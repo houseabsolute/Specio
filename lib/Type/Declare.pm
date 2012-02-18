@@ -3,45 +3,34 @@ package Type::Declare;
 use strict;
 use warnings;
 
+use parent 'Exporter';
+
 use Carp;
-use Exporter ();
 use Scalar::Util qw( blessed );
 use Type::Constraint::Simple;
 use Type::Constraint::Undeclared;
+use Type::Exporter ();
+use Type::Registry qw( register types_for_package );
 
-my %global;
+our @EXPORT = qw( declare anon parent where message inline_with );
+
 sub import {
     my $package = shift;
+    my %p       = @_;
 
     my $caller = caller();
 
-    for my $sub (qw( declare anon parent where message inline_with )) {
-        my $internal_sub = $package->can($sub);
-        no strict 'refs';
-        *{ $caller . '::' . $sub } = $internal_sub;
+    for my $name ( @{ $p{-declare} || [] } ) {
+        register(
+            $caller,
+            $name,
+            Type::Constraint::Undeclared->new( name => $name ),
+        );
     }
 
-    my %registry;
+    $package->export_to_level( 1, $package, @{ $p{-import} || [] } );
 
-    for my $name (@_) {
-        $registry{$name} = Type::Constraint::Undeclared->new( name => $name );
-    }
-
-    $global{$caller} = \%registry;
-
-    my $t = sub {
-        Carp::croak 't() must be called with a single argument' unless @_;
-        Carp::croak "No such type: $_[0]" unless exists $registry{ $_[0] };
-        return $registry{ $_[0] };
-    };
-
-    {
-        no strict 'refs';
-        *{ $caller . '::t' } = $t;
-
-        @{ $caller . '::ISA' } = 'Exporter';
-        @{ $caller . '::EXPORT' } = 't';
-    }
+    Type::Exporter::_install_t_sub( $caller, types_for_package($caller) );
 
     return;
 }
@@ -58,7 +47,7 @@ sub declare {
         declared_at => _declared_at(),
     );
 
-    $global{ caller() }{$name} = $tc;
+    register( scalar caller(), $name, $tc );
 
     return;
 }

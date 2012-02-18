@@ -3,18 +3,22 @@ package Type::Library::Builtins;
 use strict;
 use warnings;
 
-use Type::Declare qw(
-    Any
-    Item
-    Undef
-    Defined
-    Bool
-    Value
-    Ref
-    Str
-    Num
-    Int
-);
+use parent 'Type::Exporter';
+
+use Type::Declare -declare => [
+    qw(
+        Any
+        Item
+        Undef
+        Defined
+        Bool
+        Value
+        Ref
+        Str
+        Num
+        Int
+        )
+];
 
 #<<<
 declare t('Any'),
@@ -22,7 +26,7 @@ declare t('Any'),
     inline_with { '1' };
 
 declare t('Item'),
-    parent t('Any'),
+    where { 1 },
     inline_with { '1' };
 
 declare t('Undef'),
@@ -83,13 +87,13 @@ my $value_type = t('Value');
 declare t('Num'),
     parent t('Str'),
     where {
-        Scalar::Util::looks_like_number($_[0])
+        Scalar::Util::looks_like_number( $_[0] )
             # looks_like_number allows surrounding space and things like NaN, Inf, etc.
             && $_[0] =~ /^\A-?[0-9]/i;
     },
     inline_with {
         $value_type->_inline_check( $_[1] ) .
-        ' && Scalar::Util::looks_like_number(' . $_[1] . ')' .
+        ' && Scalar::Util::looks_like_number( ' . $_[1] . ' )' .
         ' && ( my $val = ' . $_[1] . ' ) =~ /^\\A-?[0-9]/i';
     };
 
@@ -97,7 +101,7 @@ declare t('Int'),
     parent t('Num'),
     where { ( my $val = $_[0] ) =~ /\A-?[0-9]+\z/ },
     inline_with {
-        $value_type->_inline_check($_[1]) .
+        $value_type->_inline_check( $_[1] ) .
         ' && ( my $val = ' . $_[1] . ' ) =~ /\A-?[0-9]+\z/'
     };
 #>>>
