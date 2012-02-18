@@ -21,6 +21,9 @@ sub register {
     my $type       = shift;
     my $exportable = shift;
 
+    croak "The $package package already has a type named $name"
+        if $Registry{$package}{internal}{$name};
+
     # This is structured so that we can always return a _reference_ for
     # *_types_for_package. This means that the generated t() sub sees any
     # changes to the registry as they happen. This is important inside a
