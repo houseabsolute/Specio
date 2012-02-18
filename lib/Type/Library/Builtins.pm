@@ -5,45 +5,32 @@ use warnings;
 
 use parent 'Type::Exporter';
 
-use Type::Declare -declare => [
-    qw(
-        Any
-        Item
-        Undef
-        Defined
-        Bool
-        Value
-        Ref
-        Str
-        Num
-        Int
-        )
-];
+use Type::Declare;
 
 #<<<
-declare t('Any'),
+declare 'Any',
     where { 1 },
     inline_with { '1' };
 
-declare t('Item'),
+declare 'Item',
     where { 1 },
     inline_with { '1' };
 
-declare t('Undef'),
+declare 'Undef',
     parent t('Item'),
     where { !defined( $_[0] ) },
     inline_with {
         '!defined(' . $_[1] . ')';
     };
 
-declare t('Defined'),
+declare 'Defined',
     parent t('Item'),
     where { defined( $_[0] ) },
     inline_with {
         'defined(' . $_[1] . ')';
     };
 
-declare t('Bool'),
+declare 'Bool',
     parent t('Item'),
     where {
         !defined( $_[0] ) || $_[0] eq "" || "$_[0]" eq '1' || "$_[0]" eq '0';
@@ -57,20 +44,20 @@ declare t('Bool'),
         ')';
     };
 
-declare t('Value'),
+declare 'Value',
     parent t('Defined'),
     where { !ref( $_[0] ) },
     inline_with {
         $_[0]->parent()->_inline_check( $_[1] ) . ' && !ref(' . $_[1] . ')';
     };
 
-declare t('Ref'),
+declare 'Ref',
     parent t('Defined'),
     where { ref( $_[0] ) },
     # no need to call parent - ref also checks for definedness
     inline_with { 'ref(' . $_[1] . ')' };
 
-declare t('Str'),
+declare 'Str',
     parent t('Value'),
     where {
         ref( \$_[0] ) eq 'SCALAR' || ref( \( my $val = $_[0] ) ) eq 'SCALAR';
@@ -84,7 +71,7 @@ declare t('Str'),
         };
 
 my $value_type = t('Value');
-declare t('Num'),
+declare 'Num',
     parent t('Str'),
     where {
         Scalar::Util::looks_like_number( $_[0] )
@@ -97,7 +84,7 @@ declare t('Num'),
         ' && ( my $val = ' . $_[1] . ' ) =~ /^\\A-?[0-9]/i';
     };
 
-declare t('Int'),
+declare 'Int',
     parent t('Num'),
     where { ( my $val = $_[0] ) =~ /\A-?[0-9]+\z/ },
     inline_with {

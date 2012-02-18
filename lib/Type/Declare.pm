@@ -10,33 +10,27 @@ use Scalar::Util qw( blessed );
 use Type::Constraint::Simple;
 use Type::Constraint::Undeclared;
 use Type::Exporter ();
-use Type::Registry qw( register types_for_package );
+use Type::Registry qw( register );
 
 our @EXPORT = qw( declare anon parent where message inline_with );
 
 sub import {
     my $package = shift;
-    my %p       = @_;
 
     my $caller = caller();
 
-    for my $name ( @{ $p{-declare} || [] } ) {
-        register(
-            $caller,
-            $name,
-            Type::Constraint::Undeclared->new( name => $name ),
-        );
-    }
+    $package->export_to_level( 1, $package, @_ );
 
-    $package->export_to_level( 1, $package, @{ $p{-import} || [] } );
-
-    Type::Exporter::_install_t_sub( $caller, types_for_package($caller) );
+    Type::Exporter::_install_t_sub(
+        $caller,
+        Type::Registry::internal_types_for_package($caller)
+    );
 
     return;
 }
 
 sub declare {
-    my $name = shift->name();
+    my $name = shift;
     my %p    = (
         name => $name,
         map { @{$_} } @_,
@@ -47,7 +41,7 @@ sub declare {
         declared_at => _declared_at(),
     );
 
-    register( scalar caller(), $name, $tc );
+    register( scalar caller(), $name, $tc, 'exportable' );
 
     return;
 }

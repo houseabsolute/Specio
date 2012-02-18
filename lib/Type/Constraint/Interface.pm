@@ -9,6 +9,7 @@ use List::AllUtils qw( all );
 use Try::Tiny;
 
 use Moose::Role;
+with 'MooseX::Clone';
 
 has name => (
     is        => 'ro',
