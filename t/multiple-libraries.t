@@ -4,7 +4,6 @@ use warnings;
 use Test::Fatal;
 use Test::More 0.88;
 
-use Devel::PartialDump;
 use Type::Library::Builtins;
 
 use lib 't/lib';
