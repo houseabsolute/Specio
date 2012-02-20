@@ -6,7 +6,6 @@ use warnings;
 use parent 'Exporter';
 
 use Carp;
-use Scalar::Util qw( blessed );
 use Type::Constraint::Simple;
 use Type::Constraint::Undeclared;
 use Type::Exporter ();
