@@ -12,6 +12,11 @@ my $dpd = Devel::PartialDump->new();
 {
     my $str = t('Str');
     isa_ok( $str, 'Type::Constraint::Simple' );
+    like(
+        $str->declared_at()->{filename},
+        qr/Builtins\.pm/,
+        'declared_at has the right filename'
+    );
 
     for my $value ( q{}, 'foo', 'bar::baz', "\x{3456}", 0, 42 ) {
         ok(
