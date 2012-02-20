@@ -4,7 +4,8 @@ use strict;
 use warnings;
 
 use Type::Helpers qw( install_t_sub );
-use Type::Registry qw( exportable_types_for_package internal_types_for_package register );
+use Type::Registry
+    qw( exportable_types_for_package internal_types_for_package register );
 
 sub import {
     my $package  = shift;
