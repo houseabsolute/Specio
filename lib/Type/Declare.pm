@@ -5,10 +5,8 @@ use warnings;
 
 use parent 'Exporter';
 
-use Carp;
 use Type::Constraint::Simple;
-use Type::Constraint::Undeclared;
-use Type::Exporter ();
+use Type::Helpers qw( install_t_sub );
 use Type::Registry qw( register );
 
 our @EXPORT = qw( declare anon parent where message inline_with );
@@ -20,7 +18,7 @@ sub import {
 
     $package->export_to_level( 1, $package, @_ );
 
-    Type::Exporter::_install_t_sub(
+    install_t_sub(
         $caller,
         Type::Registry::internal_types_for_package($caller)
     );
