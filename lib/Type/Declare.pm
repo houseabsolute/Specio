@@ -7,7 +7,7 @@ use parent 'Exporter';
 
 use Type::Constraint::Simple;
 use Type::Helpers qw( install_t_sub );
-use Type::Registry qw( register );
+use Type::Registry qw( internal_types_for_package register );
 
 our @EXPORT = qw( declare anon parent where message inline_with );
 
@@ -20,7 +20,7 @@ sub import {
 
     install_t_sub(
         $caller,
-        Type::Registry::internal_types_for_package($caller)
+        internal_types_for_package($caller)
     );
 
     return;

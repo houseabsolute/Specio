@@ -7,7 +7,8 @@ use parent 'Exporter';
 
 use Carp qw( confess croak );
 
-our @EXPORT_OK = qw( register );
+our @EXPORT_OK
+    = qw( exportable_types_for_package internal_types_for_package register );
 
 my %Registry;
 
