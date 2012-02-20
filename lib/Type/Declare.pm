@@ -53,7 +53,7 @@ sub anon {
 }
 
 sub _declared_at {
-    my ( $package, $filename, $line, $sub ) = caller(2);
+    my ( $package, $filename, $line, $sub ) = caller(1);
 
     return {
         package  => $package,
