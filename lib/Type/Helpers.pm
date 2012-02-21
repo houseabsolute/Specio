@@ -9,7 +9,7 @@ use overload ();
 use Params::Util qw( _STRING );
 use Scalar::Util qw( blessed );
 
-our @EXPORT_OK = qw( install_t_sub );
+our @EXPORT_OK = qw( install_t_sub _STRINGLIKE _INSTANCEDOES );
 
 sub install_t_sub {
     my $caller = shift;
@@ -36,14 +36,20 @@ sub install_t_sub {
 
 # XXX - this should be added to Params::Util
 sub _STRINGLIKE ($) {
-    return 1 if _STRING( $_[0] );
+    return $_[0] if _STRING( $_[0] );
 
-    return 1
+    return $_[0]
         if blessed $_[0]
             && overload::Method( $_[0], q{""} )
             && length "$_[0]";
 
-    return 0;
+    return undef;
+}
+
+sub _INSTANCEDOES ($$) {
+    return $_[0]
+        if blessed $_[0] && $_[0]->can('does') && $_[0]->does( $_[1] );
+    return undef;
 }
 
 1;

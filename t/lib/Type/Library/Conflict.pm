@@ -8,7 +8,9 @@ use parent 'Type::Exporter';
 use Type::Declare;
 use Type::Library::Builtins;
 
-declare 'X',
-    parent t('Int');
+declare(
+    'X',
+    parent => t('Int'),
+);
 
 1;

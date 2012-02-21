@@ -6,9 +6,10 @@ use Test::More 0.88;
 use Type::Declare;
 use Type::Library::Builtins;
 
-my $anon = anon
-    parent t('Str'),
-    where { length $_[0] };
+my $anon = anon(
+    parent => t('Str'),
+    where  => sub { length $_[0] }
+);
 
 isa_ok( $anon, 'Type::Constraint::Simple', 'return value from anon()' );
 
