@@ -79,8 +79,14 @@ sub _make_tc {
     );
 }
 
+our $_CALLER_LEVEL = 2;
+
 sub _declared_at {
-    my ( $package, $filename, $line, $sub ) = caller(2);
+    my ( $package, $filename, $line ) = caller($_CALLER_LEVEL);
+
+    # We want to skip the declare() and anon() subs that we exported to the
+    # calling package.
+    my $sub = ( caller( $_CALLER_LEVEL + 1 ) )[3];
 
     return {
         package  => $package,

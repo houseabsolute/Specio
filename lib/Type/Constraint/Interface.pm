@@ -9,6 +9,7 @@ use Eval::Closure qw( eval_closure );
 use List::AllUtils qw( all );
 use Sub::Name qw( subname );
 use Try::Tiny;
+use Type::Exception;
 
 use Moose::Role;
 with 'MooseX::Clone';
@@ -73,9 +74,9 @@ my $_default_message_generator = sub {
     my $value = shift;
 
     return
-          q{Validation failed for '} 
+          q{Validation failed for } 
         . $thing
-        . q{' with value }
+        . q{ with value }
         . Devel::PartialDump->new()->dump($value);
 };
 
@@ -93,10 +94,25 @@ has _description => (
     builder  => '_build_description',
 );
 
+sub validate_or_die {
+    my $self  = shift;
+    my $value = shift;
+
+    return if $self->value_is_valid($value);
+
+    Type::Exception->throw(
+        message =>
+            $self->message_generator()->( $self->_description(), $value ),
+        type  => $self,
+        value => $value,
+    );
+}
+
 sub value_is_valid {
     my $self = shift;
+    my $value = shift;
 
-    return $self->_optimized_constraint()->(@_);
+    return $self->_optimized_constraint()->($value);
 }
 
 sub _ancestors_and_self {
@@ -148,7 +164,7 @@ sub _build_optimized_constraint {
 
     return subname(
         'optimized constraint for ' . $self->_description() => sub {
-            all { $_->(@_) } @constraints;
+            all { $_->( $_[0] ) } @constraints;
         }
     );
 }
@@ -184,7 +200,7 @@ sub _build_description {
     my $desc = $self->is_anon() ? 'anonymous type' : 'type named ' . $self->name();
 
     my $decl = $self->declared_at();
-    $desc .= " declared in package package $decl->{package} ($decl->{filename}) at line $decl->{line}";
+    $desc .= " declared in package $decl->{package} ($decl->{filename}) at line $decl->{line}";
     $desc .= " in sub named $decl->{sub}" if defined $decl->{sub};
 
     return $desc;
