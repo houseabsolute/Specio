@@ -6,14 +6,31 @@ use Test::More 0.88;
 use Type::Declare;
 use Type::Library::Builtins;
 
-my $anon = anon(
-    parent => t('Str'),
-    where  => sub { length $_[0] }
-);
+{
+    my $anon = anon(
+        parent => t('Str'),
+        where  => sub { length $_[0] },
+    );
 
-isa_ok( $anon, 'Type::Constraint::Simple', 'return value from anon()' );
+    isa_ok( $anon, 'Type::Constraint::Simple', 'return value from anon()' );
 
-ok( $anon->value_is_valid('x'),  q{anon type allows "x"} );
-ok( !$anon->value_is_valid(q{}), 'anon type reject empty string' );
+    ok( $anon->value_is_valid('x'),  q{anon type allows "x"} );
+    ok( !$anon->value_is_valid(q{}), 'anon type reject empty string' );
+}
+
+{
+    my $anon = anon(
+        parent => t('Str'),
+        where  => sub { length $_[0] },
+        inline => sub {
+            $_[0]->parent()->_inline_check( $_[1] ) . " && length $_[1]";
+        },
+    );
+
+    isa_ok( $anon, 'Type::Constraint::Simple', 'return value from anon()' );
+
+    ok( $anon->value_is_valid('x'),  q{inlinable anon type allows "x"} );
+    ok( !$anon->value_is_valid(q{}), 'inlinable anon type reject empty string' );
+}
 
 done_testing();
