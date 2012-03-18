@@ -73,7 +73,9 @@ sub _make_tc {
         $p{inline_generator} = delete $p{inline};
     }
 
-    Type::Constraint::Simple->new(
+    my $class = delete $p{type_class} || 'Type::Constraint::Simple';
+
+    return $class->new(
         %p,
         declared_at => _declared_at(),
     );
