@@ -19,6 +19,8 @@ has value => (
     required => 1,
 );
 
-__PACKAGE__->meta()->make_immutable();
+# Throwable::Error does the StackTrace::Auto role, which has a modifier on
+# new() for some reason.
+__PACKAGE__->meta()->make_immutable( inline_constructor => 0 );
 
 1;
