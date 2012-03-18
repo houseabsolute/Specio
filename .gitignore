@@ -1,0 +1,10 @@
+MYMETA.json
+MYMETA.yml
+Makefile
+Makefile.PL
+Type.bs
+blib/
+inc/
+lib/Type/Library/Builtins.c
+lib/Type/Library/Builtins.o
+pm_to_blib
