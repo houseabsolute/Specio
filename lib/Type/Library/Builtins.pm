@@ -6,7 +6,9 @@ use warnings;
 use parent 'Type::Exporter';
 
 use Class::Load qw( is_class_loaded );
+use List::MoreUtils ();
 use Scalar::Util qw( blessed openhandle );
+use Type::Constraint::Parameterizable;
 use Type::Declare;
 
 XSLoader::load(
@@ -132,21 +134,21 @@ declare(
 declare(
     'CodeRef',
     parent => t('Ref'),
-    where  => sub { ref($_) eq 'CODE' },
+    where  => sub { ref( $_[0] ) eq 'CODE' },
     inline => sub { 'ref(' . $_[1] . ') eq "CODE"' },
 );
 
 declare(
     'RegexpRef',
     parent => t('Ref'),
-    where  => sub { \&_RegexpRef },
+    where  => \&_RegexpRef,
     inline => sub { 'Type::Library::Builtins::_RegexpRef(' . $_[1] . ')' },
 );
 
 declare(
     'GlobRef',
     parent => t('Ref'),
-    where  => sub { ref($_) eq 'GLOB' },
+    where  => sub { ref( $_[0] ) eq 'GLOB' },
     inline => sub { 'ref(' . $_[1] . ') eq "GLOB"' },
 );
 
@@ -156,8 +158,8 @@ declare(
     'FileHandle',
     parent => t('Ref'),
     where  => sub {
-        ( ref($_) eq "GLOB" && openhandle($_) )
-            || ( blessed($_) && $_->isa("IO::Handle") );
+        ( ref( $_[0] ) eq "GLOB" && openhandle( $_[0] ) )
+            || ( blessed( $_[0] ) && $_->isa("IO::Handle") );
     },
     inline => sub {
         '(ref('
@@ -175,15 +177,45 @@ declare(
 declare(
     'Object',
     parent => t('Ref'),
-    where  => sub { blessed($_) },
+    where  => sub { blessed( $_[0] ) },
     inline => sub { 'Scalar::Util::blessed(' . $_[1] . ')' },
 );
 
 declare(
     'ClassName',
     parent => t('Str'),
-    where  => sub { is_class_loaded($_) },
+    where  => sub { is_class_loaded( $_[0] ) },
     inline => sub { 'Class::Load::is_class_loaded(' . $_[1] . ')' },
+);
+
+declare(
+    'ArrayRef',
+    type_class => 'Type::Constraint::Parameterizable',
+    parent     => t('Ref'),
+    where      => sub { ref( $_[0] ) eq 'ARRAY' },
+    inline => sub { 'ref(' . $_[1] . q{) eq 'ARRAY'} },
+    parameterized_constraint_generator => sub {
+        my $parameter  = shift;
+        my $constraint = $parameter->_optimized_constraint();
+        return sub {
+            local $_;
+            List::MoreUtils::all { $constraint->($_) } @{ $_[0] };
+        };
+    },
+    parameterized_inline_generator => sub {
+        my $self      = shift;
+        my $parameter = shift;
+        my $val       = shift;
+
+        return
+              'do {'
+            . 'my $value = '
+            . $val . ';'
+            . q{ref($value) eq 'ARRAY' }
+            . '&& List::MoreUtils::all {'
+            . $parameter->_inline_check('$_') . ' } '
+            . '@{$value}' . '}';
+    },
 );
 
 1;

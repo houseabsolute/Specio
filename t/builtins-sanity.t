@@ -728,36 +728,6 @@ foreach my $type_name (qw( Str Num Int ClassName )) {
     );
 }
 
-# Test how $_ is used in XS implementation
-{
-    local $_ = qr/./;
-    ok(
-        Type::Library::Builtins::_RegexpRef(),
-        '$_ is RegexpRef'
-    );
-    ok(
-        !Type::Library::Builtins::_RegexpRef(1),
-        '$_ is not read when param provided'
-    );
-
-    $_ = bless qr/./, 'Blessed';
-
-    ok(
-        Type::Library::Builtins::_RegexpRef(),
-        '$_ is RegexpRef'
-    );
-
-    $_ = 42;
-    ok(
-        !Type::Library::Builtins::_RegexpRef(),
-        '$_ is not RegexpRef'
-    );
-    ok(
-        Type::Library::Builtins::_RegexpRef(qr/./),
-        '$_ is not read when param provided'
-    );
-}
-
 close $FH
     or warn "Could not close the filehandle $0 for test";
 $FH_OBJECT->close

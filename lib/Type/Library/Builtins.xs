@@ -36,11 +36,7 @@ MODULE = Type::Library::Builtins  PACKAGE = Type::Library::Builtins
 PROTOTYPES: DISABLE
 
 bool
-_RegexpRef (SV *sv=NULL)
-  INIT:
-    if (!items) {
-      sv = DEFSV;
-    }
+_RegexpRef (SV *sv)
   CODE:
     RETVAL = SvRXOK(sv);
   OUTPUT:
