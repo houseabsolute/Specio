@@ -1,7 +1,8 @@
+Build
 MYMETA.json
 MYMETA.yml
-Makefile
 Type.bs
+_build/
 blib/
 lib/Type/Library/Builtins.c
 lib/Type/Library/Builtins.o
