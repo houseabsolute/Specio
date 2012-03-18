@@ -57,7 +57,7 @@ has _inlined_constraint => (
 has inline_generator => (
     is        => 'ro',
     isa       => 'CodeRef',
-    predicate => '_has_inline_generator',
+    predicate => 'can_be_inlined',
 );
 
 has inline_environment => (
@@ -147,9 +147,16 @@ sub _inline_check {
 sub _build_optimized_constraint {
     my $self = shift;
 
-    if ( $self->_has_inline_generator() ) {
+    if ( $self->can_be_inlined() ) {
         return $self->_inlined_constraint();
     }
+    else {
+        return $self->_constraint_with_parents();
+    }
+}
+
+sub _constraint_with_parents {
+    my $self = shift;
 
     my @constraints;
     for my $type ( $self->_ancestors_and_self() ) {
@@ -158,7 +165,7 @@ sub _build_optimized_constraint {
         # If a type can be inlined, we can use that and discard all of the
         # ancestors we've seen so far, since we can assume that the inlined
         # constraint does all of the ancestor checks in addition to its own.
-        if ( $type->_has_inline_generator() ) {
+        if ( $type->can_be_inlined() ) {
             @constraints = $type->_inlined_constraint();
         }
         else {
