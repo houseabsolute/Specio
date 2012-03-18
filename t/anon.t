@@ -21,7 +21,6 @@ use Type::Library::Builtins;
 {
     my $anon = anon(
         parent => t('Str'),
-        where  => sub { length $_[0] },
         inline => sub {
             $_[0]->parent()->_inline_check( $_[1] ) . " && length $_[1]";
         },

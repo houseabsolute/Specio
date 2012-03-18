@@ -31,11 +31,9 @@ has declared_at => (
     isa => 'HashRef[Maybe[Str]]',
 );
 
-my $null_constraint = sub { 1 };
 has constraint => (
-    is      => 'ro',
-    isa     => 'CodeRef',
-    default => sub { $null_constraint },
+    is  => 'ro',
+    isa => 'CodeRef',
 );
 
 has _optimized_constraint => (
@@ -100,6 +98,25 @@ has _description => (
     builder  => '_build_description',
 );
 
+my $null_constraint = sub { 1 };
+
+around BUILDARGS => sub {
+    my $orig  = shift;
+    my $class = shift;
+    my $p     = $class->$orig(@_);
+
+    unless ( exists $p->{constraint} || exists $p->{inline_generator} ) {
+        $p->{constraint} = $null_constraint;
+    }
+
+die
+    'A type constraint should have either a constraint or inline_generator parameter, not both'
+    if exists $p->{constraint}
+        && exists $p->{inline_generator};
+
+    return $p;
+};
+
 sub validate_or_die {
     my $self  = shift;
     my $value = shift;
@@ -154,6 +171,7 @@ sub _build_optimized_constraint {
         return $self->_constraint_with_parents();
     }
 }
+
 
 sub _constraint_with_parents {
     my $self = shift;

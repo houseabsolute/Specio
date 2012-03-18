@@ -20,20 +20,17 @@ XSLoader::load(
 
 declare(
     'Any',
-    where  => sub { 1 },
     inline => sub { '1' }
 );
 
 declare(
     'Item',
-    where  => sub { 1 },
     inline => sub { '1' }
 );
 
 declare(
     'Undef',
     parent => t('Item'),
-    where  => sub { !defined( $_[0] ) },
     inline => sub {
         '!defined(' . $_[1] . ')';
     }
@@ -42,7 +39,6 @@ declare(
 declare(
     'Defined',
     parent => t('Item'),
-    where  => sub { defined( $_[0] ) },
     inline => sub {
         'defined(' . $_[1] . ')';
     }
@@ -51,9 +47,6 @@ declare(
 declare(
     'Bool',
     parent => t('Item'),
-    where  => sub {
-        !defined( $_[0] ) || $_[0] eq "" || "$_[0]" eq '1' || "$_[0]" eq '0';
-    },
     inline => sub {
         '('
             . '!defined('
@@ -70,7 +63,6 @@ declare(
 declare(
     'Value',
     parent => t('Defined'),
-    where  => sub { !ref( $_[0] ) },
     inline => sub {
         $_[0]->parent()->_inline_check( $_[1] ) . ' && !ref(' . $_[1] . ')';
     }
@@ -79,7 +71,6 @@ declare(
 declare(
     'Ref',
     parent => t('Defined'),
-    where  => sub { ref( $_[0] ) },
 
     # no need to call parent - ref also checks for definedness
     inline => sub { 'ref(' . $_[1] . ')' }
@@ -88,9 +79,6 @@ declare(
 declare(
     'Str',
     parent => t('Value'),
-    where  => sub {
-        ref( \$_[0] ) eq 'SCALAR' || ref( \( my $val = $_[0] ) ) eq 'SCALAR';
-    },
     inline => sub {
         $_[0]->parent()->_inline_check( $_[1] ) . ' && (' 
             . 'ref(\\'
@@ -106,11 +94,6 @@ my $value_type = t('Value');
 declare(
     'Num',
     parent => t('Str'),
-    where  => sub {
-        # Scalar::Util::looks_like_number allows surrounding space and things
-        # like NaN, Inf, etc.
-        $_[0] =~ /\A-?[0-9]+(?:\.[0-9]+)?\z/;
-    },
     inline => sub {
         $value_type->_inline_check( $_[1] )
             . ' && ( my $val = '
@@ -122,7 +105,6 @@ declare(
 declare(
     'Int',
     parent => t('Num'),
-    where  => sub { ( my $val = $_[0] ) =~ /\A-?[0-9]+\z/ },
     inline => sub {
         $value_type->_inline_check( $_[1] )
             . ' && ( my $val = '
@@ -134,21 +116,18 @@ declare(
 declare(
     'CodeRef',
     parent => t('Ref'),
-    where  => sub { ref( $_[0] ) eq 'CODE' },
     inline => sub { 'ref(' . $_[1] . ') eq "CODE"' },
 );
 
 declare(
     'RegexpRef',
     parent => t('Ref'),
-    where  => \&_RegexpRef,
     inline => sub { 'Type::Library::Builtins::_RegexpRef(' . $_[1] . ')' },
 );
 
 declare(
     'GlobRef',
     parent => t('Ref'),
-    where  => sub { ref( $_[0] ) eq 'GLOB' },
     inline => sub { 'ref(' . $_[1] . ') eq "GLOB"' },
 );
 
@@ -157,10 +136,6 @@ declare(
 declare(
     'FileHandle',
     parent => t('Ref'),
-    where  => sub {
-        ( ref( $_[0] ) eq "GLOB" && openhandle( $_[0] ) )
-            || ( blessed( $_[0] ) && $_->isa("IO::Handle") );
-    },
     inline => sub {
         '(ref('
             . $_[1]
@@ -177,14 +152,12 @@ declare(
 declare(
     'Object',
     parent => t('Ref'),
-    where  => sub { blessed( $_[0] ) },
     inline => sub { 'Scalar::Util::blessed(' . $_[1] . ')' },
 );
 
 declare(
     'ClassName',
     parent => t('Str'),
-    where  => sub { is_class_loaded( $_[0] ) },
     inline => sub { 'Class::Load::is_class_loaded(' . $_[1] . ')' },
 );
 
@@ -192,16 +165,7 @@ declare(
     'ArrayRef',
     type_class => 'Type::Constraint::Parameterizable',
     parent     => t('Ref'),
-    where      => sub { ref( $_[0] ) eq 'ARRAY' },
-    inline => sub { 'ref(' . $_[1] . q{) eq 'ARRAY'} },
-    parameterized_constraint_generator => sub {
-        my $parameter  = shift;
-        my $constraint = $parameter->_optimized_constraint();
-        return sub {
-            local $_;
-            List::MoreUtils::all { $constraint->($_) } @{ $_[0] };
-        };
-    },
+    inline     => sub { 'ref(' . $_[1] . q{) eq 'ARRAY'} },
     parameterized_inline_generator => sub {
         my $self      = shift;
         my $parameter = shift;
