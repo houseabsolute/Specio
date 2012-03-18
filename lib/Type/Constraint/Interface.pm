@@ -20,9 +20,15 @@ has name => (
     predicate => '_has_name',
 );
 
+has parent => (
+    is        => 'ro',
+    does      => 'Type::Constraint::Interface',
+    predicate => '_has_parent',
+);
+
 has declared_at => (
     is  => 'ro',
-    isa => 'HashRef[Str]',
+    isa => 'HashRef[Maybe[Str]]',
 );
 
 my $null_constraint = sub { 1 };
