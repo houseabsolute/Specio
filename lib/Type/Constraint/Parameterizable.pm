@@ -6,6 +6,7 @@ use namespace::autoclean;
 
 use MooseX::Params::Validate qw( validated_list );
 use Type::Constraint::Parameterized;
+use Type::Helpers qw( _declared_at );
 
 use Moose;
 
@@ -43,14 +44,19 @@ sub BUILD {
 
 sub parameterize {
     my $self = shift;
-    my ($parameter) = validated_list(
+    my ( $parameter, $declared_at ) = validated_list(
         \@_,
-        { does => 'Type::Constraint::Interface' },
+        of          => { does => 'Type::Constraint::Interface' },
+        declared_at => {
+            isa     => 'HashRef[Maybe[Str]]',
+            default => _declared_at(1),
+        },
     );
 
     my %p = (
-        parent    => $self,
-        parameter => $parameter,
+        parent      => $self,
+        parameter   => $parameter,
+        declared_at => $declared_at,
     );
 
     if ( $self->_has_parameterized_constraint_generator() ) {
@@ -58,8 +64,8 @@ sub parameterize {
             = $self->parameterized_constraint_generator()->($parameter);
     }
     else {
-        my $ig = $self->parameterized_inlined_generator();
-        $p{inline_generator} = sub { $ig->($parameter) };
+        my $ig = $self->parameterized_inline_generator();
+        $p{inline_generator} = sub { $ig->( shift, $parameter, @_ ) };
     }
 
     return Type::Constraint::Parameterized->new(%p);

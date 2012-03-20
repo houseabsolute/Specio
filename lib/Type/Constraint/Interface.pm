@@ -164,7 +164,7 @@ sub has_real_constraint {
 
 sub _inline_check {
     my $self = shift;
-    return $self->inline_generator()->( $self, shift );
+    return $self->inline_generator()->( $self, @_ );
 }
 
 sub _build_optimized_constraint {

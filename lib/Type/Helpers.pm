@@ -9,7 +9,7 @@ use overload ();
 use Params::Util qw( _STRING );
 use Scalar::Util qw( blessed );
 
-our @EXPORT_OK = qw( install_t_sub _STRINGLIKE _INSTANCEDOES );
+our @EXPORT_OK = qw( install_t_sub _INSTANCEDOES _STRINGLIKE _declared_at );
 
 sub install_t_sub {
     my $caller = shift;
@@ -33,7 +33,10 @@ sub install_t_sub {
         croak "Cannot parameterize a non-parameterizable type"
             unless $found->can('parameterize');
 
-        return $found->parameterize(%p);
+        return $found->parameterize(
+            declared_at => _declared_at(),
+            %p,
+        );
     };
 
     {
@@ -43,6 +46,34 @@ sub install_t_sub {
     }
 
     return;
+}
+
+our $_CALLER_DEPTH = 2;
+
+sub _declared_at {
+    my $depth;
+    my $sub_depth;
+    if (@_) {
+        $depth = $sub_depth = shift;
+    }
+    else {
+        $depth = $_CALLER_DEPTH;
+
+        # We want to skip the declare() and anon() subs that were exported to
+        # the calling package from Type::Declare;
+        $sub_depth = $depth + 1;
+    }
+
+    my ( $package, $filename, $line ) = caller($depth);
+
+    my $sub = ( caller($sub_depth) )[3];
+
+    return {
+        package  => $package,
+        filename => $filename,
+        line     => $line,
+        sub      => $sub,
+    };
 }
 
 # XXX - this should be added to Params::Util

@@ -8,7 +8,7 @@ use parent 'Exporter';
 use Carp qw( croak );
 use Params::Util qw( _CODELIKE );
 use Type::Constraint::Simple;
-use Type::Helpers qw( install_t_sub _STRINGLIKE _INSTANCEDOES );
+use Type::Helpers qw( install_t_sub _INSTANCEDOES _STRINGLIKE _declared_at );
 use Type::Registry qw( internal_types_for_package register );
 
 our @EXPORT = qw( declare anon );
@@ -53,23 +53,6 @@ sub _make_tc {
         %p,
         declared_at => _declared_at(),
     );
-}
-
-our $_CALLER_LEVEL = 2;
-
-sub _declared_at {
-    my ( $package, $filename, $line ) = caller($_CALLER_LEVEL);
-
-    # We want to skip the declare() and anon() subs that we exported to the
-    # calling package.
-    my $sub = ( caller( $_CALLER_LEVEL + 1 ) )[3];
-
-    return {
-        package  => $package,
-        filename => $filename,
-        line     => $line,
-        sub      => $sub,
-    };
 }
 
 1;
