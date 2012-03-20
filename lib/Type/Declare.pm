@@ -47,32 +47,6 @@ sub anon {
 sub _make_tc {
     my %p = @_;
 
-    local $Carp::CarpLevel = $Carp::CarpLevel + 1;
-
-    if ( exists $p{parent} ) {
-        _INSTANCEDOES( $p{parent}, 'Type::Constraint::Interface' )
-            or croak
-            "The parent must be an object which does the Type::Constraint::Interface role, not a $p{parent}";
-    }
-
-    if ( exists $p{where} ) {
-        _CODELIKE( $p{where} )
-            or croak 'The where parameter must be a subroutine reference';
-        $p{constraint} = delete $p{where};
-    }
-
-    if ( exists $p{message} ) {
-        _CODELIKE( $p{message} )
-            or croak 'The message parameter must be a subroutine reference';
-        $p{message_generator} = delete $p{message};
-    }
-
-    if ( exists $p{inline} ) {
-        _CODELIKE( $p{inline} )
-            or croak 'The inline parameter must be a subroutine reference';
-        $p{inline_generator} = delete $p{inline};
-    }
-
     my $class = delete $p{type_class} || 'Type::Constraint::Simple';
 
     return $class->new(

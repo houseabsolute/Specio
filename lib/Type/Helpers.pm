@@ -16,13 +16,24 @@ sub install_t_sub {
     my $types  = shift;
 
     my $t = sub {
+        my $name = shift;
+
         croak 'The t() subroutine requires a single non-empty string argument'
-            unless _STRINGLIKE( $_[0] );
+            unless _STRINGLIKE( $name );
 
-        croak "There is no type named $_[0] available for the $caller package"
-            unless exists $types->{ $_[0] };
+        croak "There is no type named $name available for the $caller package"
+            unless exists $types->{ $name };
 
-        return $types->{ $_[0] };
+        my $found = $types->{ $name };
+
+        return $found unless @_;
+
+        my %p = @_;
+
+        croak "Cannot parameterize a non-parameterizable type"
+            unless $found->can('parameterize');
+
+        return $found->parameterize(%p);
     };
 
     {

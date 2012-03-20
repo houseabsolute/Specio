@@ -4,43 +4,65 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+use MooseX::Params::Validate qw( validated_list );
+use Type::Constraint::Parameterized;
+
 use Moose;
 
 with 'Type::Constraint::Interface';
 
 has parameterized_constraint_generator => (
-    is  => 'ro',
-    isa => 'CodeRef',
+    is        => 'ro',
+    isa       => 'CodeRef',
+    predicate => '_has_parameterized_constraint_generator',
 );
 
 has parameterized_inline_generator => (
-    is  => 'ro',
-    isa => 'CodeRef',
+    is        => 'ro',
+    isa       => 'CodeRef',
+    predicate => '_has_parameterized_inline_generator',
 );
 
-around BUILDARGS => sub {
-    my $orig  = shift;
-    my $class = shift;
-    my $p     = $class->$orig(@_);
+sub BUILD {
+    my $self = shift;
 
-    if ( exists $p->{constraint} ) {
+    if ( $self->_has_constraint() ) {
         die
             'A parameterizable constraint with a constraint parameter must also have a parameterized_constraint_generator'
-            unless exists $p->{parameterized_constraint_generator};
+            unless $self->_has_parameterized_constraint_generator();
     }
 
-    if ( exists $p->{inline_generator} ) {
+    if ( $self->_has_inline_generator() ) {
         die
             'A parameterizable constraint with an inline_generator parameter must also have a parameterized_inline_generator'
-            unless exists $p->{parameterized_inline_generator};
+            unless $self->_has_parameterized_inline_generator();
     }
 
-    return $p;
-};
+    return;
+}
 
 sub parameterize {
     my $self = shift;
-    
+    my ($parameter) = validated_list(
+        \@_,
+        { does => 'Type::Constraint::Interface' },
+    );
+
+    my %p = (
+        parent    => $self,
+        parameter => $parameter,
+    );
+
+    if ( $self->_has_parameterized_constraint_generator() ) {
+        $p{constraint}
+            = $self->parameterized_constraint_generator()->($parameter);
+    }
+    else {
+        my $ig = $self->parameterized_inlined_generator();
+        $p{inline_generator} = sub { $ig->($parameter) };
+    }
+
+    return Type::Constraint::Parameterized->new(%p);
 }
 
 __PACKAGE__->meta()->make_immutable();

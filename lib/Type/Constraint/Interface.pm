@@ -12,6 +12,7 @@ use Try::Tiny;
 use Type::Exception;
 
 use Moose::Role;
+use MooseX::Aliases;
 with 'MooseX::Clone';
 
 has name => (
@@ -32,8 +33,11 @@ has declared_at => (
 );
 
 has constraint => (
-    is  => 'ro',
-    isa => 'CodeRef',
+    is        => 'rw',
+    writer    => '_set_constraint',
+    isa       => 'CodeRef',
+    predicate => '_has_constraint',
+    alias     => 'where',
 );
 
 has _optimized_constraint => (
@@ -44,18 +48,11 @@ has _optimized_constraint => (
     builder  => '_build_optimized_constraint',
 );
 
-has _inlined_constraint => (
-    is       => 'ro',
-    isa      => 'CodeRef',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_inlined_constraint',
-);
-
 has inline_generator => (
     is        => 'ro',
     isa       => 'CodeRef',
-    predicate => 'can_be_inlined',
+    predicate => '_has_inline_generator',
+    alias     => 'inline',
 );
 
 has inline_environment => (
@@ -63,6 +60,14 @@ has inline_environment => (
     isa     => 'HashRef[Str]',
     lazy    => 1,
     default => sub { {} },
+);
+
+has _inlined_constraint => (
+    is       => 'ro',
+    isa      => 'CodeRef',
+    init_arg => undef,
+    lazy     => 1,
+    builder  => '_build_inlined_constraint',
 );
 
 has _ancestors => (
@@ -88,6 +93,7 @@ has message_generator => (
     is      => 'ro',
     isa     => 'CodeRef',
     default => sub { $_default_message_generator },
+    alias   => 'message',
 );
 
 has _description => (
@@ -100,21 +106,21 @@ has _description => (
 
 my $null_constraint = sub { 1 };
 
-around BUILDARGS => sub {
-    my $orig  = shift;
-    my $class = shift;
-    my $p     = $class->$orig(@_);
+sub BUILD { }
 
-    unless ( exists $p->{constraint} || exists $p->{inline_generator} ) {
-        $p->{constraint} = $null_constraint;
+around BUILD => sub {
+    my $orig = shift;
+    my $self = shift;
+
+    unless ( $self->_has_constraint() || $self->_has_inline_generator() ) {
+        $self->_set_constraint($null_constraint);
     }
 
-die
-    'A type constraint should have either a constraint or inline_generator parameter, not both'
-    if exists $p->{constraint}
-        && exists $p->{inline_generator};
+    die
+        'A type constraint should have either a constraint or inline_generator parameter, not both'
+        if $self->_has_constraint() && $self->_has_inline_generator();
 
-    return $p;
+    return;
 };
 
 sub validate_or_die {
@@ -198,6 +204,12 @@ sub _constraint_with_parents {
             all { $_->( $_[0] ) } @constraints;
         }
     );
+}
+
+sub can_be_inlined {
+    my $self = shift;
+
+    return $self->_has_inline_generator();
 }
 
 sub _build_ancestors {
