@@ -34,7 +34,7 @@ sub install_t_sub {
             unless $found->can('parameterize');
 
         return $found->parameterize(
-            declared_at => _declared_at(),
+            declared_at => _declared_at(1),
             %p,
         );
     };
@@ -51,22 +51,11 @@ sub install_t_sub {
 our $_CALLER_DEPTH = 2;
 
 sub _declared_at {
-    my $depth;
-    my $sub_depth;
-    if (@_) {
-        $depth = $sub_depth = shift;
-    }
-    else {
-        $depth = $_CALLER_DEPTH;
-
-        # We want to skip the declare() and anon() subs that were exported to
-        # the calling package from Type::Declare;
-        $sub_depth = $depth + 1;
-    }
+    my $depth = shift // $_CALLER_DEPTH;
 
     my ( $package, $filename, $line ) = caller($depth);
 
-    my $sub = ( caller($sub_depth) )[3];
+    my $sub = ( caller($depth + 1) )[3];
 
     return {
         package  => $package,
