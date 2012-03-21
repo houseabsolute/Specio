@@ -741,10 +741,7 @@ sub test_constraint {
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-    unless ( blessed $type ) {
-        $type = eval { t($type) }
-            or return;#BAIL_OUT("No such type $type!");
-    }
+    $type = t($type) unless blessed $type;
 
     my $name = $type->name();
 
