@@ -162,6 +162,32 @@ declare(
 );
 
 declare(
+    'ScalarRef',
+    type_class => 'Type::Constraint::Parameterizable',
+    parent     => t('Ref'),
+    inline     => sub {
+        'ref( '
+            . $_[1]
+            . q{ ) eq 'SCALAR' || ref( }
+            . $_[1]
+            . q{ ) eq 'REF' };
+    },
+    parameterized_inline_generator => sub {
+        my $self      = shift;
+        my $parameter = shift;
+        my $val       = shift;
+
+        return
+              '( ref( ' 
+            . $val
+            . q{ ) eq 'SCALAR' || ref( }
+            . $val
+            . q{ ) eq 'REF' ) } . ' && '
+            . $parameter->_inline_check( '${ ( ' . $val . ' ) }' );
+    },
+);
+
+declare(
     'ArrayRef',
     type_class => 'Type::Constraint::Parameterizable',
     parent     => t('Ref'),
@@ -200,6 +226,23 @@ declare(
             . '&& List::MoreUtils::all {'
             . $parameter->_inline_check('$_') . ' } '
             . 'values %{$value}' . '}';
+    },
+);
+
+declare(
+    'Maybe',
+    type_class                     => 'Type::Constraint::Parameterizable',
+    parent                         => t('Ref'),
+    inline                         => sub { '1' },
+    parameterized_inline_generator => sub {
+        my $self      = shift;
+        my $parameter = shift;
+        my $val       = shift;
+
+        return
+              '!defined(' 
+            . $val . ') ' . '|| ('
+            . $parameter->_inline_check($val) . ')';
     },
 );
 
