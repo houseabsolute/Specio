@@ -182,4 +182,25 @@ declare(
     },
 );
 
+declare(
+    'HashRef',
+    type_class => 'Type::Constraint::Parameterizable',
+    parent     => t('Ref'),
+    inline     => sub { 'ref(' . $_[1] . q{) eq 'HASH'} },
+    parameterized_inline_generator => sub {
+        my $self      = shift;
+        my $parameter = shift;
+        my $val       = shift;
+
+        return
+              'do {'
+            . 'my $value = '
+            . $val . ';'
+            . q{ref($value) eq 'HASH' }
+            . '&& List::MoreUtils::all {'
+            . $parameter->_inline_check('$_') . ' } '
+            . 'values %{$value}' . '}';
+    },
+);
+
 1;
