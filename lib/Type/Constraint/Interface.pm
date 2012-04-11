@@ -79,6 +79,7 @@ has _ancestors => (
 );
 
 my $_default_message_generator = sub {
+    my $self = shift;
     my $thing = shift;
     my $value = shift;
 
@@ -130,8 +131,8 @@ sub validate_or_die {
     return if $self->value_is_valid($value);
 
     Type::Exception->throw(
-        message =>
-            $self->message_generator()->( $self->_description(), $value ),
+        message => $self->message_generator()
+            ->( $self, $self->_description(), $value ),
         type  => $self,
         value => $value,
     );
