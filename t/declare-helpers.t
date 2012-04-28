@@ -27,6 +27,7 @@ use Type::Declare;
 }
 
 {
+
     package Quux;
 
     sub whatever { }
@@ -34,11 +35,11 @@ use Type::Declare;
 
 {
     my $tc = object_can_type(
-        'Need2',
+        'Need2O',
         methods => [qw( foo bar )],
     );
 
-    is( $tc->name(), 'Need2', 'constraint has the expected name' );
+    is( $tc->name(), 'Need2O', 'constraint has the expected name' );
     ok(
         $tc->value_is_valid( Bar->new() ),
         'Bar object is valid for named ObjectCan type'
@@ -51,6 +52,34 @@ use Type::Declare;
         qr/\QFoo is missing the 'bar' method/,
         'got expected error message for failure with ObjectCan type'
     );
+}
+
+{
+    my $tc = any_can_type(
+        'Need2A',
+        methods => [qw( foo bar )],
+    );
+
+    is( $tc->name(), 'Need2A', 'constraint has the expected name' );
+
+    for my $thing ( 'Bar', Bar->new() ) {
+        my $desc = ref $thing ? 'Bar class name' : 'Bar object';
+
+        ok(
+            $tc->value_is_valid('Bar'),
+            "$desc is valid for named AnyCan type"
+        );
+    }
+
+    for my $thing ( 'Foo', Foo->new() ) {
+        eval { $tc->validate_or_die($thing) };
+        my $e = $@;
+        like(
+            $e->message(),
+            qr/\QFoo is missing the 'bar' method/,
+            'got expected error message for failure with AnyCan type'
+        );
+    }
 }
 
 {
@@ -94,13 +123,33 @@ use Type::Declare;
 
     ok(
         $tc->value_is_valid( Foo->new() ),
-        'Foo object is valid for isa type (requires Foo)'
+        'Foo object is valid for object isa type (requires Foo)'
     );
 
     ok(
         $tc->value_is_valid( Bar->new() ),
-        'Bar object is valid for isa type (requires Foo)'
+        'Bar object is valid for object isa type (requires Foo)'
     );
+}
+
+{
+    my $tc = any_isa_type( 'FooAny', 'Foo' );
+
+    is( $tc->name(), 'FooAny', 'can provide an explicit name' );
+
+    for my $class (qw( Foo Bar )) {
+        for my $thing ( $class, $class->new() ) {
+            my $desc
+                = ref $thing
+                ? ( ref $thing ) . ' object'
+                : "$thing class name";
+
+            ok(
+                $tc->value_is_valid( Foo->new() ),
+                "$desc is valid for any isa type (requires Foo)"
+            );
+        }
+    }
 }
 
 {
@@ -108,7 +157,7 @@ use Type::Declare;
 
     ok(
         !$tc->value_is_valid( Foo->new() ),
-        'Foo object is not valid for isa type (requires NonExistent)'
+        'Foo object is not valid for object isa type (requires NonExistent)'
     );
 
     eval { $tc->validate_or_die( Foo->new() ) };
@@ -118,6 +167,26 @@ use Type::Declare;
         qr/\Q/,
         'got expected error message for failure with ObjectCan type'
     );
+}
+
+{
+    my $tc = any_isa_type( 'QuuxAny', 'Quux' );
+
+    for my $thing ( 'Foo', Foo->new() ) {
+        my $desc = ref $thing ? 'Foo class name' : 'Foo object';
+        ok(
+            !$tc->value_is_valid($thing),
+            "$desc is not valid for any isa type (requires Quux)"
+        );
+
+        eval { $tc->validate_or_die($thing) };
+        my $e = $@;
+        like(
+            $e->message(),
+            qr/\Q/,
+            'got expected error message for failure with AnyCan type'
+        );
+    }
 }
 
 done_testing();

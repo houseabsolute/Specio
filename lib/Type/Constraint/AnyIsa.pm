@@ -1,21 +1,22 @@
-package Type::Constraint::ObjectCan;
+package Type::Constraint::AnyIsa;
 
 use strict;
 use warnings;
 use namespace::autoclean;
 
-use B ();
-use Scalar::Util;
+use B                  ();
+use Devel::PartialDump ();
+use Scalar::Util       ();
 use Type::Library::Builtins;
 
 use Moose;
 
-with 'Type::Constraint::Role::CanType';
+with 'Type::Constraint::Role::IsaType';
 
-my $Object = t('Object');
+my $Defined = t('Defined');
 has '+parent' => (
     init_arg => undef,
-    default  => sub { $Object },
+    default  => sub { $Defined },
 );
 
 my $_inline_generator = sub {
@@ -23,12 +24,13 @@ my $_inline_generator = sub {
     my $val  = shift;
 
     return
-          'Scalar::Util::blessed(' 
-        . $val . ')'
-        . ' && List::MoreUtils::all { '
+          '( Scalar::Util::blessed(' 
         . $val
-        . '->can($_) } ' . '( '
-        . ( join ', ', map { B::perlstring($_) } @{ $self->methods() } ) . ')';
+        . ') || ( '
+        . " defined $val && ! ref $val ) ) && "
+        . $val 
+        . '->isa('
+        . B::perlstring( $self->class ) . ')';
 };
 
 has '+inline_generator' => (

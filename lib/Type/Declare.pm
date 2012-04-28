@@ -11,7 +11,15 @@ use Type::Constraint::Simple;
 use Type::Helpers qw( install_t_sub _INSTANCEDOES _STRINGLIKE _declared_at );
 use Type::Registry qw( internal_types_for_package register );
 
-our @EXPORT = qw( anon declare enum object_can_type object_isa_type );
+our @EXPORT = qw(
+    anon
+    any_can_type
+    any_isa_type
+    declare
+    enum
+    object_can_type
+    object_isa_type
+);
 
 sub import {
     my $package = shift;
@@ -86,6 +94,44 @@ sub object_isa_type {
         name       => $name,
         class      => $isa,
         type_class => 'Type::Constraint::ObjectIsa',
+    );
+
+    register( scalar caller(), $name, $tc, 'exportable' );
+
+    return $tc;
+}
+
+sub any_can_type {
+    my $name;
+    $name = shift if @_ % 2;
+    my %p = @_;
+
+    # This cannot be loaded earlier, since it loads Type::Library::Builtins,
+    # which in turn wants to load Type::Declare (the current module).
+    require Type::Constraint::AnyCan;
+
+    my $tc = _make_tc(
+        ( defined $name ? ( name => $name ) : () ),
+        methods    => $p{methods},
+        type_class => 'Type::Constraint::AnyCan',
+    );
+
+    register( scalar caller(), $name, $tc, 'exportable' )
+        if defined $name;
+
+    return $tc;
+}
+
+sub any_isa_type {
+    my $name = shift;
+    my $isa = shift || $name;
+
+    require Type::Constraint::AnyIsa;
+
+    my $tc = _make_tc(
+        name       => $name,
+        class      => $isa,
+        type_class => 'Type::Constraint::AnyIsa',
     );
 
     register( scalar caller(), $name, $tc, 'exportable' );

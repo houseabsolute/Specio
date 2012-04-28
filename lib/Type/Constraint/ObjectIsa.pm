@@ -11,7 +11,7 @@ use Type::Library::Builtins;
 
 use Moose;
 
-with 'Type::Constraint::Interface';
+with 'Type::Constraint::Role::IsaType';
 
 my $Object = t('Object');
 has '+parent' => (
@@ -36,28 +36,8 @@ has '+inline_generator' => (
     default  => sub { $_inline_generator },
 );
 
-my $_default_message_generator = sub {
-    my $self  = shift;
-    my $thing = shift;
-    my $value = shift;
-
-    return
-          q{Validation failed for } 
-        . $thing
-        . q{ with value }
-        . Devel::PartialDump->new()->dump($value)
-        . '(not isa '
-        . $self->class() . ')';
-};
-
 has '+message_generator' => (
-    default => sub { $_default_message_generator },
-);
-
-has class => (
-    is       => 'ro',
-    isa      => 'ClassName',
-    required => 1,
+    default => sub { $_[0]->_default_message_generator() },
 );
 
 __PACKAGE__->meta()->make_immutable();

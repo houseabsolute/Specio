@@ -1,4 +1,4 @@
-package Type::Constraint::ObjectCan;
+package Type::Constraint::AnyCan;
 
 use strict;
 use warnings;
@@ -12,10 +12,10 @@ use Moose;
 
 with 'Type::Constraint::Role::CanType';
 
-my $Object = t('Object');
+my $Defined = t('Defined');
 has '+parent' => (
     init_arg => undef,
-    default  => sub { $Object },
+    default  => sub { $Defined },
 );
 
 my $_inline_generator = sub {
@@ -23,12 +23,15 @@ my $_inline_generator = sub {
     my $val  = shift;
 
     return
-          'Scalar::Util::blessed(' 
-        . $val . ')'
+          '( Scalar::Util::blessed(' 
+        . $val
+        . ') || ( '
+        . " defined $val && ! ref $val ) )"
         . ' && List::MoreUtils::all { '
         . $val
         . '->can($_) } ' . '( '
-        . ( join ', ', map { B::perlstring($_) } @{ $self->methods() } ) . ')';
+        . ( join ', ', map { B::perlstring($_) } @{ $self->methods() } )
+        . ')';
 };
 
 has '+inline_generator' => (
