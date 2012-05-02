@@ -4,7 +4,10 @@ use warnings;
 use Test::Fatal;
 use Test::More 0.88;
 
+use Devel::PartialDump;
 use Type::Declare;
+
+my $dpd = Devel::PartialDump->new();
 
 {
 
@@ -185,6 +188,29 @@ use Type::Declare;
             $e->message(),
             qr/\Q/,
             'got expected error message for failure with AnyCan type'
+        );
+    }
+}
+
+{
+    require Type::Constraint::Enum;
+
+    my $tc = enum(
+        'Enum1',
+        values => [qw( a b c )],
+    );
+
+    for my $value (qw( a b c )) {
+        ok(
+            $tc->value_is_valid($value),
+            "enum type accepts '$value'"
+        );
+    }
+
+    for my $value ( 'd', 42, [] ) {
+        ok(
+            !$tc->value_is_valid($value),
+            'enum type rejects ' . $dpd->dump($value)
         );
     }
 }

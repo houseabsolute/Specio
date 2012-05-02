@@ -52,15 +52,23 @@ sub anon {
     return _make_tc(@_);
 }
 
-sub _make_tc {
+sub enum {
+    my $name;
+    $name = shift if @_ % 2;
     my %p = @_;
 
-    my $class = delete $p{type_class} || 'Type::Constraint::Simple';
+    require Type::Constraint::Enum;
 
-    return $class->new(
-        %p,
-        declared_at => _declared_at(),
+    my $tc = _make_tc(
+        ( defined $name ? ( name => $name ) : () ),
+        values     => $p{values},
+        type_class => 'Type::Constraint::Enum',
     );
+
+    register( scalar caller(), $name, $tc, 'exportable' )
+        if defined $name;
+
+    return $tc;
 }
 
 sub object_can_type {
@@ -137,6 +145,17 @@ sub any_isa_type {
     register( scalar caller(), $name, $tc, 'exportable' );
 
     return $tc;
+}
+
+sub _make_tc {
+    my %p = @_;
+
+    my $class = delete $p{type_class} || 'Type::Constraint::Simple';
+
+    return $class->new(
+        %p,
+        declared_at => _declared_at(),
+    );
 }
 
 1;

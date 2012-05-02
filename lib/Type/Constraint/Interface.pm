@@ -57,7 +57,7 @@ has inline_generator => (
 
 has inline_environment => (
     is      => 'ro',
-    isa     => 'HashRef[Str]',
+    isa     => 'HashRef[Any]',
     lazy    => 1,
     default => sub { {} },
 );
