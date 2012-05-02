@@ -179,7 +179,6 @@ sub _build_optimized_constraint {
     }
 }
 
-
 sub _constraint_with_parents {
     my $self = shift;
 
