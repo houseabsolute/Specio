@@ -5,6 +5,7 @@ use encoding 'utf8';
 use Test::Fatal;
 use Test::More 0.88;
 
+use Eval::Closure qw( eval_closure );
 use Type::Declare;
 use Type::Library::Builtins;
 
@@ -89,6 +90,48 @@ use Type::Library::Builtins;
     ok(
         $hashref->can_inline_coercion_and_check(),
         'can inline coercion and check for hashref with two coercions'
+    );
+
+    my ( $source, $environment )
+        = $hashref->inline_coercion_and_check('$_[0]');
+
+    my $coerce_and_check;
+    eval {
+        $coerce_and_check = eval_closure(
+            source      => 'sub { ' . $source . ' }',
+            environment => $environment,
+            description => 'inlined coerce and check sub',
+        );
+    };
+
+    is(
+        $@,
+        q{},
+        'no error evaling closure for coercion and check'
+    );
+
+    is_deeply(
+        $coerce_and_check->( { x => 1 } ),
+        { x => 1 },
+        'hashref is passed through coerce and check unchanged'
+    );
+
+    is_deeply(
+        $coerce_and_check->( [ x => 1 ] ),
+        { x => 1 },
+        'arrayref is coerced to hashref'
+    );
+
+    is_deeply(
+        $coerce_and_check->(42),
+        { 42 => 1 },
+        'integer is coerced to hashref'
+    );
+
+    like(
+        exception { $coerce_and_check->('foo') },
+        qr/\QValidation failed for type named HashRef declared in package Type::Library::Builtins\E.+\Qwith value "foo"/,
+        'string throws exception'
     );
 }
 

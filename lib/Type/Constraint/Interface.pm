@@ -116,7 +116,7 @@ sub validate_or_die {
 }
 
 sub value_is_valid {
-    my $self = shift;
+    my $self  = shift;
     my $value = shift;
 
     return $self->_optimized_constraint()->($value);
@@ -131,7 +131,7 @@ sub _ancestors_and_self {
 sub is_anon {
     my $self = shift;
 
-    return ! $self->_has_name();
+    return !$self->_has_name();
 }
 
 sub has_real_constraint {
@@ -244,16 +244,35 @@ sub inline_coercion_and_check {
     die 'Cannot inline coercion and check'
         unless $self->can_inline_coercion_and_check();
 
-    my $code = 'do {' . 'my $value = ' . $_[0] . ';';
+    my $source = 'do {' . 'my $value = ' . $_[0] . ';';
     for my $coercion ( $self->coercions() ) {
-        $code
+        $source
             .= '$value = '
             . $coercion->inline_coercion( $_[0] ) . ' if '
-            . $coercion->to()->inline_check( $_[0] ) . ';';
+            . $coercion->from()->inline_check( $_[0] ) . ';';
     }
-    $code .= $self->inline_check('$value') . '; };';
 
-    return $code;
+    #<<<
+    $source
+        .= $self->inline_check('$value')
+        . ' or Type::Exception->throw( '
+            . ' message => $_Type_Constraint_Interface_message_generator->('
+                . '   $_Type_Constraint_Interface_type, $_Type_Constraint_Interface_description, $value ), '
+            . ' type    => $_Type_Constraint_Interface_type,'
+            . ' value   => $value );';
+    #>>>
+    $source .= '$value };';
+
+    return (
+        $source,
+        {
+            '$_Type_Constraint_Interface_type' => \$self,
+            '$_Type_Constraint_Interface_message_generator' =>
+                \( $self->message_generator() ),
+            '$_Type_Constraint_Interface_description' =>
+                \( $self->_description() ),
+        }
+    );
 }
 
 sub _build_ancestors {
@@ -267,12 +286,13 @@ sub _build_ancestors {
     }
 
     return \@parents;
-}
 
+}
 sub _build_description {
     my $self = shift;
 
-    my $desc = $self->is_anon() ? 'anonymous type' : 'type named ' . $self->name();
+    my $desc
+        = $self->is_anon() ? 'anonymous type' : 'type named ' . $self->name();
 
     $desc .= q{ } . $self->_declaration_description();
 
