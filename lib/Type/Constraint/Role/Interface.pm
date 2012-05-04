@@ -1,4 +1,4 @@
-package Type::Constraint::Interface;
+package Type::Constraint::Role::Interface;
 
 use strict;
 use warnings;
@@ -23,7 +23,7 @@ has name => (
 
 has parent => (
     is        => 'ro',
-    does      => 'Type::Constraint::Interface',
+    does      => 'Type::Constraint::Role::Interface',
     predicate => '_has_parent',
 );
 

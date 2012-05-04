@@ -10,13 +10,13 @@ with 'MooseX::Clone', 'Type::Role::Inlinable';
 
 has from => (
     is       => 'ro',
-    does     => 'Type::Constraint::Interface',
+    does     => 'Type::Constraint::Role::Interface',
     required => 1,
 );
 
 has to => (
     is       => 'ro',
-    does     => 'Type::Constraint::Interface',
+    does     => 'Type::Constraint::Role::Interface',
     required => 1,
     weak_ref => 1,
 );

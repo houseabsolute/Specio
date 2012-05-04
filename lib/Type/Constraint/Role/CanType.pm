@@ -8,7 +8,7 @@ use Scalar::Util qw( blessed );
 
 use Moose::Role;
 
-with 'Type::Constraint::Interface';
+with 'Type::Constraint::Role::Interface';
 
 has methods => (
     is       => 'ro',

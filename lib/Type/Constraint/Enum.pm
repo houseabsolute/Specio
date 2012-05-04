@@ -9,7 +9,7 @@ use Type::Library::Builtins;
 
 use Moose;
 
-with 'Type::Constraint::Interface';
+with 'Type::Constraint::Role::Interface';
 
 my $Str = t('Str');
 has '+parent' => (

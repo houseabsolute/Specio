@@ -5,7 +5,7 @@ use warnings;
 
 use Moose::Role;
 
-with 'Type::Constraint::Interface';
+with 'Type::Constraint::Role::Interface';
 
 has class => (
     is       => 'ro',

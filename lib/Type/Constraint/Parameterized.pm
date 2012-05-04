@@ -8,7 +8,7 @@ use Type::Constraint::Parameterized;
 
 use Moose;
 
-with 'Type::Constraint::Interface';
+with 'Type::Constraint::Role::Interface';
 
 has '+parent' => (
     isa      => 'Type::Constraint::Parameterizable',
@@ -17,7 +17,7 @@ has '+parent' => (
 
 has parameter => (
     is       => 'ro',
-    does     => 'Type::Constraint::Interface',
+    does     => 'Type::Constraint::Role::Interface',
     required => 1,
 );
 

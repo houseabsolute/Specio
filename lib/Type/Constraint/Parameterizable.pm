@@ -10,7 +10,7 @@ use Type::Helpers qw( _declared_at );
 
 use Moose;
 
-with 'Type::Constraint::Interface';
+with 'Type::Constraint::Role::Interface';
 
 has parameterized_constraint_generator => (
     is        => 'ro',
@@ -46,7 +46,7 @@ sub parameterize {
     my $self = shift;
     my ( $parameter, $declared_at ) = validated_list(
         \@_,
-        of          => { does => 'Type::Constraint::Interface' },
+        of          => { does => 'Type::Constraint::Role::Interface' },
         declared_at => {
             isa     => 'HashRef[Maybe[Str]]',
             default => _declared_at(1),

@@ -6,7 +6,7 @@ use namespace::autoclean;
 
 use Moose;
 
-with 'Type::Constraint::Interface';
+with 'Type::Constraint::Role::Interface';
 
 __PACKAGE__->meta()->make_immutable();
 

@@ -10,7 +10,7 @@ extends 'Throwable::Error';
 
 has type => (
     is       => 'ro',
-    does     => 'Type::Constraint::Interface',
+    does     => 'Type::Constraint::Role::Interface',
     required => 1,
 );
 
