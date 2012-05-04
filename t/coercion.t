@@ -40,4 +40,10 @@ ok(
     'does not have a coercion for the Str type'
 );
 
+is_deeply(
+    $arrayref->coerce_value(42),
+    [42],
+    'coerced int to arrayref',
+);
+
 done_testing();
