@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use encoding 'utf8';
 
+use Test::Fatal;
 use Test::More 0.88;
 
 use Type::Declare;
@@ -44,6 +45,12 @@ is_deeply(
     $arrayref->coerce_value(42),
     [42],
     'coerced int to arrayref',
+);
+
+like(
+    exception { $arrayref->coerce_value(42.1) },
+    qr/\QCould not find a coercion for 42.1/,
+    'cannot coerced num to arrayref',
 );
 
 done_testing();
