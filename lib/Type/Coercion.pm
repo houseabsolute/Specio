@@ -5,7 +5,8 @@ use warnings;
 
 use Moose;
 use MooseX::Aliases;
-with 'MooseX::Clone';
+
+with 'MooseX::Clone', 'Type::Role::Inlinable';
 
 has from => (
     is       => 'ro',
@@ -25,28 +26,6 @@ has coercion => (
     isa       => 'CodeRef',
     predicate => '_has_coercion',
     alias     => 'using',
-);
-
-has inline_generator => (
-    is        => 'ro',
-    isa       => 'CodeRef',
-    predicate => '_has_inline_generator',
-    alias     => 'inline',
-);
-
-has inline_environment => (
-    is      => 'ro',
-    isa     => 'HashRef[Any]',
-    lazy    => 1,
-    default => sub { {} },
-);
-
-has _inlined_coercion => (
-    is       => 'ro',
-    isa      => 'CodeRef',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_inlined_coercion',
 );
 
 has _optimized_coercion => (
@@ -90,18 +69,17 @@ sub _build_optimized_coercion {
     }
 }
 
-sub _build_inlined_constraint {
+sub _build_description {
     my $self = shift;
 
-    my $source = 'sub { ' . $self->_inline_coercion('$_[0]') . '}';
+    my $desc
+        = 'coercion from '
+        . ( $self->from()->name() // 'anon type' ) . ' to '
+        . ( $self->to()->name()   // 'anon type' );
 
-    return eval_closure(
-        source      => $source,
-        environment => $self->inline_environment(),
-        description => 'inlined coercion from '
-            . $self->from()->_description() . ' to '
-            . $self->to()->_description(),
-    );
+    $desc .= q{ } . $self->_declaration_description();
+
+    return $desc;
 }
 
 __PACKAGE__->meta()->make_immutable();

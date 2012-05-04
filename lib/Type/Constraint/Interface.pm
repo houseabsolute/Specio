@@ -5,7 +5,6 @@ use warnings;
 use namespace::autoclean;
 
 use Devel::PartialDump;
-use Eval::Closure qw( eval_closure );
 use List::AllUtils qw( all );
 use Sub::Name qw( subname );
 use Try::Tiny;
@@ -13,7 +12,8 @@ use Type::Exception;
 
 use Moose::Role;
 use MooseX::Aliases;
-with 'MooseX::Clone';
+
+with 'MooseX::Clone', 'Type::Role::Inlinable';
 
 has name => (
     is        => 'ro',
@@ -25,11 +25,6 @@ has parent => (
     is        => 'ro',
     does      => 'Type::Constraint::Interface',
     predicate => '_has_parent',
-);
-
-has declared_at => (
-    is  => 'ro',
-    isa => 'HashRef[Maybe[Str]]',
 );
 
 has constraint => (
@@ -46,28 +41,6 @@ has _optimized_constraint => (
     init_arg => undef,
     lazy     => 1,
     builder  => '_build_optimized_constraint',
-);
-
-has inline_generator => (
-    is        => 'ro',
-    isa       => 'CodeRef',
-    predicate => '_has_inline_generator',
-    alias     => 'inline',
-);
-
-has inline_environment => (
-    is      => 'ro',
-    isa     => 'HashRef[Any]',
-    lazy    => 1,
-    default => sub { {} },
-);
-
-has _inlined_constraint => (
-    is       => 'ro',
-    isa      => 'CodeRef',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_inlined_constraint',
 );
 
 has _ancestors => (
@@ -97,17 +70,10 @@ has message_generator => (
     alias   => 'message',
 );
 
-has _description => (
-    is       => 'ro',
-    isa      => 'Str',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_description',
-);
-
 has _coercions => (
     traits  => [ 'Clone', 'Hash' ],
     handles => {
+        coercions               => 'values',
         coercion_from_type      => 'get',
         _has_coercion_from_type => 'exists',
         _add_coercion           => 'set',
@@ -116,7 +82,7 @@ has _coercions => (
     default => sub { {} },
 );
 
-my $null_constraint = sub { 1 };
+my $NullConstraint = sub { 1 };
 
 sub BUILD { }
 
@@ -125,7 +91,7 @@ around BUILD => sub {
     my $self = shift;
 
     unless ( $self->_has_constraint() || $self->_has_inline_generator() ) {
-        $self->_set_constraint($null_constraint);
+        $self->_set_constraint($NullConstraint);
     }
 
     die
@@ -171,7 +137,9 @@ sub is_anon {
 sub has_real_constraint {
     my $self = shift;
 
-    return ! $self->constraint() ne $null_constraint;
+    return (   $self->_has_constraint
+            && $self->constraint() ne $NullConstraint )
+        || $self->_has_inline_generator();
 }
 
 sub _inline_check {
@@ -183,7 +151,7 @@ sub _build_optimized_constraint {
     my $self = shift;
 
     if ( $self->can_be_inlined() ) {
-        return $self->_inlined_constraint();
+        return $self->_generated_inline_sub();
     }
     else {
         return $self->_constraint_with_parents();
@@ -201,26 +169,20 @@ sub _constraint_with_parents {
         # ancestors we've seen so far, since we can assume that the inlined
         # constraint does all of the ancestor checks in addition to its own.
         if ( $type->can_be_inlined() ) {
-            @constraints = $type->_inlined_constraint();
+            @constraints = $type->_generated_inline_sub();
         }
         else {
             push @constraints, $type->constraint();
         }
     }
 
-    return $null_constraint unless @constraints;
+    return $NullConstraint unless @constraints;
 
     return subname(
         'optimized constraint for ' . $self->_description() => sub {
             all { $_->( $_[0] ) } @constraints;
         }
     );
-}
-
-sub can_be_inlined {
-    my $self = shift;
-
-    return $self->_has_inline_generator();
 }
 
 # This is only used for identifying from types as part of coercions, but I
@@ -253,6 +215,20 @@ sub has_coercion_from_type {
     return $self->_has_coercion_from_type( $type->id() );
 }
 
+sub coerce_value {
+    my $self  = shift;
+    my $value = shift;
+
+    for my $coercion ( $self->coercions() ) {
+        next unless $coercion->from()->value_is_valid($value);
+
+        return $coercion->coerce($value);
+    }
+
+    die 'Could not find a coercion from '
+        . Devel::PartialDump->new()->dump($value);
+}
+
 sub _build_ancestors {
     my $self = shift;
 
@@ -266,26 +242,12 @@ sub _build_ancestors {
     return \@parents;
 }
 
-sub _build_inlined_constraint {
-    my $self = shift;
-
-    my $source = 'sub { ' . $self->_inline_check('$_[0]') . '}';
-
-    return eval_closure(
-        source      => $source,
-        environment => $self->inline_environment(),
-        description => 'inlined constraint for ' . $self->_description(),
-    );
-}
-
 sub _build_description {
     my $self = shift;
 
     my $desc = $self->is_anon() ? 'anonymous type' : 'type named ' . $self->name();
 
-    my $decl = $self->declared_at();
-    $desc .= " declared in package $decl->{package} ($decl->{filename}) at line $decl->{line}";
-    $desc .= " in sub named $decl->{sub}" if defined $decl->{sub};
+    $desc .= q{ } . $self->_declaration_description();
 
     return $desc;
 }

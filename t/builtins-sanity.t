@@ -691,7 +691,7 @@ foreach my $type_name (qw( Str Num Int ClassName )) {
 
     my $inlined;
     if ( $type->can_be_inlined() ) {
-        $inlined = $type->_inlined_constraint();
+        $inlined = $type->_generated_inline_sub();
     }
 
     ok(
@@ -749,7 +749,7 @@ sub test_constraint {
 
     my $inlined;
     if ( $type->can_be_inlined() ) {
-        $inlined = $type->_inlined_constraint();
+        $inlined = $type->_generated_inline_sub();
     }
 
     for my $accept ( @{ $tests->{accept} || [] } ) {

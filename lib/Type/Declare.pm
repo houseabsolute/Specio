@@ -163,7 +163,12 @@ sub _make_tc {
 sub coerce {
     my $to = shift;
 
-    return $to->add_coercion( Type::Coercion->new( to => $to, @_ ) );
+    return $to->add_coercion(
+        Type::Coercion->new(
+            to          => $to, @_,
+            declared_at => _declared_at(),
+        )
+    );
 }
 
 1;
