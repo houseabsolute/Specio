@@ -105,6 +105,17 @@ has _description => (
     builder  => '_build_description',
 );
 
+has _coercions => (
+    traits  => [ 'Clone', 'Hash' ],
+    handles => {
+        coercion_from_type      => 'get',
+        _has_coercion_from_type => 'exists',
+        _add_coercion           => 'set',
+        has_coercions           => 'count',
+    },
+    default => sub { {} },
+);
+
 my $null_constraint = sub { 1 };
 
 sub BUILD { }
@@ -210,6 +221,36 @@ sub can_be_inlined {
     my $self = shift;
 
     return $self->_has_inline_generator();
+}
+
+# This is only used for identifying from types as part of coercions, but I
+# want to leave open the possibility of using something other than
+# _description in the future.
+sub id {
+    my $self = shift;
+
+    return $self->_description();
+}
+
+sub add_coercion {
+    my $self     = shift;
+    my $coercion = shift;
+
+    my $from_id = $coercion->from()->id();
+
+    confess "Cannot add two coercions fom the same type: $from_id"
+        if $self->_has_coercion_from_type($from_id);
+
+    $self->_add_coercion( $from_id => $coercion );
+
+    return;
+}
+
+sub has_coercion_from_type {
+    my $self = shift;
+    my $type = shift;
+
+    return $self->_has_coercion_from_type( $type->id() );
 }
 
 sub _build_ancestors {

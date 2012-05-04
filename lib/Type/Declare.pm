@@ -7,6 +7,7 @@ use parent 'Exporter';
 
 use Carp qw( croak );
 use Params::Util qw( _CODELIKE );
+use Type::Coercion;
 use Type::Constraint::Simple;
 use Type::Helpers qw( install_t_sub _INSTANCEDOES _STRINGLIKE _declared_at );
 use Type::Registry qw( internal_types_for_package register );
@@ -15,6 +16,7 @@ our @EXPORT = qw(
     anon
     any_can_type
     any_isa_type
+    coerce
     declare
     enum
     object_can_type
@@ -156,6 +158,12 @@ sub _make_tc {
         %p,
         declared_at => _declared_at(),
     );
+}
+
+sub coerce {
+    my $to = shift;
+
+    return $to->add_coercion( Type::Coercion->new( to => $to, @_ ) );
 }
 
 1;

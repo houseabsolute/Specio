@@ -30,7 +30,7 @@ sub register {
     # changes to the registry as they happen. This is important inside a
     # package that is declaring new types. It needs to be able to see types it
     # has declared.
-    $Registry{$package}{internal}{$name} = $type;
+    $Registry{$package}{internal}{$name}   = $type;
     $Registry{$package}{exportable}{$name} = $type
         if $exportable;
 
