@@ -56,8 +56,8 @@ sub can_be_inlined {
 sub _build_generated_inline_sub {
     my $self = shift;
 
-    my $source = 'sub { ' . $self->_inline_check('$_[0]') . '}';
-
+    my $source
+        = 'sub { ' . $self->inline_generator()->( $self, '$_[0]' ) . '}';
 
     return eval_closure(
         source      => $source,

@@ -52,7 +52,7 @@ has _ancestors => (
 );
 
 my $_default_message_generator = sub {
-    my $self = shift;
+    my $type  = shift;
     my $thing = shift;
     my $value = shift;
 
@@ -142,8 +142,11 @@ sub has_real_constraint {
         || $self->_has_inline_generator();
 }
 
-sub _inline_check {
+sub inline_check {
     my $self = shift;
+
+    die 'Cannot inline' unless $self->_has_inline_generator();
+
     return $self->inline_generator()->( $self, @_ );
 }
 
@@ -227,6 +230,30 @@ sub coerce_value {
 
     die 'Could not find a coercion for '
         . Devel::PartialDump->new()->dump($value);
+}
+
+sub can_inline_coercion_and_check {
+    my $self = shift;
+
+    return all { $_->can_be_inlined() } $self, $self->coercions();
+}
+
+sub inline_coercion_and_check {
+    my $self = shift;
+
+    die 'Cannot inline coercion and check'
+        unless $self->can_inline_coercion_and_check();
+
+    my $code = 'do {' . 'my $value = ' . $_[0] . ';';
+    for my $coercion ( $self->coercions() ) {
+        $code
+            .= '$value = '
+            . $coercion->inline_coercion( $_[0] ) . ' if '
+            . $coercion->to()->inline_check( $_[0] ) . ';';
+    }
+    $code .= $self->inline_check('$value') . '; };';
+
+    return $code;
 }
 
 sub _build_ancestors {

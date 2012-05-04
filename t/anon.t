@@ -22,7 +22,7 @@ use Type::Library::Builtins;
     my $anon = anon(
         parent => t('Str'),
         inline => sub {
-            $_[0]->parent()->_inline_check( $_[1] ) . " && length $_[1]";
+            $_[0]->parent()->inline_check( $_[1] ) . " && length $_[1]";
         },
     );
 

@@ -64,7 +64,7 @@ declare(
     'Value',
     parent => t('Defined'),
     inline => sub {
-        $_[0]->parent()->_inline_check( $_[1] ) . ' && !ref(' . $_[1] . ')';
+        $_[0]->parent()->inline_check( $_[1] ) . ' && !ref(' . $_[1] . ')';
     }
 );
 
@@ -80,7 +80,7 @@ declare(
     'Str',
     parent => t('Value'),
     inline => sub {
-        $_[0]->parent()->_inline_check( $_[1] ) . ' && (' 
+        $_[0]->parent()->inline_check( $_[1] ) . ' && (' 
             . 'ref(\\'
             . $_[1]
             . ') eq "SCALAR"'
@@ -95,7 +95,7 @@ declare(
     'Num',
     parent => t('Str'),
     inline => sub {
-        $value_type->_inline_check( $_[1] )
+        $value_type->inline_check( $_[1] )
             . ' && ( my $val = '
             . $_[1]
             . ' ) =~ /\\A-?[0-9]+(?:\\.[0-9]+)?\\z/';
@@ -106,7 +106,7 @@ declare(
     'Int',
     parent => t('Num'),
     inline => sub {
-        $value_type->_inline_check( $_[1] )
+        $value_type->inline_check( $_[1] )
             . ' && ( my $val = '
             . $_[1]
             . ' ) =~ /\A-?[0-9]+\z/';
@@ -183,7 +183,7 @@ declare(
             . q{ ) eq 'SCALAR' || ref( }
             . $val
             . q{ ) eq 'REF' ) } . ' && '
-            . $parameter->_inline_check( '${ ( ' . $val . ' ) }' );
+            . $parameter->inline_check( '${ ( ' . $val . ' ) }' );
     },
 );
 
@@ -203,7 +203,7 @@ declare(
             . $val . ';'
             . q{ref($value) eq 'ARRAY' }
             . '&& List::MoreUtils::all {'
-            . $parameter->_inline_check('$_') . ' } '
+            . $parameter->inline_check('$_') . ' } '
             . '@{$value}' . '}';
     },
 );
@@ -224,7 +224,7 @@ declare(
             . $val . ';'
             . q{ref($value) eq 'HASH' }
             . '&& List::MoreUtils::all {'
-            . $parameter->_inline_check('$_') . ' } '
+            . $parameter->inline_check('$_') . ' } '
             . 'values %{$value}' . '}';
     },
 );
@@ -242,7 +242,7 @@ declare(
         return
               '!defined(' 
             . $val . ') ' . '|| ('
-            . $parameter->_inline_check($val) . ')';
+            . $parameter->inline_check($val) . ')';
     },
 );
 
