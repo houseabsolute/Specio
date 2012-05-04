@@ -225,7 +225,7 @@ sub coerce_value {
         return $coercion->coerce($value);
     }
 
-    die 'Could not find a coercion from '
+    die 'Could not find a coercion for '
         . Devel::PartialDump->new()->dump($value);
 }
 
