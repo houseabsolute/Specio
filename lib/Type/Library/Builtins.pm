@@ -7,8 +7,8 @@ use parent 'Type::Exporter';
 
 use Class::Load qw( is_class_loaded );
 use List::MoreUtils ();
-use overload ();
-use Scalar::Util ();
+use overload        ();
+use Scalar::Util    ();
 use Type::Constraint::Parameterizable;
 use Type::Declare;
 
@@ -128,17 +128,17 @@ declare(
     'Int',
     parent => t('Num'),
     inline => sub {
-        '( ( Scalar::Util::blessed('
-            . $_[1] . ') && '
+        'Scalar::Util::blessed('
+            . $_[1] . ') ? '
             . ' overload::Overloaded('
             . $_[1]
             . ') && defined overload::Method('
             . $_[1]
             . ', "0+") && '
-            . '( my $val1 = '
+            . ' ( ( my $val1 = '
             . $_[1]
-            . ' + 0 ) =~ /\A-?[0-9]+\z/ ) )'
-            . ' || ( ( '
+            . ' + 0 ) =~ /\A-?[0-9]+\z/ )'
+            . ' : ( ( '
             . $value_type->inline_check( $_[1] )
             . ') && ( my $val2 = '
             . $_[1]
@@ -150,14 +150,14 @@ declare(
     'CodeRef',
     parent => t('Ref'),
     inline => sub {
-        '( Scalar::Util::blessed('
-            . $_[1] . ') && '
+        'Scalar::Util::blessed('
+            . $_[1] . ') ? '
             . ' overload::Overloaded('
             . $_[1]
             . ') && defined overload::Method('
             . $_[1]
-            . ', "&{}") ) '
-            . ' || ( ref('
+            . ', "&{}") '
+            . ' : ( ref('
             . $_[1]
             . ') eq "CODE" )';
     },
@@ -182,7 +182,18 @@ declare(
 declare(
     'GlobRef',
     parent => t('Ref'),
-    inline => sub { 'ref(' . $_[1] . ') eq "GLOB"' },
+    inline => sub {
+        'Scalar::Util::blessed('
+            . $_[1] . ') ? '
+            . 'overload::Overloaded('
+            . $_[1]
+            . ') && defined overload::Method('
+            . $_[1]
+            . ', "*{}") '
+            . ' : ( ref('
+            . $_[1]
+            . ') eq "GLOB" )';
+    },
 );
 
 # NOTE: scalar filehandles are GLOB refs, but a GLOB ref is not always a
@@ -269,9 +280,9 @@ declare(
 
 declare(
     'HashRef',
-    type_class => 'Type::Constraint::Parameterizable',
-    parent     => t('Ref'),
-    inline     => sub { 'ref(' . $_[1] . q{) eq 'HASH'} },
+    type_class                     => 'Type::Constraint::Parameterizable',
+    parent                         => t('Ref'),
+    inline                         => sub { 'ref(' . $_[1] . q{) eq 'HASH'} },
     parameterized_inline_generator => sub {
         my $self      = shift;
         my $parameter = shift;
