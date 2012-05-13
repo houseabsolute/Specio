@@ -319,22 +319,40 @@ declare(
 
 declare(
     'HashRef',
-    type_class                     => 'Type::Constraint::Parameterizable',
-    parent                         => t('Ref'),
-    inline                         => sub { 'ref(' . $_[1] . q{) eq 'HASH'} },
+    type_class => 'Type::Constraint::Parameterizable',
+    parent     => t('Ref'),
+    inline     => sub {
+        'Scalar::Util::blessed('
+            . $_[1] . ') ? '
+            . 'overload::Overloaded('
+            . $_[1]
+            . ') && defined overload::Method('
+            . $_[1]
+            . ', "%{}") '
+            . ' : ref('
+            . $_[1]
+            . q{) eq 'HASH'};
+    },
     parameterized_inline_generator => sub {
         my $self      = shift;
         my $parameter = shift;
         my $val       = shift;
 
         return
-              'do {'
-            . 'my $value = '
-            . $val . ';'
-            . q{ref($value) eq 'HASH' }
+              '( ( Scalar::Util::blessed(' 
+            . $val . ') && '
+            . 'overload::Overloaded('
+            . $val
+            . ') && defined overload::Method('
+            . $val
+            . ', "%{}") ) || '
+            . '( ref('
+            . $val
+            . ') eq "HASH" )'
             . '&& List::MoreUtils::all {'
             . $parameter->inline_check('$_') . ' } '
-            . 'values %{$value}' . '}';
+            . 'values %{'
+            . $val . '}' . ' )';
     },
 );
 
