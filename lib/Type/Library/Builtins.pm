@@ -283,20 +283,37 @@ declare(
     'ArrayRef',
     type_class => 'Type::Constraint::Parameterizable',
     parent     => t('Ref'),
-    inline     => sub { 'ref(' . $_[1] . q{) eq 'ARRAY'} },
+    inline     => sub {
+        'Scalar::Util::blessed('
+            . $_[1] . ') ? '
+            . 'overload::Overloaded('
+            . $_[1]
+            . ') && defined overload::Method('
+            . $_[1]
+            . ', "\\@{}") '
+            . ' : ref('
+            . $_[1]
+            . q{) eq 'ARRAY'};
+    },
     parameterized_inline_generator => sub {
         my $self      = shift;
         my $parameter = shift;
         my $val       = shift;
 
         return
-              'do {'
-            . 'my $value = '
-            . $val . ';'
-            . q{ref($value) eq 'ARRAY' }
+              '( ( Scalar::Util::blessed(' 
+            . $val . ') && '
+            . 'overload::Overloaded('
+            . $val
+            . ') && defined overload::Method('
+            . $val
+            . ', "\\@{}") ) || '
+            . '( ref('
+            . $val
+            . ') eq "ARRAY" )'
             . '&& List::MoreUtils::all {'
-            . $parameter->inline_check('$_') . ' } '
-            . '@{$value}' . '}';
+            . $parameter->inline_check('$_') . ' } ' . '@{'
+            . $val . '}' . ' )';
     },
 );
 
