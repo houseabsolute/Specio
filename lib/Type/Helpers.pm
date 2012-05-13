@@ -15,6 +15,7 @@ sub install_t_sub {
     my $caller = shift;
     my $types  = shift;
 
+    # XXX - check to see if their t() is something else entirely?
     return if  $caller->can('t');
 
     my $t = sub {
