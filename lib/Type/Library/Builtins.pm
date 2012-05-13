@@ -262,7 +262,15 @@ declare(
         my $val       = shift;
 
         return
-              '( ref( ' 
+              'Scalar::Util::blessed(' 
+            . $val . ') ? '
+            . 'overload::Overloaded('
+            . $val
+            . ') && defined overload::Method('
+            . $val
+            . ', "\\${}") ' . ' && '
+            . $parameter->inline_check( '${ ( ' . $val . ' ) }' )
+            . ' : ( ref( '
             . $val
             . q{ ) eq 'SCALAR' || ref( }
             . $val
