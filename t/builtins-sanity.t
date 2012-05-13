@@ -53,6 +53,22 @@ my $UNDEF = undef;
 my $CLASS_NAME = 'Thing';
 
 {
+    package BoolOverload;
+
+    use overload
+        'bool' => sub { ${ $_[0] } },
+        fallback => 1;
+
+    sub new {
+        my $str = $_[1];
+        bless \$str, __PACKAGE__;
+    }
+}
+
+my $BOOL_OVERLOAD_TRUE  = BoolOverload->new(1);
+my $BOOL_OVERLOAD_FALSE = BoolOverload->new(0);
+
+{
     package StrOverload;
 
     use overload
@@ -73,6 +89,8 @@ my %tests = (
         accept => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -104,6 +122,8 @@ my %tests = (
         accept => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -135,6 +155,8 @@ my %tests = (
         accept => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -171,6 +193,8 @@ my %tests = (
         reject => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -201,6 +225,8 @@ my %tests = (
         accept => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $EMPTY_STRING,
             $UNDEF,
         ],
@@ -234,6 +260,8 @@ my %tests = (
         accept => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -277,6 +305,8 @@ my %tests = (
             $GLOB,
         ],
         reject => [
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $STR_OVERLOAD_EMPTY,
             $STR_OVERLOAD_FULL,
             $SCALAR_REF,
@@ -296,6 +326,8 @@ my %tests = (
     },
     Ref => {
         accept => [
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $STR_OVERLOAD_EMPTY,
             $STR_OVERLOAD_FULL,
             $SCALAR_REF,
@@ -337,6 +369,8 @@ my %tests = (
             $NEG_NUM,
         ],
         reject => [
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -368,6 +402,8 @@ my %tests = (
             $NEG_INT,
         ],
         reject => [
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $NUM,
             $NEG_NUM,
             $EMPTY_STRING,
@@ -410,6 +446,8 @@ my %tests = (
             $INT_WITH_NL2,
         ],
         reject => [
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $SCALAR_REF,
             $SCALAR_REF_REF,
             $ARRAY_REF,
@@ -434,6 +472,8 @@ my %tests = (
         reject => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -466,6 +506,8 @@ my %tests = (
         reject => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -499,6 +541,8 @@ my %tests = (
         reject => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -532,6 +576,8 @@ my %tests = (
         reject => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -566,6 +612,8 @@ my %tests = (
         reject => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -599,6 +647,8 @@ my %tests = (
         reject => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -632,6 +682,8 @@ my %tests = (
         reject => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,
@@ -659,6 +711,8 @@ my %tests = (
     },
     Object => {
         accept => [
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $STR_OVERLOAD_EMPTY,
             $STR_OVERLOAD_FULL,
             $FH_OBJECT,
@@ -697,6 +751,8 @@ my %tests = (
         reject => [
             $ZERO,
             $ONE,
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
             $INT,
             $NEG_INT,
             $NUM,

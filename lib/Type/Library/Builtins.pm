@@ -49,7 +49,13 @@ declare(
     'Bool',
     parent => t('Item'),
     inline => sub {
-        '('
+        'Scalar::Util::blessed('
+            . $_[1] . ') ? '
+            . ' overload::Overloaded('
+            . $_[1]
+            . ') && defined overload::Method('
+            . $_[1]
+            . ', "bool")' . ' : ('
             . '!defined('
             . $_[1] . ') ' . '|| '
             . $_[1]
