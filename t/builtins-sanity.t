@@ -1256,8 +1256,8 @@ sub test_constraint {
 
     if ( $type->isa('Type::Constraint::Parameterizable') ) {
         my $parameterized = Type::Constraint::Simple->new(
-            name        => $type->name() . 'OfAny',
-            parent      => $type->parameterize( of => t('Any') ),
+            name        => $type->name() . 'OfItem',
+            parent      => $type->parameterize( of => t('Item') ),
             declared_at => _declared_at(0),
         );
         test_constraint( $parameterized, $tests );
