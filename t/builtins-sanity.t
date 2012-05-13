@@ -150,6 +150,10 @@ my $REGEX_OVERLOAD = RegexOverload->new(qr/foo/);
 local *FOO;
 my $GLOB_OVERLOAD = GlobOverload->new(\*FOO);
 
+local *BAR;
+open BAR, '<', $0 or die "Could not open $0 for the test";
+my $GLOB_OVERLOAD_FH = GlobOverload->new(\*BAR);
+
 my %tests = (
     Any => {
         accept => [
@@ -182,6 +186,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -223,6 +228,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -264,6 +270,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -310,6 +317,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -353,6 +361,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -393,6 +402,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -436,6 +446,7 @@ my %tests = (
             $CODE_OVERLOAD,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -465,6 +476,7 @@ my %tests = (
             $CODE_OVERLOAD,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -520,6 +532,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $INT_WITH_NL1,
@@ -565,6 +578,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -608,6 +622,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -651,6 +666,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -694,6 +710,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -737,6 +754,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -780,6 +798,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,
@@ -826,6 +845,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $OBJECT,
@@ -837,6 +857,7 @@ my %tests = (
         accept => [
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
         ],
         reject => [
@@ -880,6 +901,7 @@ my %tests = (
         accept => [
             $FH,
             $FH_OBJECT,
+            $GLOB_OVERLOAD_FH,
         ],
         reject => [
             $ZERO,
@@ -937,6 +959,7 @@ my %tests = (
             $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $OBJECT,
         ],
         reject => [
@@ -997,6 +1020,7 @@ my %tests = (
             $GLOB,
             $GLOB_REF,
             $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
             $FH,
             $FH_OBJECT,
             $REGEX,

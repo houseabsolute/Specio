@@ -202,15 +202,22 @@ declare(
     'FileHandle',
     parent => t('Ref'),
     inline => sub {
-        '(ref('
+        'Scalar::Util::blessed('
+            . $_[1] . ') ? '
+            . $_[1]
+            . '->isa("IO::Handle") || '
+            . '( overload::Overloaded('
+            . $_[1]
+            . ') && defined overload::Method('
+            . $_[1]
+            . ', "*{}") '
+            . '&& Scalar::Util::openhandle( *{'
+            . $_[1] . '} ) )'
+            . ' : ref('
             . $_[1]
             . ') eq "GLOB" '
             . '&& Scalar::Util::openhandle('
-            . $_[1] . ')) '
-            . '|| (Scalar::Util::blessed('
-            . $_[1] . ') ' . '&& '
-            . $_[1]
-            . '->isa("IO::Handle"))';
+            . $_[1] . ')';
     },
 );
 
