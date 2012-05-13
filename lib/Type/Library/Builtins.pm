@@ -202,7 +202,12 @@ declare(
 declare(
     'ClassName',
     parent => t('Str'),
-    inline => sub { 'Class::Load::is_class_loaded(' . $_[1] . ')' },
+    inline => sub {
+        'defined( '
+            . $_[1]
+            . ') && Class::Load::is_class_loaded("'
+            . $_[1] . '")';
+    },
 );
 
 declare(

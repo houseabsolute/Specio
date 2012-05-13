@@ -81,8 +81,9 @@ my $BOOL_OVERLOAD_FALSE = BoolOverload->new(0);
     }
 }
 
-my $STR_OVERLOAD_EMPTY = StrOverload->new(q{});
-my $STR_OVERLOAD_FULL  = StrOverload->new('full');
+my $STR_OVERLOAD_EMPTY      = StrOverload->new(q{});
+my $STR_OVERLOAD_FULL       = StrOverload->new('full');
+my $STR_OVERLOAD_CLASS_NAME = StrOverload->new('StrOverload');
 
 {
     package NumOverload;
@@ -895,6 +896,7 @@ my %tests = (
     ClassName => {
         accept => [
             $CLASS_NAME,
+            $STR_OVERLOAD_CLASS_NAME,
         ],
         reject => [
             $ZERO,
