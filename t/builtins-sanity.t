@@ -84,6 +84,25 @@ my $BOOL_OVERLOAD_FALSE = BoolOverload->new(0);
 my $STR_OVERLOAD_EMPTY = StrOverload->new(q{});
 my $STR_OVERLOAD_FULL  = StrOverload->new('full');
 
+{
+    package NumOverload;
+
+    use overload
+        q{0+} => sub { ${ $_[0] } },
+        fallback => 1;
+
+    sub new {
+        my $str = $_[1];
+        bless \$str, __PACKAGE__;
+    }
+}
+
+my $NUM_OVERLOAD_ZERO        = NumOverload->new(0);
+my $NUM_OVERLOAD_ONE         = NumOverload->new(1);
+my $NUM_OVERLOAD_NEG         = NumOverload->new(-42);
+my $NUM_OVERLOAD_DECIMAL     = NumOverload->new(42.42);
+my $NUM_OVERLOAD_NEG_DECIMAL = NumOverload->new(42.42);
+
 my %tests = (
     Any => {
         accept => [
@@ -95,6 +114,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -128,6 +152,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -161,6 +190,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -199,6 +233,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -235,6 +274,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $STRING,
             $NUM_IN_STRING,
             $STR_OVERLOAD_EMPTY,
@@ -266,6 +310,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -309,6 +358,11 @@ my %tests = (
             $BOOL_OVERLOAD_FALSE,
             $STR_OVERLOAD_EMPTY,
             $STR_OVERLOAD_FULL,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $SCALAR_REF,
             $SCALAR_REF_REF,
             $ARRAY_REF,
@@ -330,6 +384,11 @@ my %tests = (
             $BOOL_OVERLOAD_FALSE,
             $STR_OVERLOAD_EMPTY,
             $STR_OVERLOAD_FULL,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $SCALAR_REF,
             $SCALAR_REF_REF,
             $ARRAY_REF,
@@ -367,6 +426,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
         ],
         reject => [
             $BOOL_OVERLOAD_TRUE,
@@ -400,12 +464,17 @@ my %tests = (
             $ONE,
             $INT,
             $NEG_INT,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
         ],
         reject => [
             $BOOL_OVERLOAD_TRUE,
             $BOOL_OVERLOAD_FALSE,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -448,6 +517,11 @@ my %tests = (
         reject => [
             $BOOL_OVERLOAD_TRUE,
             $BOOL_OVERLOAD_FALSE,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $SCALAR_REF,
             $SCALAR_REF_REF,
             $ARRAY_REF,
@@ -478,6 +552,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -512,6 +591,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -547,6 +631,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -582,6 +671,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -618,6 +712,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -653,6 +752,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -688,6 +792,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -715,6 +824,11 @@ my %tests = (
             $BOOL_OVERLOAD_FALSE,
             $STR_OVERLOAD_EMPTY,
             $STR_OVERLOAD_FULL,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
@@ -757,6 +871,11 @@ my %tests = (
             $NEG_INT,
             $NUM,
             $NEG_NUM,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
@@ -917,7 +1036,13 @@ sub describe {
     if ( blessed $val ) {
         my $desc = ( ref $val ) . ' object';
         if ( $val->isa('StrOverload') ) {
-            $desc .= ' (' . describe( "$val" ) . ')';
+            $desc .= ' (' . describe("$val") . ')';
+        }
+        elsif ( $val->isa('BoolOverload') ) {
+            $desc .= ' (' . ( $val ? 'true' : 'false' ) . ')';
+        }
+        elsif ( $val->isa('NumOverload') ) {
+            $desc .= ' (' . describe( $val + 0 ) . ')';
         }
 
         return $desc;

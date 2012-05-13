@@ -110,10 +110,17 @@ declare(
     'Num',
     parent => t('Str'),
     inline => sub {
-        $value_type->inline_check( $_[1] )
+        'Scalar::Util::blessed('
+            . $_[1] . ') ? '
+            . ' overload::Overloaded('
+            . $_[1]
+            . ') && defined overload::Method('
+            . $_[1]
+            . ', "0+")' . ' : ( '
+            . $value_type->inline_check( $_[1] )
             . ' && ( my $val = '
             . $_[1]
-            . ' ) =~ /\\A-?[0-9]+(?:\\.[0-9]+)?\\z/';
+            . ' ) =~ /\\A-?[0-9]+(?:\\.[0-9]+)?\\z/ )';
     }
 );
 
@@ -121,10 +128,21 @@ declare(
     'Int',
     parent => t('Num'),
     inline => sub {
-        $value_type->inline_check( $_[1] )
-            . ' && ( my $val = '
+        '( ( Scalar::Util::blessed('
+            . $_[1] . ') && '
+            . ' overload::Overloaded('
             . $_[1]
-            . ' ) =~ /\A-?[0-9]+\z/';
+            . ') && defined overload::Method('
+            . $_[1]
+            . ', "0+") && '
+            . '( my $val1 = '
+            . $_[1]
+            . ' + 0 ) =~ /\A-?[0-9]+\z/ ) )'
+            . ' || ( ( '
+            . $value_type->inline_check( $_[1] )
+            . ') && ( my $val2 = '
+            . $_[1]
+            . ' ) =~ /\A-?[0-9]+\z/ )';
     }
 );
 
