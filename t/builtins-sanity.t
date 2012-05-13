@@ -60,8 +60,8 @@ my $CLASS_NAME = 'Thing';
         fallback => 1;
 
     sub new {
-        my $str = $_[1];
-        bless \$str, __PACKAGE__;
+        my $bool = $_[1];
+        bless \$bool, __PACKAGE__;
     }
 }
 
@@ -92,8 +92,8 @@ my $STR_OVERLOAD_FULL  = StrOverload->new('full');
         fallback => 1;
 
     sub new {
-        my $str = $_[1];
-        bless \$str, __PACKAGE__;
+        my $num = $_[1];
+        bless \$num, __PACKAGE__;
     }
 }
 
@@ -102,6 +102,21 @@ my $NUM_OVERLOAD_ONE         = NumOverload->new(1);
 my $NUM_OVERLOAD_NEG         = NumOverload->new(-42);
 my $NUM_OVERLOAD_DECIMAL     = NumOverload->new(42.42);
 my $NUM_OVERLOAD_NEG_DECIMAL = NumOverload->new(42.42);
+
+{
+    package CodeOverload;
+
+    use overload
+        q{&{}} => sub { ${ $_[0] } },
+        fallback => 1;
+
+    sub new {
+        my $code = $_[1];
+        bless \$code, __PACKAGE__;
+    }
+}
+
+my $CODE_OVERLOAD = CodeOverload->new( sub { } );
 
 my %tests = (
     Any => {
@@ -131,6 +146,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -169,6 +185,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -207,6 +224,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -250,6 +268,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -290,6 +309,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -327,6 +347,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -368,6 +389,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB_REF,
             $FH,
             $FH_OBJECT,
@@ -394,6 +416,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB_REF,
             $FH,
             $FH_OBJECT,
@@ -445,6 +468,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -487,6 +511,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -527,6 +552,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -567,6 +593,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -607,6 +634,7 @@ my %tests = (
             $SCALAR_REF_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -647,6 +675,7 @@ my %tests = (
             $SCALAR_REF_REF,
             $ARRAY_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -661,6 +690,7 @@ my %tests = (
     CodeRef => {
         accept => [
             $CODE_REF,
+            $CODE_OVERLOAD,
         ],
         reject => [
             $ZERO,
@@ -729,6 +759,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,
@@ -769,6 +800,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $FH_OBJECT,
             $OBJECT,
@@ -809,6 +841,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $OBJECT,
@@ -829,6 +862,7 @@ my %tests = (
             $NUM_OVERLOAD_NEG,
             $NUM_OVERLOAD_NEG_DECIMAL,
             $NUM_OVERLOAD_DECIMAL,
+            $CODE_OVERLOAD,
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
@@ -888,6 +922,7 @@ my %tests = (
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
+            $CODE_OVERLOAD,
             $GLOB,
             $GLOB_REF,
             $FH,

@@ -149,7 +149,18 @@ declare(
 declare(
     'CodeRef',
     parent => t('Ref'),
-    inline => sub { 'ref(' . $_[1] . ') eq "CODE"' },
+    inline => sub {
+        '( Scalar::Util::blessed('
+            . $_[1] . ') && '
+            . ' overload::Overloaded('
+            . $_[1]
+            . ') && defined overload::Method('
+            . $_[1]
+            . ', "&{}") ) '
+            . ' || ( ref('
+            . $_[1]
+            . ') eq "CODE" )';
+    },
 );
 
 declare(
