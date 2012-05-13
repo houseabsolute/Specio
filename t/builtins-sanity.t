@@ -4,8 +4,9 @@ use warnings;
 use Test::Fatal;
 use Test::More 0.88;
 
+use B ();
 use IO::File;
-use Scalar::Util qw( blessed openhandle );
+use Scalar::Util qw( blessed looks_like_number openhandle );
 use Type::Library::Builtins;
 
 my $ZERO    = 0;
@@ -51,6 +52,22 @@ my $UNDEF = undef;
 
 my $CLASS_NAME = 'Thing';
 
+{
+    package StrOverload;
+
+    use overload
+        q{""} => sub { ${ $_[0] } },
+        fallback => 1;
+
+    sub new {
+        my $str = $_[1];
+        bless \$str, __PACKAGE__;
+    }
+}
+
+my $STR_OVERLOAD_EMPTY = StrOverload->new(q{});
+my $STR_OVERLOAD_FULL  = StrOverload->new('full');
+
 my %tests = (
     Any => {
         accept => [
@@ -63,6 +80,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -92,6 +111,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -121,6 +142,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -155,6 +178,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -186,6 +211,8 @@ my %tests = (
             $NEG_NUM,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -214,6 +241,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -248,6 +277,8 @@ my %tests = (
             $GLOB,
         ],
         reject => [
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $SCALAR_REF,
             $SCALAR_REF_REF,
             $ARRAY_REF,
@@ -265,6 +296,8 @@ my %tests = (
     },
     Ref => {
         accept => [
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $SCALAR_REF,
             $SCALAR_REF_REF,
             $ARRAY_REF,
@@ -307,6 +340,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $SCALAR_REF,
             $SCALAR_REF_REF,
             $ARRAY_REF,
@@ -338,6 +373,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -367,6 +404,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
         ],
@@ -402,6 +441,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $ARRAY_REF,
@@ -432,6 +473,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -463,6 +506,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -494,6 +539,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -526,6 +573,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -557,6 +606,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -588,6 +639,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -606,6 +659,8 @@ my %tests = (
     },
     Object => {
         accept => [
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
@@ -649,6 +704,8 @@ my %tests = (
             $EMPTY_STRING,
             $STRING,
             $NUM_IN_STRING,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
             $INT_WITH_NL1,
             $INT_WITH_NL2,
             $SCALAR_REF,
@@ -795,13 +852,21 @@ sub describe {
 
         $val =~ s/\n/\\n/g;
 
-        return $val;
+        return looks_like_number($val) ? $val : B::perlstring($val);
     }
 
     return 'open filehandle'
         if openhandle $val && !blessed $val;
 
-    return blessed $val
-        ? ( ref $val ) . ' object'
-        : ( ref $val ) . ' reference';
+    if ( blessed $val ) {
+        my $desc = ( ref $val ) . ' object';
+        if ( $val->isa('StrOverload') ) {
+            $desc .= ' (' . describe( "$val" ) . ')';
+        }
+
+        return $desc;
+    }
+    else {
+        return ( ref $val ) . ' reference';
+    }
 }

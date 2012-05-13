@@ -7,7 +7,8 @@ use parent 'Type::Exporter';
 
 use Class::Load qw( is_class_loaded );
 use List::MoreUtils ();
-use Scalar::Util qw( blessed openhandle );
+use overload ();
+use Scalar::Util ();
 use Type::Constraint::Parameterizable;
 use Type::Declare;
 
@@ -80,8 +81,16 @@ declare(
     'Str',
     parent => t('Value'),
     inline => sub {
-        $_[0]->parent()->inline_check( $_[1] ) . ' && (' 
-            . 'ref(\\'
+        'Scalar::Util::blessed('
+            . $_[1] . ')'
+            . ' && overload::Overloaded('
+            . $_[1]
+            . ') && defined overload::Method('
+            . $_[1]
+            . ', q{""})'
+            . ' ? 1 : '
+            . $_[0]->parent()->inline_check( $_[1] ) . ' && '
+            . '( ref(\\'
             . $_[1]
             . ') eq "SCALAR"'
             . ' || ref(\\(my $val = '
