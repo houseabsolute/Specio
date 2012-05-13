@@ -15,6 +15,8 @@ sub install_t_sub {
     my $caller = shift;
     my $types  = shift;
 
+    return if  $caller->can('t');
+
     my $t = sub {
         my $name = shift;
 
