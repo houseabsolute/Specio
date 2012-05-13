@@ -166,7 +166,17 @@ declare(
 declare(
     'RegexpRef',
     parent => t('Ref'),
-    inline => sub { 'Type::Library::Builtins::_RegexpRef(' . $_[1] . ')' },
+    inline => sub {
+        '( Scalar::Util::blessed('
+            . $_[1] . ') && '
+            . ' overload::Overloaded('
+            . $_[1]
+            . ') && defined overload::Method('
+            . $_[1]
+            . ', "qr") ) || '
+            . 'Type::Library::Builtins::_RegexpRef('
+            . $_[1] . ')';
+    },
 );
 
 declare(

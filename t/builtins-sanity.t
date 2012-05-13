@@ -119,6 +119,21 @@ my $NUM_OVERLOAD_NEG_DECIMAL = NumOverload->new(42.42);
 
 my $CODE_OVERLOAD = CodeOverload->new( sub { } );
 
+{
+    package RegexOverload;
+
+    use overload
+        q{qr} => sub { ${ $_[0] } },
+        fallback => 1;
+
+    sub new {
+        my $regex = $_[1];
+        bless \$regex, __PACKAGE__;
+    }
+}
+
+my $REGEX_OVERLOAD = RegexOverload->new(qr/foo/);
+
 my %tests = (
     Any => {
         accept => [
@@ -154,6 +169,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
@@ -193,6 +209,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
@@ -232,6 +249,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
         ],
@@ -276,6 +294,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
         ],
@@ -317,6 +336,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
         ],
@@ -355,6 +375,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
@@ -396,6 +417,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
@@ -423,6 +445,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
         ],
@@ -478,6 +501,7 @@ my %tests = (
             $INT_WITH_NL2,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
@@ -519,6 +543,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
@@ -560,6 +585,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
@@ -601,6 +627,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
@@ -642,6 +669,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
@@ -683,6 +711,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
@@ -724,6 +753,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
@@ -733,6 +763,7 @@ my %tests = (
         accept => [
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
         ],
         reject => [
             $ZERO,
@@ -807,6 +838,7 @@ my %tests = (
             $OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $UNDEF,
         ],
@@ -848,6 +880,7 @@ my %tests = (
             $OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $UNDEF,
         ],
@@ -867,6 +900,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
         ],
@@ -931,6 +965,7 @@ my %tests = (
             $FH_OBJECT,
             $REGEX,
             $REGEX_OBJ,
+            $REGEX_OVERLOAD,
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
