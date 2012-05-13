@@ -7,6 +7,7 @@ use Test::More 0.88;
 use B ();
 use IO::File;
 use Scalar::Util qw( blessed looks_like_number openhandle );
+use Type::Helpers qw( _declared_at );
 use Type::Library::Builtins;
 
 my $ZERO    = 0;
@@ -154,6 +155,21 @@ local *BAR;
 open BAR, '<', $0 or die "Could not open $0 for the test";
 my $GLOB_OVERLOAD_FH = GlobOverload->new(\*BAR);
 
+{
+    package ScalarOverload;
+
+    use overload
+        q[${}] => sub { ${ $_[0] } },
+        fallback => 1;
+
+    sub new {
+        my $scalar = $_[1];
+        bless \$scalar, __PACKAGE__;
+    }
+}
+
+my $SCALAR_OVERLOAD = ScalarOverload->new('x');
+
 my %tests = (
     Any => {
         accept => [
@@ -179,6 +195,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -221,6 +238,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -263,6 +281,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -310,6 +329,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -354,6 +374,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -395,6 +416,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -440,6 +462,7 @@ my %tests = (
             $NUM_OVERLOAD_DECIMAL,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -470,6 +493,7 @@ my %tests = (
             $NUM_OVERLOAD_DECIMAL,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -525,6 +549,7 @@ my %tests = (
             $STR_OVERLOAD_FULL,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -571,6 +596,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -615,6 +641,7 @@ my %tests = (
             $NUM_OVERLOAD_DECIMAL,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -637,6 +664,7 @@ my %tests = (
         accept => [
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
         ],
         reject => [
             $ZERO,
@@ -704,6 +732,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $HASH_REF,
             $CODE_REF,
             $CODE_OVERLOAD,
@@ -748,6 +777,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $CODE_REF,
             $CODE_OVERLOAD,
@@ -793,6 +823,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $GLOB,
@@ -838,6 +869,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -883,6 +915,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -926,6 +959,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,
@@ -960,6 +994,7 @@ my %tests = (
             $FAKE_REGEX,
             $GLOB_OVERLOAD,
             $GLOB_OVERLOAD_FH,
+            $SCALAR_OVERLOAD,
             $OBJECT,
         ],
         reject => [
@@ -1013,6 +1048,7 @@ my %tests = (
             $INT_WITH_NL2,
             $SCALAR_REF,
             $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
             $ARRAY_REF,
             $HASH_REF,
             $CODE_REF,

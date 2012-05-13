@@ -157,9 +157,9 @@ declare(
             . ') && defined overload::Method('
             . $_[1]
             . ', "&{}") '
-            . ' : ( ref('
+            . ' : ref('
             . $_[1]
-            . ') eq "CODE" )';
+            . ') eq "CODE"';
     },
 );
 
@@ -243,7 +243,14 @@ declare(
     type_class => 'Type::Constraint::Parameterizable',
     parent     => t('Ref'),
     inline     => sub {
-        'ref( '
+        'Scalar::Util::blessed('
+            . $_[1] . ') ? '
+            . 'overload::Overloaded('
+            . $_[1]
+            . ') && defined overload::Method('
+            . $_[1]
+            . ', "\\${}") '
+            . ' : ref( '
             . $_[1]
             . q{ ) eq 'SCALAR' || ref( }
             . $_[1]
