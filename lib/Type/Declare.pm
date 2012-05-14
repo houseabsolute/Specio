@@ -9,7 +9,8 @@ use Carp qw( croak );
 use Params::Util qw( _CODELIKE );
 use Type::Coercion;
 use Type::Constraint::Simple;
-use Type::Helpers qw( install_t_sub _INSTANCEDOES _STRINGLIKE _declared_at );
+use Type::DeclaredAt;
+use Type::Helpers qw( install_t_sub _INSTANCEDOES _STRINGLIKE );
 use Type::Registry qw( internal_types_for_package register );
 
 our @EXPORT = qw(
@@ -156,7 +157,7 @@ sub _make_tc {
 
     return $class->new(
         %p,
-        declared_at => _declared_at(),
+        declared_at => Type::DeclaredAt->new_from_caller(2),
     );
 }
 
@@ -166,7 +167,7 @@ sub coerce {
     return $to->add_coercion(
         Type::Coercion->new(
             to          => $to, @_,
-            declared_at => _declared_at(),
+            declared_at => Type::DeclaredAt->new_from_caller(1),
         )
     );
 }

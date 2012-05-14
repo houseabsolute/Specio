@@ -288,13 +288,14 @@ sub _build_ancestors {
     return \@parents;
 
 }
+
 sub _build_description {
     my $self = shift;
 
     my $desc
         = $self->is_anon() ? 'anonymous type' : 'type named ' . $self->name();
 
-    $desc .= q{ } . $self->_declaration_description();
+    $desc .= q{ } . $self->declared_at()->description();
 
     return $desc;
 }

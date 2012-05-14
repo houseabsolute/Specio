@@ -16,29 +16,37 @@ use Type::Library::Builtins;
 
     my $from_method = t1($arrayref);
 
-    is_deeply(
-        $from_method->declared_at(),
-        {
-            filename => __FILE__,
-            line     => 42,
-            package  => 'main',
-            sub      => 'main::t1',
-        },
-        'got the right declaration spot for type made from ->parameterize'
-    );
+    for my $pair (
+        [ filename   => __FILE__ ],
+        [ line       => 42 ],
+        [ package    => 'main' ],
+        [ subroutine => 'main::t1' ],
+        ) {
+
+        my ( $key, $expect ) = @{$pair};
+        is(
+            $from_method->declared_at()->$key(),
+            $expect,
+            "declared_at $key is the expected value for parameterized type made from ->parameterize"
+        );
+    }
 
     my $from_t = t2();
 
-    is_deeply(
-        $from_t->declared_at(),
-        {
-            filename => __FILE__,
-            line     => 84,
-            package  => 'main',
-            sub      => 'main::t2',
-        },
-        'got the right declaration spot for type made from ->parameterize'
-    );
+    for my $pair (
+        [ filename   => __FILE__ ],
+        [ line       => 84 ],
+        [ package    => 'main' ],
+        [ subroutine => 'main::t2' ],
+        ) {
+
+        my ( $key, $expect ) = @{$pair};
+        is(
+            $from_t->declared_at()->$key(),
+            $expect,
+            "declared_at $key is the expected value for parameterized type made from calling t()"
+        );
+    }
 
     declare(
         'ArrayRefOfInt',

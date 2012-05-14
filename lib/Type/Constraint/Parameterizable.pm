@@ -6,7 +6,7 @@ use namespace::autoclean;
 
 use MooseX::Params::Validate qw( validated_list );
 use Type::Constraint::Parameterized;
-use Type::Helpers qw( _declared_at );
+use Type::DeclaredAt;
 
 use Moose;
 
@@ -48,10 +48,14 @@ sub parameterize {
         \@_,
         of          => { does => 'Type::Constraint::Role::Interface' },
         declared_at => {
-            isa     => 'HashRef[Maybe[Str]]',
-            default => _declared_at(1),
+            isa      => 'Type::DeclaredAt',
+            optional => 1,
         },
     );
+
+    # This isn't a default so as to avoid generating it even when they
+    # parameter is already set.
+    $declared_at //= Type::DeclaredAt->new_from_caller(1),
 
     my %p = (
         parent      => $self,

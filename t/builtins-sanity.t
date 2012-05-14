@@ -7,7 +7,7 @@ use Test::More 0.88;
 use B ();
 use IO::File;
 use Scalar::Util qw( blessed looks_like_number openhandle );
-use Type::Helpers qw( _declared_at );
+use Type::DeclaredAt;
 use Type::Library::Builtins;
 
 my $ZERO    = 0;
@@ -1258,7 +1258,7 @@ sub test_constraint {
         my $parameterized = Type::Constraint::Simple->new(
             name        => $type->name() . 'OfItem',
             parent      => $type->parameterize( of => t('Item') ),
-            declared_at => _declared_at(0),
+            declared_at => Type::DeclaredAt->new_from_caller(0),
         );
         test_constraint( $parameterized, $tests );
     }

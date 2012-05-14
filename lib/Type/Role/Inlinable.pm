@@ -35,7 +35,7 @@ has _generated_inline_sub => (
 
 has declared_at => (
     is       => 'ro',
-    isa      => 'HashRef[Maybe[Str]]',
+    isa      => 'Type::DeclaredAt',
     required => 1,
 );
 
@@ -68,17 +68,6 @@ sub _build_generated_inline_sub {
 
 sub _build_inline_environment {
     return {};
-}
-
-sub _declaration_description {
-    my $self = shift;
-
-    my $decl = $self->declared_at();
-
-    my $desc = "declared in package $decl->{package} ($decl->{filename}) at line $decl->{line}";
-    $desc .= " in sub named $decl->{sub}" if defined $decl->{sub};
-
-    return $desc;
 }
 
 1;

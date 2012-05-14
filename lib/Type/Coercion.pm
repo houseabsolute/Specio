@@ -84,7 +84,7 @@ sub _build_description {
         . ( $self->from()->name() // 'anon type' ) . ' to '
         . ( $self->to()->name()   // 'anon type' );
 
-    $desc .= q{ } . $self->_declaration_description();
+    $desc .= q{ } . $self->declared_at()->description();
 
     return $desc;
 }
