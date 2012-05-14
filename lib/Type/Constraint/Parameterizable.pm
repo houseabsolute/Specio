@@ -80,3 +80,69 @@ sub parameterize {
 __PACKAGE__->meta()->make_immutable();
 
 1;
+
+# ABSTRACT: A class which represents parameterizable constraints
+
+__END__
+
+=head1 SYNOPSIS
+
+  my $arrayref = t('ArrayRef');
+
+  my $arrayref_of_int = $arrayref->parameterize( of => t('Int') );
+
+=head1 DESCRIPTION
+
+This class implements the API for parameterizable types like C<ArrayRef> and
+C<Maybe>.
+
+=head1 API
+
+This class implements the same API as L<Type::Constraint::Simple>, with a few
+additions.
+
+=head2 Type::Constraint::Parameterizable->new(...)
+
+This class's constructor accepts two additional parameters:
+
+=over 4
+
+=item * parameterized_constraint_generator
+
+This is a subroutine that generates a new constraint subroutine when the type
+is parameterized.
+
+It will be called as a method on the type and will be passed a single
+argument, the type object for the type parameter.
+
+This parameter is mutually exclusive with the
+C<parameterized_inline_generator> parameter.
+
+=item * parameterized_inline_generator
+
+This is a subroutine that generates a new inline generator subroutine when the
+type is parameterized.
+
+It will be called as a method on the L<Type::Constraint::Parameterized> object
+when that object needs to generate inline constraint. It will receive the type
+parameter as the first argument and the variable name as a string as the
+second.
+
+This probably seems fairly confusing, so looking at the examples in the
+L<Type::Library::Builtins> code may be helpful.
+
+This parameter is mutually exclusive with the
+C<parameterized_inline_generator> parameter.
+
+=back
+
+=head2 $type->parameterize(...)
+
+This method takes two arguments. The C<of> argument should be an object which
+does the L<Type::Constraint::Role::Interface> role, and is required.
+
+The other argument, C<declared_at>, is optional. If it is not given, then a
+new L<Type::Declared> object is creating using a call stack depth of 1.
+
+This method returns a new L<Type::Constraint::Parameterized> object.
+
