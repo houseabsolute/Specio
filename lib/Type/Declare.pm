@@ -193,6 +193,11 @@ __END__
       where  => sub { $_[0] =~ /foo/i },
   );
 
+  declare(
+      'ArrayRefOfInt',
+      parent => t( 'ArrayRef', of => t('Int') ),
+  );
+
   my $even = anon(
       parent => t('Int'),
       inline => sub {
