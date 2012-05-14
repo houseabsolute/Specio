@@ -284,7 +284,7 @@ argument is a I<string> containing the variable name to use in the generated
 code. Typically this is something like C<'$_[0]'> or C<'$value'>.
 
 The inline generator subroutine should return a I<string> of code representing
-a single term, and it I<should not> be terminated with a semi-colon. This
+a single term, and it I<should not> be terminated with a semicolon. This
 allows the inlined code to be safely included in an C<if> statement, for
 example. You can use C<do { }> blocks and ternaries to get everything into one
 term. This single term should evaluate to true or false.
@@ -365,7 +365,7 @@ argument is a I<string> containing the variable name to use in the generated
 code. Typically this is something like C<'$_[0]'> or C<'$value'>.
 
 The inline generator subroutine should return a I<string> of code representing
-a single term, and it I<should not> be terminated with a semi-colon. This
+a single term, and it I<should not> be terminated with a semicolon. This
 allows the inlined code to be safely included in an C<if> statement, for
 example. You can use C<do { }> blocks and ternaries to get everything into one
 term. This single term should evaluate to the new value.

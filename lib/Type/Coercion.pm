@@ -160,7 +160,7 @@ You can also pass this option with the key C<using> in the parameter list.
 =item * inline_generator => sub { ... }
 
 This should be a subroutine reference which returns a string containing a
-single term. This code should I<not> end in a semi-colon. This code should
+single term. This code should I<not> end in a semicolon. This code should
 implement the coercion.
 
 The generator will be called as a method on the coercion with a single
