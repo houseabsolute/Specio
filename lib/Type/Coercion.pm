@@ -124,7 +124,7 @@ coercion is a piece of code that takes a value of one type returns a new value
 of a new type. For example, a coercion from c<Num> to C<Int> might round a
 number to its nearest integer and return that integer.
 
-Coercoins can be implemented either as a simple subroutine reference or as an
+Coercions can be implemented either as a simple subroutine reference or as an
 inline generator subroutine. Using an inline generator is faster but more
 complicated.
 

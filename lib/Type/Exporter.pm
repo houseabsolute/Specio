@@ -79,5 +79,5 @@ You can explicitly ask for types to be re-exported:
   use Type::Library::Builtins -reexport;
 
 In this case, packages which C<use MyApp::Type::Library> will get all the
-types from L<Type::Library::Builtins> as well as any types defiend in
+types from L<Type::Library::Builtins> as well as any types defined in
 C<MyApp::Type::Library>.
