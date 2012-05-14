@@ -142,7 +142,7 @@ This method takes two arguments. The C<of> argument should be an object which
 does the L<Type::Constraint::Role::Interface> role, and is required.
 
 The other argument, C<declared_at>, is optional. If it is not given, then a
-new L<Type::Declared> object is creating using a call stack depth of 1.
+new L<Type::DeclaredAt> object is creating using a call stack depth of 1.
 
 This method returns a new L<Type::Constraint::Parameterized> object.
 

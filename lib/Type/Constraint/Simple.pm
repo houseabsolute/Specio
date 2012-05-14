@@ -231,5 +231,5 @@ semicolon.
 
 =head1 ROLES
 
-This role does the L<Type::Role::Interface>, L<Type::Role::Inlinable> and
-L<MooseX::Clone> roles.
+This role does the L<Type::Constraint::Role::Interface>,
+L<Type::Role::Inlinable> and L<MooseX::Clone> roles.

@@ -242,7 +242,7 @@ L<Type::Exporter> package:
       where  => sub { $_[0] =~ /foo/i },
   );
 
-Now the L<MyApp::Type::Library> package will export a single type named
+Now the MyApp::Type::Library package will export a single type named
 C<Foo>. It I<does not> (yet) re-export the types provided by
 L<Type::Library::Builtins>.
 
@@ -258,7 +258,7 @@ ask for this explicitly:
 
   declare( 'Foo, ... );
 
-Now L<MyApp::Types::Library> exports any types it defines, as well as all the
+Now MyApp::Types::Library exports any types it defines, as well as all the
 types defined in L<Type::Library::Builtins>.
 
 =head1 DECLARING TYPES
