@@ -12,15 +12,17 @@ use Moose;
 
 with 'Type::Constraint::Role::Interface';
 
-has parameterized_constraint_generator => (
+has _parameterized_constraint_generator => (
     is        => 'ro',
     isa       => 'CodeRef',
+    init_arg  => 'parameterized_constraint_generator',
     predicate => '_has_parameterized_constraint_generator',
 );
 
-has parameterized_inline_generator => (
+has _parameterized_inline_generator => (
     is        => 'ro',
     isa       => 'CodeRef',
+    init_arg  => 'parameterized_inline_generator',
     predicate => '_has_parameterized_inline_generator',
 );
 
@@ -65,10 +67,10 @@ sub parameterize {
 
     if ( $self->_has_parameterized_constraint_generator() ) {
         $p{constraint}
-            = $self->parameterized_constraint_generator()->($parameter);
+            = $self->_parameterized_constraint_generator()->($parameter);
     }
     else {
-        my $ig = $self->parameterized_inline_generator();
+        my $ig = $self->_parameterized_inline_generator();
         $p{inline_generator} = sub { $ig->( shift, $parameter, @_ ) };
     }
 
