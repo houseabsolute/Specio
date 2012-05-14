@@ -222,4 +222,4 @@ the C<inline_coercion_and_check()> method for type constraint object.
 
 =head1 ROLES
 
-This class does the L<MooseX::Clone> and L<Type::Inlinable> roles.
+This class does the L<Type::Inlinable> and L<MooseX::Clone> roles.
