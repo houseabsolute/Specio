@@ -376,3 +376,27 @@ example. You can use C<do { }> blocks and ternaries to get everything into one
 term. This single term should evaluate to the new value.
 
 =back
+
+=head1 PARAMETERIZED TYPES
+
+You can create a parameterized type by calling C<t()> with additional
+parameters, like this:
+
+  my $arrayref_of_int = t( 'ArrayRef', of => t('Int') );
+
+  my $arrayref_of_hashref_of_int = t(
+      'ArrayRef',
+      of => t(
+          'HashRef',
+          of => t('Int'),
+      ),
+  );
+
+The C<t()> subroutine assumes that if it receives more than one argument, it
+should look up the named type and call C<< $type->parameterize(...) >> with
+the additional arguments.
+
+If the named type cannot be parameterized, it throws an error.
+
+You can also call C<< $type->parameterize() >> directly if needed. See
+L<Type::Constraint::Parameterizable> for details.
