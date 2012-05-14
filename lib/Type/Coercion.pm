@@ -169,7 +169,7 @@ like C<'$_[0]'> or C<'$var'>.
 
 This parameter is mutually exclusive with C<coercion>.
 
-Either this parameter or the C<constraint> parameter is required.
+Either this parameter or the C<coercion> parameter is required.
 
 You can also pass this option with the key C<inline> in the parameter list.
 
