@@ -219,3 +219,7 @@ generator.
 This returns true if the coercion has an inline generator I<and> the
 constraint it is from can be inlined. This exists primarily for the benefit of
 the C<inline_coercion_and_check()> method for type constraint object.
+
+=head1 ROLES
+
+This class does the L<MooseX::Clone> and L<Type::Inlinable> roles.
