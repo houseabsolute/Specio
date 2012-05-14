@@ -22,7 +22,7 @@ has inline_environment => (
     is      => 'ro',
     isa     => 'HashRef[Any]',
     lazy    => 1,
-    default => sub { {} },
+    builder => '_build_inline_environment',
 );
 
 has _generated_inline_sub => (
@@ -64,6 +64,10 @@ sub _build_generated_inline_sub {
         environment => $self->inline_environment(),
         description => 'inlined sub for ' . $self->_description(),
     );
+}
+
+sub _build_inline_environment {
+    return {};
 }
 
 sub _declaration_description {

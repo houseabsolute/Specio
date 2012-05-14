@@ -41,10 +41,6 @@ has '+inline_generator' => (
     default  => sub { $_inline_generator },
 );
 
-has '+inline_environment' => (
-    default => sub { $_[0]->_build_inline_environment() },
-);
-
 sub _build_inline_environment {
     my $self = shift;
 
