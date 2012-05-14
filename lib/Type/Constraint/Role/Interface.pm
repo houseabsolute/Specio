@@ -335,4 +335,3 @@ or expanded upon.
 =head1 ROLES
 
 This role does the L<Type::Role::Inlinable> and L<MooseX::Clone> roles.
-
