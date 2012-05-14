@@ -28,7 +28,10 @@ Rolsky
 ScalarRef
 boolification
 globification
+inlinable
 inline
 isa
 parameterizable
+parameterization
 parameterized
+sigils
