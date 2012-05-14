@@ -32,7 +32,7 @@ my $_inline_generator = sub {
         . $val . ') '
         . '&& !ref('
         . $val . ') '
-        . '&& $_enum_values{'
+        . '&& $_Type_Constraint_Enum_enum_values{'
         . $val . '}';
 };
 
@@ -46,7 +46,7 @@ sub _build_inline_environment {
 
     my %values = map { $_ => 1 } @{ $self->values() };
 
-    return { '%_enum_values' => \%values };
+    return { '%_Type_Constraint_Enum_enum_values' => \%values };
 }
 
 __PACKAGE__->meta()->make_immutable();
