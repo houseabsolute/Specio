@@ -176,7 +176,8 @@ You can also pass this option with the key C<inline> in the parameter list.
 =item * inline_environment => {}
 
 This should be a hash reference of variable names (with sigils) and values for
-that variable.
+that variable. The values should be I<references> to the values of the
+variables.
 
 This environment will be used when compiling the coercion as part of a
 subroutine. The named variables will be captured as closures in the generated
