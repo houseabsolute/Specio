@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.01     2012-05-13
+
 - First release upon an unsuspecting world. This is very alpha and subject to
   change. I'm mostly releasing it to get some feedback on the design. Do not
   use this in your code yet, unless you promise not to complain about the lack
