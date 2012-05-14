@@ -31,7 +31,7 @@ my $_inline_generator = sub {
         . B::perlstring( $self->class ) . ')';
 };
 
-has '+inline_generator' => (
+has '+_inline_generator' => (
     init_arg => undef,
     default  => sub { $_inline_generator },
 );

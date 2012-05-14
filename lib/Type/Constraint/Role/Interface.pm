@@ -27,11 +27,12 @@ has parent => (
     predicate => '_has_parent',
 );
 
-has constraint => (
+has _constraint => (
     is        => 'rw',
     writer    => '_set_constraint',
     isa       => 'CodeRef',
     predicate => '_has_constraint',
+    init_arg  => 'constraint',
     alias     => 'where',
 );
 
@@ -138,7 +139,7 @@ sub has_real_constraint {
     my $self = shift;
 
     return (   $self->_has_constraint
-            && $self->constraint() ne $NullConstraint )
+            && $self->_constraint() ne $NullConstraint )
         || $self->_has_inline_generator();
 }
 
@@ -147,7 +148,7 @@ sub inline_check {
 
     die 'Cannot inline' unless $self->_has_inline_generator();
 
-    return $self->inline_generator()->( $self, @_ );
+    return $self->_inline_generator()->( $self, @_ );
 }
 
 sub _build_optimized_constraint {
@@ -175,7 +176,7 @@ sub _constraint_with_parents {
             @constraints = $type->_generated_inline_sub();
         }
         else {
-            push @constraints, $type->constraint();
+            push @constraints, $type->_constraint();
         }
     }
 

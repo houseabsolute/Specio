@@ -11,14 +11,15 @@ use MooseX::Aliases;
 
 requires '_build_description';
 
-has inline_generator => (
+has _inline_generator => (
     is        => 'ro',
     isa       => 'CodeRef',
     predicate => '_has_inline_generator',
+    init_arg  => 'inline_generator',
     alias     => 'inline',
 );
 
-has inline_environment => (
+has _inline_environment => (
     is      => 'ro',
     isa     => 'HashRef[Any]',
     lazy    => 1,
@@ -57,11 +58,11 @@ sub _build_generated_inline_sub {
     my $self = shift;
 
     my $source
-        = 'sub { ' . $self->inline_generator()->( $self, '$_[0]' ) . '}';
+        = 'sub { ' . $self->_inline_generator()->( $self, '$_[0]' ) . '}';
 
     return eval_closure(
         source      => $source,
-        environment => $self->inline_environment(),
+        environment => $self->_inline_environment(),
         description => 'inlined sub for ' . $self->_description(),
     );
 }

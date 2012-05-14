@@ -21,10 +21,11 @@ has to => (
     weak_ref => 1,
 );
 
-has coercion => (
+has _coercion => (
     is        => 'ro',
     isa       => 'CodeRef',
     predicate => '_has_coercion',
+    init_arg  => 'coercion',
     alias     => 'using',
 );
 
@@ -56,7 +57,7 @@ sub coerce {
 sub inline_coercion {
     my $self = shift;
 
-    return $self->inline_generator()->( $self, @_ )
+    return $self->_inline_generator()->( $self, @_ )
 }
 
 sub _build_optimized_coercion {
@@ -66,7 +67,7 @@ sub _build_optimized_coercion {
         return $self->_inlined_coercion();
     }
     else {
-        return $self->coercion();
+        return $self->_coercion();
     }
 }
 
@@ -195,7 +196,7 @@ This parameter is required.
 
 =back
 
-=head2 $coercion->from(), $coercion->to(), $coercion->coercion(), $coercion->inline_generator(), $coercion->declared_at()
+=head2 $coercion->from(), $coercion->to(), $coercion->declared_at()
 
 These methods are all read-only attribute accessors for the corresponding
 attribute.
