@@ -26,6 +26,7 @@ PARAMETERIZABLE
 PayPal
 Rolsky
 ScalarRef
+Throwable
 boolification
 distro
 globification
