@@ -30,3 +30,11 @@ my $_default_message_generator = sub {
 sub _default_message_generator { return $_default_message_generator }
 
 1;
+
+# ABSTRACT: Provides a common implementation for Type::Constraint::AnyIsa and Type::Constraint::ObjectIsa
+
+__END__
+
+=head1 DESCRIPTION
+
+See L<Type::Constraint::AnyIsa> and L<Type::Constraint::ObjectIsa> for details.

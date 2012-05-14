@@ -49,3 +49,11 @@ override BUILDARGS => sub {
 };
 
 1;
+
+# ABSTRACT: Provides a common implementation for Type::Constraint::AnyCan and Type::Constraint::ObjectCan
+
+__END__
+
+=head1 DESCRIPTION
+
+See L<Type::Constraint::AnyCan> and L<Type::Constraint::ObjectCan> for details.
