@@ -50,3 +50,11 @@ sub internal_types_for_package {
 }
 
 1;
+
+# ABSTRACT: Implements the per-package type registry
+
+__END__
+
+=head1 DESCRIPTION
+
+There's nothing public here.
