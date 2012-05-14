@@ -11,7 +11,6 @@ use Try::Tiny;
 use Type::Exception;
 
 use Moose::Role;
-use MooseX::Aliases;
 
 with 'MooseX::Clone', 'Type::Role::Inlinable';
 
@@ -33,7 +32,6 @@ has _constraint => (
     isa       => 'CodeRef',
     predicate => '_has_constraint',
     init_arg  => 'constraint',
-    alias     => 'where',
 );
 
 has _optimized_constraint => (
@@ -69,7 +67,6 @@ has _message_generator => (
     isa      => 'CodeRef',
     default  => sub { $_default_message_generator },
     init_arg => 'message_generator',
-    alias    => 'message',
 );
 
 has _coercions => (
@@ -85,6 +82,18 @@ has _coercions => (
 );
 
 my $NullConstraint = sub { 1 };
+
+around BUILDARGS => sub {
+    my $orig  = shift;
+    my $class = shift;
+
+    my $p = $class->$orig(@_);
+
+    $p->{constraint}        = delete $p->{where}   if exists $p->{where};
+    $p->{message_generator} = delete $p->{message} if exists $p->{message};
+
+    return $p;
+};
 
 sub BUILD { }
 

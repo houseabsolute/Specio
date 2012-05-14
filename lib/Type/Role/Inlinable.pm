@@ -7,7 +7,6 @@ use namespace::autoclean;
 use Eval::Closure qw( eval_closure );
 
 use Moose::Role;
-use MooseX::Aliases;
 
 requires '_build_description';
 
@@ -16,7 +15,6 @@ has _inline_generator => (
     isa       => 'CodeRef',
     predicate => '_has_inline_generator',
     init_arg  => 'inline_generator',
-    alias     => 'inline',
 );
 
 has _inline_environment => (
@@ -48,6 +46,17 @@ has _description => (
     lazy     => 1,
     builder  => '_build_description',
 );
+
+around BUILDARGS => sub {
+    my $orig  = shift;
+    my $class = shift;
+
+    my $p = $class->$orig(@_);
+
+    $p->{inline_generator} = delete $p->{inline} if exists $p->{inline};
+
+    return $p;
+};
 
 sub can_be_inlined {
     my $self = shift;

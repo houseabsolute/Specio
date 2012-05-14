@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use Moose;
-use MooseX::Aliases;
 
 with 'MooseX::Clone', 'Type::Role::Inlinable';
 
@@ -26,7 +25,6 @@ has _coercion => (
     isa       => 'CodeRef',
     predicate => '_has_coercion',
     init_arg  => 'coercion',
-    alias     => 'using',
 );
 
 has _optimized_coercion => (
@@ -36,6 +34,17 @@ has _optimized_coercion => (
     lazy     => 1,
     builder  => '_build_optimized_coercion',
 );
+
+around BUILDARGS => sub {
+    my $orig  = shift;
+    my $class = shift;
+
+    my $p = $class->$orig(@_);
+
+    $p->{coercion} = delete $p->{using} if exists $p->{using};
+
+    return $p;
+};
 
 sub BUILD {
     my $self = shift;
