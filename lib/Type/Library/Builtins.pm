@@ -374,3 +374,15 @@ declare(
 );
 
 1;
+
+# ABSTRACT: Implements type constraint objects for Perl's built-in types
+
+__END__
+
+=head1 DESCRIPTION
+
+See the documentation in L<Type> for a list of types that this library
+implements.
+
+This library uses L<Type::Exporter> to export its types.
+
