@@ -27,6 +27,7 @@ PayPal
 Rolsky
 ScalarRef
 boolification
+distro
 globification
 inlinable
 inline
