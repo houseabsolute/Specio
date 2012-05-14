@@ -71,3 +71,11 @@ sub _INSTANCEDOES ($$) {
 }
 
 1;
+
+# ABSTRACT: Helper subs for the Type distro
+
+__END__
+
+=head1 DESCRIPTION
+
+There's nothing public here.
