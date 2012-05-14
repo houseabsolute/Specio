@@ -377,6 +377,46 @@ term. This single term should evaluate to the new value.
 
 =back
 
+=head1 DECLARATION HELPERS
+
+This module also exports some helper subs for declaring certain kinds of types:
+
+=head2 any_isa_type(), object_isa_type()
+
+The C<any_isa_type()> helpers creates a type which accepts a class name or
+object of the given class. The C<object_isa_type()> helpers creates a type
+which only accepts an object of the given class.
+
+These subroutines take a type name as the first argument. The remaining
+arguments are key/value pairs. Currently this is just the C<class> key, which
+should be a class name. This is the class that the type requires.
+
+The type name argument can be omitted to create an anonymous type.
+
+=head2 any_can_type(), object_can_type()
+
+The C<any_can_type()> helpers creates a type which accepts a class name or
+object with the given methods. The C<object_can_type()> helpers creates a type
+which only accepts an object with the given methods.
+
+These subroutines take a type name as the first argument. The remaining
+arguments are key/value pairs. Currently this is just the C<methods> key,
+which can be either a string or array reference of strings. These strings are
+the required methods for the type.
+
+The type name argument can be omitted to create an anonymous type.
+
+=head2 enum()
+
+This creates a type which accepts a string matching a given list of acceptable
+values.
+
+The first argument is the type name. The remaining arguments are key/value
+pairs. Currently this is just the C<values> key. This should an array
+reference of acceptable string values.
+
+The type name argument can be omitted to create an anonymous type.
+
 =head1 PARAMETERIZED TYPES
 
 You can create a parameterized type by calling C<t()> with additional
