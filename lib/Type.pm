@@ -333,6 +333,15 @@ coercions and parameterizable types. This is a misfeature.
 
 =back
 
+=head1 LONG-TERM PLANS
+
+Eventually I'd like to see this distro replace Moose's internal type system,
+which would also make MooseX::Types obsolete. This almost certainly means
+rewriting this distro to not use Moose itself (or any modules which use Moose,
+like Throwable).
+
+For now, the current code is a proof of concept for the design.
+
 =head1 BUGS
 
 Please report any bugs or feature requests to C<bug-type@rt.cpan.org>, or
