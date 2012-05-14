@@ -82,3 +82,13 @@ sub _build_inline_environment {
 }
 
 1;
+
+# ABSTRACT: A role for things which can be inlined (type constraints and coercions)
+
+__END__
+
+=head1 DESCRIPTION
+
+This role implements a common API for inlinable things, type constraints and
+coercions. It is fully documented in the relevant classes.
+
