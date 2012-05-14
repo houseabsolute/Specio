@@ -301,3 +301,25 @@ sub _build_description {
 }
 
 1;
+
+# ABSTRACT: The interface all type constraints should provide
+
+__END__
+
+=head1 DESCRIPTION
+
+This role defines the interface that all type constraints must provide, and
+provides most (or all) of the implementation. The L<Type::Constraint::Simple>
+class simply consumes this role and provides no additional code. Other
+constraint classes add features or override some of this role's functionality.
+
+=head1 API
+
+See the L<Type::Constraint::Simple> documentation for details. See the
+internals of various constraint classes to see how this role can be overridden
+or expanded upon.
+
+=head1 ROLES
+
+This role does the L<Type::Role::Inlinable> and L<MooseX::Clone> roles.
+
