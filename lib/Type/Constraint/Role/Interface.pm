@@ -245,12 +245,23 @@ sub inline_coercion_and_check {
     die 'Cannot inline coercion and check'
         unless $self->can_inline_coercion_and_check();
 
+    my %env = (
+        '$_Type_Constraint_Interface_type' => \$self,
+        '$_Type_Constraint_Interface_message_generator' =>
+            \( $self->message_generator() ),
+        '$_Type_Constraint_Interface_description' =>
+            \( $self->_description() ),
+        %{ $self->_inline_environment() },
+    );
+
     my $source = 'do {' . 'my $value = ' . $_[0] . ';';
     for my $coercion ( $self->coercions() ) {
         $source
             .= '$value = '
             . $coercion->inline_coercion( $_[0] ) . ' if '
             . $coercion->from()->inline_check( $_[0] ) . ';';
+
+        %env = ( %env, %{ $coercion->_inline_environment() } );
     }
 
     #<<<
@@ -264,16 +275,7 @@ sub inline_coercion_and_check {
     #>>>
     $source .= '$value };';
 
-    return (
-        $source,
-        {
-            '$_Type_Constraint_Interface_type' => \$self,
-            '$_Type_Constraint_Interface_message_generator' =>
-                \( $self->message_generator() ),
-            '$_Type_Constraint_Interface_description' =>
-                \( $self->_description() ),
-        }
-    );
+    return ( $source, \%env );
 }
 
 sub _build_ancestors {

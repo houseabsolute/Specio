@@ -20,10 +20,11 @@ has _inline_generator => (
 );
 
 has _inline_environment => (
-    is      => 'ro',
-    isa     => 'HashRef[Any]',
-    lazy    => 1,
-    builder => '_build_inline_environment',
+    is       => 'ro',
+    isa      => 'HashRef[Any]',
+    lazy     => 1,
+    init_arg => 'inline_environment',
+    builder  => '_build_inline_environment',
 );
 
 has _generated_inline_sub => (
