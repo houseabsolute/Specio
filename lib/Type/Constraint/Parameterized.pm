@@ -56,7 +56,7 @@ additions.
 
 =head2 Type::Constraint::Parameterized->new(...)
 
-This class's cosntructor accepts two additional parameters:
+This class's constructor accepts two additional parameters:
 
 =over 4
 
