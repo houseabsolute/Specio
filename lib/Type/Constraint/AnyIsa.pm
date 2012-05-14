@@ -38,7 +38,7 @@ has '+_inline_generator' => (
     default  => sub { $_inline_generator },
 );
 
-has '+message_generator' => (
+has '+_message_generator' => (
     default => sub { $_[0]->_default_message_generator() },
 );
 

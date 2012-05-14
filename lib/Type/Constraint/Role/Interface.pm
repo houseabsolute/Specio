@@ -64,11 +64,12 @@ my $_default_message_generator = sub {
         . Devel::PartialDump->new()->dump($value);
 };
 
-has message_generator => (
-    is      => 'ro',
-    isa     => 'CodeRef',
-    default => sub { $_default_message_generator },
-    alias   => 'message',
+has _message_generator => (
+    is       => 'ro',
+    isa      => 'CodeRef',
+    default  => sub { $_default_message_generator },
+    init_arg => 'message_generator',
+    alias    => 'message',
 );
 
 has _coercions => (
@@ -109,7 +110,7 @@ sub validate_or_die {
     return if $self->value_is_valid($value);
 
     Type::Exception->throw(
-        message => $self->message_generator()
+        message => $self->_message_generator()
             ->( $self, $self->_description(), $value ),
         type  => $self,
         value => $value,
@@ -248,7 +249,7 @@ sub inline_coercion_and_check {
     my %env = (
         '$_Type_Constraint_Interface_type' => \$self,
         '$_Type_Constraint_Interface_message_generator' =>
-            \( $self->message_generator() ),
+            \( $self->_message_generator() ),
         '$_Type_Constraint_Interface_description' =>
             \( $self->_description() ),
         %{ $self->_inline_environment() },

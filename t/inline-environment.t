@@ -52,7 +52,7 @@ use Type::Library::Builtins;
             '$_Type_Constraint_Interface_description' =>
                 \( $t->_description() ),
             '$_Type_Constraint_Interface_message_generator' =>
-                \( $t->message_generator() ),
+                \( $t->_message_generator() ),
             '$_Type_Constraint_Interface_type' => \$t,
         },
         'inline_coercion_and_check merges all inline environment hashes together',
