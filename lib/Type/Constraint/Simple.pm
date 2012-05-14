@@ -15,7 +15,3 @@ __PACKAGE__->meta()->make_immutable();
 # ABSTRACT: Class for simple (non-parameterized or specialized) types
 
 __END__
-
-=head1 SYNOPSIS
-
-  my $tc = Type::Constraint::Simple
