@@ -139,6 +139,12 @@ subroutine something like this:
 
 You can also pass this option with the key C<message> in the parameter list.
 
+=item * declared_at => $declared_at
+
+This parameter must be a L<Type::DeclaredAt> object.
+
+This parameter is required.
+
 =back
 
 It is possible to create a type without a constraint of its own.
