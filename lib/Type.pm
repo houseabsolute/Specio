@@ -123,7 +123,7 @@ follows:
               FileHandle
               Object
 
-The C<Item> type accepts anything and everthing.
+The C<Item> type accepts anything and everything.
 
 The C<Bool> type only accepts C<undef>, C<0>, or C<1>.
 
