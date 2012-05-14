@@ -73,7 +73,7 @@ sub _build_optimized_coercion {
 sub can_be_inlined {
     my $self = shift;
 
-    return $self->_has_inline_generator() && $self->to()->can_be_inlined();
+    return $self->_has_inline_generator() && $self->from()->can_be_inlined();
 }
 
 sub _build_description {
@@ -134,10 +134,14 @@ parameters:
 The type this coercion is from. The type must be an object which does the
 L<Type::Constraint::Role::Interface> interface.
 
+This parameter is required.
+
 =item * to => $type
 
 The type this coercion is to. The type must be an object which does the
 L<Type::Constraint::Role::Interface> interface.
+
+This parameter is required.
 
 =item * coercion => sub { ... }
 
@@ -146,7 +150,9 @@ method on the object and passed a single argument, the value to coerce.
 
 It should return the new value.
 
-This option is mutually exclusive with the C<inline_generator> option.
+This parameter is mutually exclusive with C<inline_generator>.
+
+Either this parameter or the C<inline_generator> parameter is required.
 
 You can also pass this option with the key C<using> in the parameter list.
 
@@ -159,6 +165,12 @@ implement the coercion.
 The generator will be called as a method on the coercion with a single
 argument. That argument is the name of the variable being coerced, something
 like C<'$_[0]'> or C<'$var'>.
+
+This parameter is mutually exclusive with C<coercion>.
+
+Either this parameter or the C<constraint> parameter is required.
+
+You can also pass this option with the key C<inline> in the parameter list.
 
 =item * inline_environment => {}
 
@@ -173,4 +185,37 @@ It should be very rare to need to set this in the constructor. It's more
 likely that a special coercion subclass would need to provide values that it
 generates internally.
 
+This parameter defaults to an empty hash reference.
+
+=item * declared_at => $declared_at
+
+This parameter must be a L<Type::DeclaredAt> object.
+
+This parameter is required.
+
 =back
+
+=head2 $coercion->from(), $coercion->to(), $coercion->coercion(), $coercion->inline_generator(), $coercion->declared_at()
+
+These methods are all read-only attribute accessors for the corresponding
+attribute.
+
+=head2 $coercion->coerce($value)
+
+Given a value of the right "from" type, returns a new value of the "to" type.
+
+This method does not actually check that the types of given or return values.
+
+=head2 $coercion->inline_coercion($var)
+
+Given a variable name like C<'$_[0]'> this returns a string with code for the
+coercion.
+
+Note that this method will die if the coercion does not have an inline
+generator.
+
+=head2 $coercion->can_be_inlined()
+
+This returns true if the coercion has an inline generator I<and> the
+constraint it is from can be inlined. This exists primarily for the benefit of
+the C<inline_coercion_and_check()> method for type constraint object.
