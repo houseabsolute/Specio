@@ -2,6 +2,7 @@ Build
 MYMETA.json
 MYMETA.yml
 Type.bs
+.build/
 _build/
 blib/
 lib/Type/Library/Builtins.c
