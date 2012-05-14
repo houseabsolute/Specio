@@ -289,6 +289,18 @@ allows the inlined code to be safely included in an C<if> statement, for
 example. You can use C<do { }> blocks and ternaries to get everything into one
 term. This single term should evaluate to true or false.
 
+The inline generator is expected to include code to implement both the current
+type and all its parents. Typically, the easiest way to do this is to write a
+subroutine something like this:
+
+  sub {
+      my $self = shift;
+      my $var  = shift;
+
+      return $_[0]->parent()->inline_check( $_[1] )
+          . ' and more checking code goes here';
+  }
+
 This parameter is mutually exclusive with the C<where> parameter.
 
 =item * message_generator => sub { ... }
