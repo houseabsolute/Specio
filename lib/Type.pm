@@ -312,6 +312,11 @@ In Type, the distinction between accepting an object versus object or class is
 explicit. There are four declaration helpers, C<object_can_type>,
 C<object_isa_type>, C<any_can_type>, and C<any_isa_type>.
 
+=item * Overloading support is baked in
+
+Perl's overloading is broken as hell, but ignoring it makes Moose's type
+system frustrating.
+
 =item * Types can either have a constraint or inline generator, not both
 
 Moose and MooseX::Types types can be defined with a subroutine reference as
