@@ -359,7 +359,7 @@ declare(
 declare(
     'Maybe',
     type_class                     => 'Type::Constraint::Parameterizable',
-    parent                         => t('Ref'),
+    parent                         => t('Item'),
     inline                         => sub { '1' },
     parameterized_inline_generator => sub {
         my $self      = shift;
