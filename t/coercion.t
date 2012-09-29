@@ -135,4 +135,45 @@ use Type::Library::Builtins;
     );
 }
 
+{
+    my $hashref = declare(
+        'HashRef2',
+        parent => t('HashRef'),
+    );
+
+    coerce(
+        $hashref,
+        from  => t('ArrayRef'),
+        using => sub {
+            return { @{ $_[0] } };
+        },
+    );
+
+    coerce(
+        $hashref,
+        from  => t('Int'),
+        using => sub {
+            return { $_[0] => 1 };
+        },
+    );
+
+    is_deeply(
+        $hashref->coerce_value( [ x => 1 ] ),
+        { x => 1 },
+        'arrayref is coerced to hashref'
+    );
+
+    is_deeply(
+        $hashref->coerce_value(42),
+        { 42 => 1 },
+        'integer is coerced to hashref'
+    );
+
+    like(
+        exception { $hashref->coerce_value('foo') },
+        qr/\QCould not find a coercion for "foo"/,
+        'cannot coerce a string to hashref'
+    );
+}
+
 done_testing();

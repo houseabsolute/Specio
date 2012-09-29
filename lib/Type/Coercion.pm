@@ -73,7 +73,7 @@ sub _build_optimized_coercion {
     my $self = shift;
 
     if ( $self->_has_inline_generator() ) {
-        return $self->_inlined_coercion();
+        return $self->_generated_inline_sub();
     }
     else {
         return $self->_coercion();
