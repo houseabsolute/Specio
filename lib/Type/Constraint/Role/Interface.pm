@@ -313,6 +313,62 @@ sub _build_description {
     return $desc;
 }
 
+# Moose compatibility methods - these exist as a temporary hack to make Type
+# work with Moose.
+
+sub has_coercion {
+    shift->has_coercions();
+}
+
+sub _inline_check {
+    shift->inline_check(@_);
+}
+
+sub _compiled_type_constraint {
+    shift->_optimized_constraint();
+}
+
+# This class implements the methods that Moose expects from coercions as well.
+sub coercion {
+    return shift;
+}
+
+sub _compiled_type_coercion {
+    my $self = shift;
+
+    return sub {
+        return $self->coerce_value(shift);
+    }
+}
+
+sub inline_environment {
+    shift->_inline_environment();
+}
+
+sub has_message {
+    1;
+}
+
+sub message {
+    shift->_message_generator();
+}
+
+sub get_message {
+    my $self  = shift;
+    my $value = shift;
+
+    return $self->_message_generator()
+        ->( $self, $self->_description(), $value );
+}
+
+sub check {
+    shift->value_is_valid(@_);
+}
+
+sub coerce {
+    shift->coerce_value(@_);
+}
+
 1;
 
 # ABSTRACT: The interface all type constraints should provide
