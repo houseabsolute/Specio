@@ -53,6 +53,10 @@ sub BUILD {
         'A type coercion should have either a coercion or inline_generator parameter, not both'
         if $self->_has_coercion() && $self->_has_inline_generator();
 
+    die
+        'A type coercion must have either a coercion or inline_generator parameter'
+        unless $self->_has_coercion() || $self->_has_inline_generator();
+
     return;
 }
 

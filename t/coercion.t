@@ -176,4 +176,19 @@ use Type::Library::Builtins;
     );
 }
 
+{
+    my $str = t('Str');
+
+    like(
+        exception {
+            coerce(
+                $str,
+                from => t('Int'),
+            );
+        },
+        qr/\QA type coercion must have either a coercion or inline_generator parameter/,
+        'a coercion must have a coercion sub or an inline generator'
+    );
+}
+
 done_testing();
