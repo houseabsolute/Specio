@@ -5,7 +5,7 @@ use warnings;
 use namespace::autoclean;
 
 use Devel::PartialDump;
-use List::AllUtils qw( all );
+use List::AllUtils qw( all any );
 use Sub::Name qw( subname );
 use Try::Tiny;
 use Type::Exception;
@@ -81,6 +81,17 @@ has _coercions => (
     default => sub { {} },
 );
 
+# Because types are cloned on import, we can't directly compare type
+# objects. Because type names can be reused between packages (no global
+# registry) we can't compare types based on name either.
+has _signature => (
+    is        => 'ro',
+    isa       => 'Str',
+    init_arg => undef,
+    lazy     => 1,
+    builder  => '_build_signature',
+);
+
 my $NullConstraint = sub { 1 };
 
 around BUILDARGS => sub {
@@ -137,6 +148,14 @@ sub _ancestors_and_self {
     my $self = shift;
 
     return ( ( reverse @{ $self->_ancestors() } ), $self );
+}
+
+sub is_a_type_of {
+    my $self = shift;
+    my $type = shift;
+
+    return any { $_->_signature() eq $type->_signature() }
+    $self->_ancestors_and_self();
 }
 
 sub is_anon {
@@ -311,6 +330,14 @@ sub _build_description {
     $desc .= q{ } . $self->declared_at()->description();
 
     return $desc;
+}
+
+sub _build_signature {
+    my $self = shift;
+
+    return join "\n",
+        ( $self->_has_parent() ? $self->parent()->_signature() : () ),
+        . ( $self->_constraint() // $self->_inline_generator() );
 }
 
 # Moose compatibility methods - these exist as a temporary hack to make Type

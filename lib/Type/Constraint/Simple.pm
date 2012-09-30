@@ -157,6 +157,11 @@ Returns the value of these parameters as they were passed to the constructor.
 
 Returns false for named types, true otherwise.
 
+=head2 $type->is_a_type_of($other_type)
+
+Given a type object, this returns true if the type this method is called on is
+a descendant of that type or is that type.
+
 =head2 $type->coercions()
 
 Returns a list of L<Type::Coercion> objects which belong to this constraint.

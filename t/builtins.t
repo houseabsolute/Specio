@@ -35,4 +35,24 @@ my $dpd = Devel::PartialDump->new();
     }
 }
 
+is(
+    t('Str')->parent()->name(),
+    'Value',
+    'parent of Str is Value'
+);
+
+for my $name (qw( Str Value Defined Item )) {
+    ok(
+        t('Str')->is_a_type_of( t($name) ),
+        "Str is_a_type_of($name)"
+    );
+}
+
+for my $name (qw( Maybe ArrayRef Object )) {
+    ok(
+        ! t('Str')->is_a_type_of( t($name) ),
+        "Str ! is_a_type_of($name)"
+    );
+}
+
 done_testing();
