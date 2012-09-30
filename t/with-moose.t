@@ -208,6 +208,7 @@ is(
     package Bar;
 
     use Type::Library::Builtins;
+    use Type::Declare;
 
     use Moose;
 
@@ -216,10 +217,43 @@ is(
                 traits => ['Array'],
                 is     => 'ro',
                 isa    => t( 'ArrayRef', of => t('Int') ),
+                default => sub          { [] },
+                handles => { add_native => 'push' },
             );
         },
         undef,
         'no exception creating native Array attr where isa => ArrayRef of Int'
+    );
+
+    declare(
+        'AofStr',
+        parent => t( 'ArrayRef', of => t('Str') ),
+    );
+
+    coerce(
+        t('AofStr'),
+        from  => t('Str'),
+        using => sub { [ $_[0] ] },
+    );
+
+    coerce(
+        t('Str'),
+        from  => t('HashRef'),
+        using => sub { return join '-', sort keys %{ $_[0] } },
+    );
+
+    ::is(
+        ::exception{ has coerced => (
+                traits  => ['Array'],
+                is      => 'ro',
+                isa     => t('AofStr'),
+                default => sub { [] },
+                coerce  => 1,
+                handles => { add_coerced => 'push' },
+            );
+        },
+        undef,
+        'no exception creating native Array attr where isa => AofStr and coerce => 1'
     );
 
     ::like(
@@ -232,7 +266,43 @@ is(
         qr/\QThe type constraint for native2 must be a subtype of ArrayRef but it's a Str/,
         'got exception creating native Array attr where isa => Str'
     );
+}
 
+{
+    my $bar = Bar->new();
+
+    is(
+        exception { $bar->add_native(42) },
+        undef,
+        'no exception pushing int onto native trait'
+    );
+
+    like(
+        exception { $bar->add_native('foo') },
+        qr/\QA new member value for native\E.+\Qfor type named Int\E.+\Qwith value "foo"/,
+        'got exception pushing str onto native trait'
+    );
+}
+
+{
+    my $bar = Bar->new();
+    is(
+        exception { $bar->add_coerced( { a => 1, b => 2 } ) },
+        undef,
+        'no exception pushing hashref onto coerced attribute'
+    );
+
+    is_deeply(
+        $bar->coerced(),
+        ['a-b'],
+        'pushed value was coerced as expected',
+    );
+
+    like(
+        exception { $bar->add_coerced( qr/foobar/ ) },
+        qr/\QAttribute (coerced) does not pass the type constraint because/,
+        'got exception trying to push regex object onto coerced attribute'
+    );
 }
 
 done_testing();
