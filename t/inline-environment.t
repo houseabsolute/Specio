@@ -43,20 +43,19 @@ use Type::Library::Builtins;
 
     my ( $code, $env ) = $t->inline_coercion_and_check('$var');
 
-    is_deeply(
-        $env,
-        {
-            '$scalar' => 42,
-            '%hash'   => { y => 84 },
-            '@array'  => [ 1, 2, 3 ],
-            '$_Type_Constraint_Interface_description' =>
-                \( $t->_description() ),
-            '$_Type_Constraint_Interface_message_generator' =>
-                \( $t->_message_generator() ),
-            '$_Type_Constraint_Interface_type' => \$t,
-        },
-        'inline_coercion_and_check merges all inline environment hashes together',
+    my %expect = (
+        '$scalar' => 42,
+        '%hash'   => { y => 84 },
+        '@array'  => [ 1, 2, 3 ],
     );
+
+    for my $key ( sort keys %expect ) {
+        is_deeply(
+            $env->{$key},
+            $expect{$key},
+            "inline_coercion_and_check merges all inline environment hashes together - $key",
+        );
+    }
 }
 
 done_testing();
