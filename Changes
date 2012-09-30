@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.03     2012-09-30
+
 - Various hacks to make Type::Constraint objects play nice with Moose. Needs
   changes to Moose to work properly, however.
 
