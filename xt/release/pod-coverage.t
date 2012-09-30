@@ -13,7 +13,8 @@ my @modules = grep { !$skip{$_} } all_modules();
 plan tests => scalar @modules;
 
 my %trustme = (
-    'Type::Coercion' => ['BUILD'],
+    'Type::Coercion'                  => ['BUILD'],
+    'Type::Constraint::Parameterized' => ['type_parameter'],
 );
 
 for my $module ( sort @modules ) {
