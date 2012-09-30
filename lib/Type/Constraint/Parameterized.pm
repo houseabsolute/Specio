@@ -28,6 +28,13 @@ sub can_be_inlined {
         && $self->parameter()->can_be_inlined();
 }
 
+# Moose compatibility methods - these exist as a temporary hack to make Type
+# work with Moose.
+
+sub type_parameter {
+    shift->parameter();
+}
+
 __PACKAGE__->meta()->make_immutable();
 
 1;

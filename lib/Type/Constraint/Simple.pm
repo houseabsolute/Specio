@@ -129,9 +129,14 @@ with value 1.1".
 You can override this to provide something more specific about the way the
 type failed.
 
-The subroutine you provide will be called as a method on the type with one
-argument. This is the value that failed the type check, after any coercions
-that might have been applied.
+The subroutine you provide will be called as a subroutine, I<not as a method>,
+with two arguments. The first is the description of the type (the bit in the
+message above that starts with "type named Int ..." and ends with "... in sub
+named (eval)". This description says what the thing is and where it was
+defined.
+
+The second argument is the value that failed the type check, after any
+coercions that might have been applied.
 
 You can also pass this option with the key C<message> in the parameter list.
 

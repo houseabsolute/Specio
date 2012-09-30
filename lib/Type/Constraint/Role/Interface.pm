@@ -11,6 +11,7 @@ use Try::Tiny;
 use Type::Exception;
 
 use Moose::Role;
+use MooseX::SemiAffordanceAccessor;
 
 with 'MooseX::Clone', 'Type::Role::Inlinable';
 
@@ -50,22 +51,10 @@ has _ancestors => (
     builder  => '_build_ancestors',
 );
 
-my $_default_message_generator = sub {
-    my $type  = shift;
-    my $value = shift;
-
-    return
-          q{Validation failed for } 
-        . $type->_description()
-        . q{ with value }
-        . Devel::PartialDump->new()->dump($value);
-};
-
 has _message_generator => (
-    is       => 'ro',
+    is       => 'rw',
     isa      => 'CodeRef',
-    default  => sub { $_default_message_generator },
-    init_arg => 'message_generator',
+    init_arg => undef,
 );
 
 has _coercions => (
@@ -110,6 +99,7 @@ sub BUILD { }
 around BUILD => sub {
     my $orig = shift;
     my $self = shift;
+    my $p    = shift;
 
     unless ( $self->_has_constraint() || $self->_has_inline_generator() ) {
         $self->_set_constraint($NullConstraint);
@@ -119,8 +109,28 @@ around BUILD => sub {
         'A type constraint should have either a constraint or inline_generator parameter, not both'
         if $self->_has_constraint() && $self->_has_inline_generator();
 
+    $self->_set_message_generator(
+        $self->_wrap_message_generator( $p->{message_generator} ) );
+
     return;
 };
+
+sub _wrap_message_generator {
+    my $self      = shift;
+    my $generator = shift;
+
+    $generator //= sub {
+        my $description = shift;
+        my $value       = shift;
+
+        return "Validation failed for $description with value "
+            . Devel::PartialDump->new()->dump($value);
+    };
+
+    my $d = $self->_description();
+
+    return sub { $generator->( $d, @_ ) };
+}
 
 sub validate_or_die {
     my $self  = shift;
@@ -129,10 +139,9 @@ sub validate_or_die {
     return if $self->value_is_valid($value);
 
     Type::Exception->throw(
-        message => $self->_message_generator()
-            ->( $self, $value ),
-        type  => $self,
-        value => $value,
+        message => $self->_message_generator()->($value),
+        type    => $self,
+        value   => $value,
     );
 }
 
@@ -303,8 +312,7 @@ sub inline_coercion_and_check {
     $source
         .= $self->inline_check('$value')
         . ' or Type::Exception->throw( '
-            . ' message => $_Type_Constraint_Interface_message_generator->('
-                . '   $_Type_Constraint_Interface_type, $value ), '
+            . ' message => $_Type_Constraint_Interface_message_generator->($value),'
             . ' type    => $_Type_Constraint_Interface_type,'
             . ' value   => $value );';
     #>>>

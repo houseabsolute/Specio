@@ -5,7 +5,8 @@ use warnings;
 
 use Moose::Role;
 
-with 'Type::Constraint::Role::Interface';
+with 'Type::Constraint::Role::Interface' =>
+    { -excludes => ['_wrap_message_generator'] };
 
 has class => (
     is       => 'ro',
@@ -13,20 +14,27 @@ has class => (
     required => 1,
 );
 
-my $_default_message_generator = sub {
-    my $type  = shift;
-    my $value = shift;
+sub _wrap_message_generator {
+    my $self      = shift;
+    my $generator = shift;
 
-    return
-          q{Validation failed for } 
-        . $type->_description()
-        . q{ with value }
-        . Devel::PartialDump->new()->dump($value)
-        . '(not isa '
-        . $type->class() . ')';
-};
+    my $class = $self->class();
 
-sub _default_message_generator { return $_default_message_generator }
+    $generator //= sub {
+        my $description = shift;
+        my $value       = shift;
+
+        return
+              "Validation failed for $description with value "
+            . Devel::PartialDump->new()->dump($value)
+            . '(not isa '
+            . $class . ')';
+    };
+
+    my $d = $self->_description();
+
+    return sub { $generator->( $d, @_ ) };
+}
 
 1;
 

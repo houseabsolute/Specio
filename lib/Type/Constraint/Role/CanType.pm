@@ -8,32 +8,14 @@ use Scalar::Util qw( blessed );
 
 use Moose::Role;
 
-with 'Type::Constraint::Role::Interface';
+with 'Type::Constraint::Role::Interface' =>
+    { -excludes => ['_wrap_message_generator'] };
 
 has methods => (
     is       => 'ro',
     isa      => 'ArrayRef[Str]',
     required => 1,
 );
-
-my $_default_message_generator = sub {
-    my $self  = shift;
-    my $value = shift;
-
-    my @methods = grep { !$value->can($_) } @{ $self->methods() };
-    my $class = blessed $value;
-    $class ||= $value;
-
-    my $noun = PL_N( 'method', scalar @methods );
-
-    return
-          $class
-        . ' is missing the '
-        . WORDLIST( map { "'$_'" } @methods ) . q{ }
-        . $noun;
-};
-
-sub _default_message_generator { return $_default_message_generator }
 
 override BUILDARGS => sub {
     my $self = shift;
@@ -46,6 +28,35 @@ override BUILDARGS => sub {
 
     return $p;
 };
+
+sub _wrap_message_generator {
+    my $self      = shift;
+    my $generator = shift;
+
+    my @methods = @{ $self->methods() };
+
+    $generator //= sub {
+        my $description = shift;
+        my $value       = shift;
+
+        my $class = blessed $value;
+        $class ||= $value;
+
+        my @missing = grep { !$value->can($_) } @methods;
+
+        my $noun = PL_N( 'method', scalar @missing );
+
+        return
+              $class
+            . ' is missing the '
+            . WORDLIST( map { "'$_'" } @missing ) . q{ }
+            . $noun;
+    };
+
+    my $d = $self->_description();
+
+    return sub { $generator->( $d, @_ ) };
+}
 
 1;
 
