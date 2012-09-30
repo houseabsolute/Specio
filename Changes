@@ -1,5 +1,14 @@
 {{$NEXT}}
 
+- Added any_does_type and object_does_type declaration helpers. These check
+  whether a class and/or object does a given role. They work with Moose,
+  Mouse, and Role::Tiny.
+
+- Fixed implementation of any_isa_type and object_isa_type to match docs. If
+  given more than one argument, the docs said they expected named parameters
+  but internally the code expected positional parameters.
+
+
 0.03     2012-09-30
 
 - Various hacks to make Type::Constraint objects play nice with Moose. Needs
