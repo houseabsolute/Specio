@@ -77,18 +77,16 @@ with this module.
 
 At it's core, a type is simply a constraint. A constraint is code that checks
 a value and returns true or false. Most constraints are represented by
-L<Type::Constraint::Simple> objects, though there are some other type
-constraint classes for specialized constraint types.
+L<Type::Constraint::Simple> objects though there are other type constraint
+classes for specialized kinds of constraints.
 
-Types can be named or anonymous, and they can have a parent type. A type has
-an optional constraint. The constraint is optional because sometimes you want
-to make a named subtype of some existing parent without adding additional
-constraints.
+Types can be named or anonymous, and each type can have a parent type. A
+type's constraint is optional because it can be used to create a named subtype
+of some existing type without adding additional constraints.
 
 Constraints can be expressed either in terms of a simple subroutine reference
 or in terms of an inline generator subroutine reference. The former is easier
-to write, but the latter is preferred, since it allow for much more extensive
-optimizations.
+to write but the latter is preferred because it allow for better optimization.
 
 A type can also have an optional message generator subroutine reference. You
 can use this to provide a more intelligent error message when a value does not
