@@ -51,10 +51,10 @@ use Type::Library::Builtins;
         'coerced int to arrayref',
     );
 
-    like(
-        exception { $arrayref->coerce_value(42.1) },
-        qr/\QCould not find a coercion for 42.1/,
-        'cannot coerced num to arrayref',
+    is(
+        $arrayref->coerce_value(42.1),
+        42.1,
+        'cannot coerce num to arrayref - returns original value',
     );
 
     ok(
@@ -169,10 +169,10 @@ use Type::Library::Builtins;
         'integer is coerced to hashref'
     );
 
-    like(
-        exception { $hashref->coerce_value('foo') },
-        qr/\QCould not find a coercion for "foo"/,
-        'cannot coerce a string to hashref'
+    is(
+        $hashref->coerce_value('foo'),
+        'foo',
+        'cannot coerce num to arrayref - returns original value',
     );
 }
 

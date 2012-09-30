@@ -213,7 +213,7 @@ This attempts to coerce a value into a new value that matches the type. It
 checks all of the type's coercions. If it finds one which has a "from" type
 that accepts the value, it runs the coercion and returns the new value.
 
-If it cannot find a matching coercion it throws an error.
+If it cannot find a matching coercion it returns the original value.
 
 =head2 $type->inline_coercion_and_check($var)
 

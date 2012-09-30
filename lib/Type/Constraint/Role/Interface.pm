@@ -273,8 +273,7 @@ sub coerce_value {
         return $coercion->coerce($value);
     }
 
-    die 'Could not find a coercion for '
-        . Devel::PartialDump->new()->dump($value);
+    return $value;
 }
 
 sub can_inline_coercion_and_check {
