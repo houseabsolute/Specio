@@ -204,4 +204,35 @@ is(
     );
 }
 
+{
+    package Bar;
+
+    use Type::Library::Builtins;
+
+    use Moose;
+
+    ::is(
+        ::exception{ has native => (
+                traits => ['Array'],
+                is     => 'ro',
+                isa    => t( 'ArrayRef', of => t('Int') ),
+            );
+        },
+        undef,
+        'no exception creating native Array attr where isa => ArrayRef of Int'
+    );
+
+    ::like(
+        ::exception{ has native2 => (
+                traits => ['Array'],
+                is     => 'ro',
+                isa    => t('Str'),
+            );
+        },
+        qr/\QThe type constraint for native2 must be a subtype of ArrayRef but it's a Str/,
+        'got exception creating native Array attr where isa => Str'
+    );
+
+}
+
 done_testing();
