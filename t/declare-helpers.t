@@ -136,7 +136,10 @@ my $dpd = Devel::PartialDump->new();
 }
 
 {
-    my $tc = any_isa_type( 'FooAny', 'Foo' );
+    my $tc = any_isa_type(
+        'FooAny',
+        class => 'Foo',
+    );
 
     is( $tc->name(), 'FooAny', 'can provide an explicit name' );
 
@@ -173,7 +176,10 @@ my $dpd = Devel::PartialDump->new();
 }
 
 {
-    my $tc = any_isa_type( 'QuuxAny', 'Quux' );
+    my $tc = any_isa_type(
+        'QuuxAny',
+        class => 'Quux',
+    );
 
     for my $thing ( 'Foo', Foo->new() ) {
         my $desc = ref $thing ? 'Foo class name' : 'Foo object';
