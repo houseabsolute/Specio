@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.04     2012-09-30
+
 - Added any_does_type and object_does_type declaration helpers. These check
   whether a class and/or object does a given role. They work with Moose,
   Mouse, and Role::Tiny.
