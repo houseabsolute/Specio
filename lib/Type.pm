@@ -3,6 +3,8 @@ package Type;
 use strict;
 use warnings;
 
+use v5.10;
+
 1;
 
 # ABSTRACT: Type constraints and coercions for Perl
