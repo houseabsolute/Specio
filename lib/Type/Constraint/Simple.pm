@@ -166,6 +166,11 @@ Returns false for named types, true otherwise.
 Given a type object, this returns true if the type this method is called on is
 a descendant of that type or is that type.
 
+=head2 $type->is_same_type_as($other_type)
+
+Given a type object, this returns true if the type this method is called on is
+the same as that type.
+
 =head2 $type->coercions()
 
 Returns a list of L<Type::Coercion> objects which belong to this constraint.
