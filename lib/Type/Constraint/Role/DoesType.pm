@@ -40,7 +40,7 @@ sub _wrap_message_generator {
 
 1;
 
-# ABSTRACT: Provides a common implementation for Type::Constraint::AnyRole and Type::Constraint::ObjectRole
+# ABSTRACT: Provides a common implementation for Type::Constraint::AnyDoes and Type::Constraint::ObjectDoes
 
 __END__
 
