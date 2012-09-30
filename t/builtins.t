@@ -5,6 +5,7 @@ use encoding 'utf8';
 use Test::More 0.88;
 
 use Devel::PartialDump;
+use Type::Declare;
 use Type::Library::Builtins;
 
 my $dpd = Devel::PartialDump->new();
@@ -41,17 +42,38 @@ is(
     'parent of Str is Value'
 );
 
+my $str_clone = t('Str')->clone();
+
 for my $name (qw( Str Value Defined Item )) {
     ok(
         t('Str')->is_a_type_of( t($name) ),
         "Str is_a_type_of($name)"
     );
+
+    next if $name eq 'Str';
+
+    ok(
+        $str_clone->is_a_type_of( t($name) ),
+        "Str clone is_a_type_of($name)"
+    );
 }
 
 for my $name (qw( Maybe ArrayRef Object )) {
     ok(
-        ! t('Str')->is_a_type_of( t($name) ),
+        !t('Str')->is_a_type_of( t($name) ),
         "Str ! is_a_type_of($name)"
+    );
+
+    ok(
+        !$str_clone->is_a_type_of( t($name) ),
+        "Str clone ! is_a_type_of($name)"
+    );
+}
+
+for my $type ( t('Str'), $str_clone ) {
+    ok(
+        $type->is_same_type_as( t('Str') ),
+        $type->name() . ' is_same_type_as Str'
     );
 }
 

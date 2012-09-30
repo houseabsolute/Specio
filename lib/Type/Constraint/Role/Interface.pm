@@ -158,6 +158,13 @@ sub is_a_type_of {
     $self->_ancestors_and_self();
 }
 
+sub is_same_type_as {
+    my $self = shift;
+    my $type = shift;
+
+    return $self->_signature() eq $type->_signature();
+}
+
 sub is_anon {
     my $self = shift;
 
