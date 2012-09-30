@@ -282,42 +282,49 @@ sub can_inline_coercion_and_check {
     return all { $_->can_be_inlined() } $self, $self->coercions();
 }
 
-sub inline_coercion_and_check {
-    my $self = shift;
+{
+    my $counter = 1;
 
-    die 'Cannot inline coercion and check'
-        unless $self->can_inline_coercion_and_check();
+    sub inline_coercion_and_check {
+        my $self = shift;
 
-    my %env = (
-        '$_Type_Constraint_Interface_type' => \$self,
-        '$_Type_Constraint_Interface_message_generator' =>
-            \( $self->_message_generator() ),
-        '$_Type_Constraint_Interface_description' =>
-            \( $self->_description() ),
-        %{ $self->_inline_environment() },
-    );
+        die 'Cannot inline coercion and check'
+            unless $self->can_inline_coercion_and_check();
 
-    my $source = 'do {' . 'my $value = ' . $_[0] . ';';
-    for my $coercion ( $self->coercions() ) {
+        my $unique_id = sprintf( '%016d', $counter++ );
+
+        my $type_var_name = '$_Type_Constraint_Interface_type' . $counter;
+        my $message_generator_var_name
+            = '$_Type_Constraint_Interface_message_generator' . $counter;
+
+        my %env = (
+            $type_var_name              => \$self,
+            $message_generator_var_name => \( $self->_message_generator() ),
+            %{ $self->_inline_environment() },
+        );
+
+        my $source = 'do {' . 'my $value = ' . $_[0] . ';';
+        for my $coercion ( $self->coercions() ) {
+            $source
+                .= '$value = '
+                . $coercion->inline_coercion( $_[0] ) . ' if '
+                . $coercion->from()->inline_check( $_[0] ) . ';';
+
+            %env = ( %env, %{ $coercion->_inline_environment() } );
+        }
+
+        #<<<
         $source
-            .= '$value = '
-            . $coercion->inline_coercion( $_[0] ) . ' if '
-            . $coercion->from()->inline_check( $_[0] ) . ';';
+            .= $self->inline_check('$value')
+                . ' or Type::Exception->throw( '
+                . ' message => ' . $message_generator_var_name . '->($value),'
+                . ' type    => ' . $type_var_name . ','
+                . ' value   => $value );';
+        #>>>
+        $source .= '$value };';
 
-        %env = ( %env, %{ $coercion->_inline_environment() } );
+        return ( $source, \%env );
     }
-
-    #<<<
-    $source
-        .= $self->inline_check('$value')
-        . ' or Type::Exception->throw( '
-            . ' message => $_Type_Constraint_Interface_message_generator->($value),'
-            . ' type    => $_Type_Constraint_Interface_type,'
-            . ' value   => $value );';
-    #>>>
-    $source .= '$value };';
-
-    return ( $source, \%env );
 }
 
 sub _build_ancestors {
