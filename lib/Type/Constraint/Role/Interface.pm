@@ -52,12 +52,11 @@ has _ancestors => (
 
 my $_default_message_generator = sub {
     my $type  = shift;
-    my $thing = shift;
     my $value = shift;
 
     return
           q{Validation failed for } 
-        . $thing
+        . $type->_description()
         . q{ with value }
         . Devel::PartialDump->new()->dump($value);
 };
@@ -131,7 +130,7 @@ sub validate_or_die {
 
     Type::Exception->throw(
         message => $self->_message_generator()
-            ->( $self, $self->_description(), $value ),
+            ->( $self, $value ),
         type  => $self,
         value => $value,
     );
@@ -305,7 +304,7 @@ sub inline_coercion_and_check {
         .= $self->inline_check('$value')
         . ' or Type::Exception->throw( '
             . ' message => $_Type_Constraint_Interface_message_generator->('
-                . '   $_Type_Constraint_Interface_type, $_Type_Constraint_Interface_description, $value ), '
+                . '   $_Type_Constraint_Interface_type, $value ), '
             . ' type    => $_Type_Constraint_Interface_type,'
             . ' value   => $value );';
     #>>>
@@ -395,8 +394,7 @@ sub get_message {
     my $self  = shift;
     my $value = shift;
 
-    return $self->_message_generator()
-        ->( $self, $self->_description(), $value );
+    return $self->_message_generator()->( $self, $value );
 }
 
 sub check {

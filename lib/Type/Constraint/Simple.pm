@@ -86,6 +86,18 @@ The generator will be called as a method on the constraint with a single
 argument. That argument is the name of the variable being coerced, something
 like C<'$_[0]'> or C<'$var'>.
 
+The inline generator is expected to include code to implement both the current
+type and all its parents. Typically, the easiest way to do this is to write a
+subroutine something like this:
+
+  sub {
+      my $self = shift;
+      my $var  = shift;
+
+      return $_[0]->parent()->inline_check( $_[1] )
+          . ' and more checking code goes here';
+  }
+
 This parameter is mutually exclusive with C<constraint>.
 
 You can also pass this option with the key C<inline> in the parameter list.
@@ -117,25 +129,9 @@ with value 1.1".
 You can override this to provide something more specific about the way the
 type failed.
 
-The subroutine you provide will be called as a method on the type with two
-arguments. The first is the description of the type (the bit in the message
-above that starts with "type named Int ..." and ends with "... in sub named
-(eval)". This description says what the thing is and where it was defined.
-
-The second argument is the value that failed the type check, after any
-coercions that might have been applied.
-
-The inline generator is expected to include code to implement both the current
-type and all its parents. Typically, the easiest way to do this is to write a
-subroutine something like this:
-
-  sub {
-      my $self = shift;
-      my $var  = shift;
-
-      return $_[0]->parent()->inline_check( $_[1] )
-          . ' and more checking code goes here';
-  }
+The subroutine you provide will be called as a method on the type with one
+argument. This is the value that failed the type check, after any coercions
+that might have been applied.
 
 You can also pass this option with the key C<message> in the parameter list.
 

@@ -18,7 +18,6 @@ has methods => (
 
 my $_default_message_generator = sub {
     my $self  = shift;
-    my $thing = shift;
     my $value = shift;
 
     my @methods = grep { !$value->can($_) } @{ $self->methods() };
