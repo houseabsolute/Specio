@@ -5,12 +5,12 @@
 - Various hacks to make Type::Constraint objects play nice with Moose. Needs
   changes to Moose to work properly, however.
 
-- The message generator sub is no longer called as a method, it is simply
-  called as a sub, so it doesn't receive the type as an argument.
+- The message generator sub is no longer called as a method. It is called as a
+  sub so it doesn't receive the type as an argument.
 
-- The inline environment variable names used for each type are unique so types
-  will not step on each other if you want to inline more than one type check
-  in the same scope.
+- The inline environment variable names used for each type are now
+  unique. This means that types will not step on each other if you want to
+  inline more than one type check in the same scope.
 
 - Non-inlined type coercions were completely broken.
 
