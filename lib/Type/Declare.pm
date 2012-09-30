@@ -16,11 +16,13 @@ use Type::Registry qw( internal_types_for_package register );
 our @EXPORT = qw(
     anon
     any_can_type
+    any_does_type
     any_isa_type
     coerce
     declare
     enum
     object_can_type
+    object_does_type
     object_isa_type
 );
 
@@ -95,15 +97,32 @@ sub object_can_type {
     return $tc;
 }
 
+sub object_does_type {
+    my $name = shift;
+    my %p = @_;
+
+    require Type::Constraint::ObjectDoes;
+
+    my $tc = _make_tc(
+        name       => $name,
+        role       => $p{role} // $name,
+        type_class => 'Type::Constraint::ObjectDoes',
+    );
+
+    register( scalar caller(), $name, $tc, 'exportable' );
+
+    return $tc;
+}
+
 sub object_isa_type {
     my $name = shift;
-    my $isa = shift || $name;
+    my %p    = @_;
 
     require Type::Constraint::ObjectIsa;
 
     my $tc = _make_tc(
         name       => $name,
-        class      => $isa,
+        class      => $p{class} // $name,
         type_class => 'Type::Constraint::ObjectIsa',
     );
 
@@ -133,15 +152,32 @@ sub any_can_type {
     return $tc;
 }
 
+sub any_does_type {
+    my $name = shift;
+    my %p    = @_;
+
+    require Type::Constraint::AnyDoes;
+
+    my $tc = _make_tc(
+        name       => $name,
+        role       => $p{role} // $name,
+        type_class => 'Type::Constraint::AnyDoes',
+    );
+
+    register( scalar caller(), $name, $tc, 'exportable' );
+
+    return $tc;
+}
+
 sub any_isa_type {
     my $name = shift;
-    my $isa = shift || $name;
+    my %p    = @_;
 
     require Type::Constraint::AnyIsa;
 
     my $tc = _make_tc(
         name       => $name,
-        class      => $isa,
+        class      => $p{class} // $name,
         type_class => 'Type::Constraint::AnyIsa',
     );
 
@@ -390,6 +426,21 @@ which only accepts an object of the given class.
 These subroutines take a type name as the first argument. The remaining
 arguments are key/value pairs. Currently this is just the C<class> key, which
 should be a class name. This is the class that the type requires.
+
+The type name argument can be omitted to create an anonymous type.
+
+=head2 any_does_type(), object_does_type()
+
+The C<any_does_type()> helpers creates a type which accepts a class name or
+object which does the given role. The C<object_does_type()> helpers creates a
+type which only accepts an object which does the given role.
+
+These subroutines take a type name as the first argument. The remaining
+arguments are key/value pairs. Currently this is just the C<role> key, which
+should be a role name. This is the class that the type requires.
+
+This should just work (I hope) with roles created by L<Moose>, L<Mouse>, and
+L<Moo> (using L<Role::Tiny>).
 
 The type name argument can be omitted to create an anonymous type.
 
