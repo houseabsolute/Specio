@@ -116,6 +116,9 @@ It should be very rare to need to set this in the constructor. It's more
 likely that a special type subclass would need to provide values that it
 generates internally.
 
+If you do set this, you are responsible for generating variable names that
+won't clash with anything else in the inlined code.
+
 This parameter defaults to an empty hash reference.
 
 =item * message_generator => sub { ... }
