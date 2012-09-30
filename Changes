@@ -1,5 +1,25 @@
 {{$NEXT}}
 
+- Various hacks to make Type::Constraint objects play nice with Moose. Needs
+  changes to Moose to work properly, however.
+
+- The message generator sub is no longer called as a method, it is simply
+  called as a sub, so it doesn't receive the type as an argument.
+
+- The inline environment variable names used for each type are unique so types
+  will not step on each other if you want to inline more than one type check
+  in the same scope.
+
+- Non-inlined type coercions were completely broken.
+
+- Added $type->is_same_type_as and $type->is_a_type_of methods.
+
+- The Maybe type was a subtype of Ref in the code, which is wrong. It is now a
+  subtype of Item.
+
+- This module now explicitly requires Perl 5.10.
+
+
 0.02     2012-05-14
 
 - Now with lots more documentation, but this is still very alpha. Feedback
