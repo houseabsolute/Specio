@@ -342,6 +342,10 @@ sub _build_description {
 sub _build_signature {
     my $self = shift;
 
+    # This assumes that when a type is cloned, the underlying constraint or
+    # generator sub is copied by _reference_, so it has the same memory
+    # address and stringifies to the same value. XXX - will this break under
+    # threads?
     return join "\n",
         ( $self->_has_parent() ? $self->parent()->_signature() : () ),
         . ( $self->_constraint() // $self->_inline_generator() );
