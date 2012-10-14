@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- This module didn't really need XS. It turns out that 5.10 added
+  re::is_regexp() so we can use that instead. Thanks to Jesse Luehrs for
+  pointing this out.
+
+
 0.04     2012-09-30
 
 - Added any_does_type and object_does_type declaration helpers. These check
