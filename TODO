@@ -1,0 +1,28 @@
+Better integration with Moose
+
+support string type names via something like MooseX::Type (no "s"):
+
+  use Type::Library::Builtins;
+
+  use Moose;
+  use MooseX::Type;
+
+  has foo => ( isa => 'Str' );
+
+Internally MX::Type will provide an attr trait and class trait that together
+look up a registry for the class by name, something like:
+
+  use Type::Registries qw( registry_for_package );
+
+  my $registry = registry_for_package($package);
+
+The registry will be an object with a method like "type_named" or something
+like that.
+
+To parser things like "ArrayRef[Str]" we need to separate the type string
+parsing into its module that can return a data structure like:
+
+  name => 'ArrayRef',
+  parameters => [ 'Str' ]
+
+Then MX::Types will use this information to find the relevant types.
