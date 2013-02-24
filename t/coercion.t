@@ -6,8 +6,8 @@ use Test::Fatal;
 use Test::More 0.88;
 
 use Eval::Closure qw( eval_closure );
-use Type::Declare;
-use Type::Library::Builtins;
+use Specio::Declare;
+use Specio::Library::Builtins;
 
 {
     my $arrayref = t('ArrayRef');
@@ -18,8 +18,8 @@ use Type::Library::Builtins;
     );
 
     ok(
-        !Type::Library::Builtins::t('ArrayRef')->has_coercions(),
-        'ArrayRef type in Type::Library::Builtins package does not have coercions'
+        !Specio::Library::Builtins::t('ArrayRef')->has_coercions(),
+        'ArrayRef type in Specio::Library::Builtins package does not have coercions'
     );
 
     coerce(
@@ -31,8 +31,8 @@ use Type::Library::Builtins;
     ok( $arrayref->has_coercions(), 'ArrayRef type object has coercions' );
 
     ok(
-        !Type::Library::Builtins::t('ArrayRef')->has_coercions(),
-        'ArrayRef type in Type::Library::Builtins package does not have coercions (coercions only apply to local copy of type)'
+        !Specio::Library::Builtins::t('ArrayRef')->has_coercions(),
+        'ArrayRef type in Specio::Library::Builtins package does not have coercions (coercions only apply to local copy of type)'
     );
 
     ok(
@@ -130,7 +130,7 @@ use Type::Library::Builtins;
 
     like(
         exception { $coerce_and_check->('foo') },
-        qr/\QValidation failed for type named HashRef declared in package Type::Library::Builtins\E.+\Qwith value "foo"/,
+        qr/\QValidation failed for type named HashRef declared in package Specio::Library::Builtins\E.+\Qwith value "foo"/,
         'string throws exception'
     );
 }

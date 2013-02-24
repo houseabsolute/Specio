@@ -7,8 +7,8 @@ use Test::More 0.88;
 use B ();
 use IO::File;
 use Scalar::Util qw( blessed looks_like_number openhandle );
-use Type::DeclaredAt;
-use Type::Library::Builtins;
+use Specio::DeclaredAt;
+use Specio::Library::Builtins;
 
 my $ZERO    = 0;
 my $ONE     = 1;
@@ -1255,11 +1255,11 @@ sub test_constraint {
         }
     }
 
-    if ( $type->isa('Type::Constraint::Parameterizable') ) {
-        my $parameterized = Type::Constraint::Simple->new(
+    if ( $type->isa('Specio::Constraint::Parameterizable') ) {
+        my $parameterized = Specio::Constraint::Simple->new(
             name        => $type->name() . 'OfItem',
             parent      => $type->parameterize( of => t('Item') ),
-            declared_at => Type::DeclaredAt->new_from_caller(0),
+            declared_at => Specio::DeclaredAt->new_from_caller(0),
         );
         test_constraint( $parameterized, $tests );
     }

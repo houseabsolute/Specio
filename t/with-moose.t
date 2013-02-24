@@ -11,8 +11,8 @@ plan skip_all =>
 {
     package Foo;
 
-    use Type::Declare;
-    use Type::Library::Builtins;
+    use Specio::Declare;
+    use Specio::Library::Builtins;
 
     use Moose;
 
@@ -23,7 +23,7 @@ plan skip_all =>
             );
         },
         undef,
-        'no exception passing a Type object as the isa parameter for a Moose attr'
+        'no exception passing a Specio object as the isa parameter for a Moose attr'
     );
 
     has numbers => (
@@ -211,8 +211,8 @@ is(
 {
     package Bar;
 
-    use Type::Library::Builtins;
-    use Type::Declare;
+    use Specio::Library::Builtins;
+    use Specio::Declare;
 
     use Moose;
 

@@ -5,37 +5,37 @@ use encoding 'utf8';
 use Test::Fatal;
 use Test::More 0.88;
 
-use Type::Constraint::Simple;
-use Type::DeclaredAt;
-use Type::Library::Builtins;
+use Specio::Constraint::Simple;
+use Specio::DeclaredAt;
+use Specio::Library::Builtins;
 
 {
-    my $t = Type::Constraint::Simple->new(
+    my $t = Specio::Constraint::Simple->new(
         name               => 'Foo',
         parent             => t('Str'),
         inline_generator   => sub { '1' },
         inline_environment => { '$scalar' => 42 },
-        declared_at        => Type::DeclaredAt->new_from_caller(0),
+        declared_at        => Specio::DeclaredAt->new_from_caller(0),
     );
 
-    my $from_int = Type::Coercion->new(
+    my $from_int = Specio::Coercion->new(
         from               => t('Int'),
         to                 => $t,
         inline_generator   => sub { '1' },
         inline_environment => {
             '%hash' => { y => 84 },
         },
-        declared_at => Type::DeclaredAt->new_from_caller(0),
+        declared_at => Specio::DeclaredAt->new_from_caller(0),
     );
 
-    my $from_num = Type::Coercion->new(
+    my $from_num = Specio::Coercion->new(
         from               => t('Num'),
         to                 => $t,
         inline_generator   => sub { '1' },
         inline_environment => {
             '@array' => [ 1, 2, 3 ],
         },
-        declared_at => Type::DeclaredAt->new_from_caller(0),
+        declared_at => Specio::DeclaredAt->new_from_caller(0),
     );
 
     $t->add_coercion($from_int);

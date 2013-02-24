@@ -5,7 +5,7 @@ use Pod::Coverage::Moose;
 use Test::Pod::Coverage;
 use Test::More;
 
-my %skip = map { $_ => 1 } qw( Type::Helpers Type::Registry );
+my %skip = map { $_ => 1 } qw( Specio::Helpers Specio::Registry );
 
 # This is a stripped down version of all_pod_coverage_ok which lets us
 # vary the trustme parameter per module.
@@ -13,8 +13,8 @@ my @modules = grep { !$skip{$_} } all_modules();
 plan tests => scalar @modules;
 
 my %trustme = (
-    'Type::Coercion'                  => ['BUILD'],
-    'Type::Constraint::Parameterized' => ['type_parameter'],
+    'Specio::Coercion'                  => ['BUILD'],
+    'Specio::Constraint::Parameterized' => ['type_parameter'],
 );
 
 for my $module ( sort @modules ) {

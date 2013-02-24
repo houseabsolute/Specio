@@ -5,7 +5,7 @@ use Test::Fatal;
 use Test::More 0.88;
 
 use Eval::Closure qw( eval_closure );
-use Type::Library::Builtins;
+use Specio::Library::Builtins;
 
 {
     my $str = t('Str');

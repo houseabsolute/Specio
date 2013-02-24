@@ -5,7 +5,7 @@ use Test::Fatal;
 use Test::More 0.88;
 
 use lib 't/lib';
-use Type::Library::Combines;
+use Specio::Library::Combines;
 
 {
     for my $type (qw( X Y Str Undef )) {

@@ -5,7 +5,7 @@ use Test::Fatal;
 use Test::More 0.88;
 
 use Devel::PartialDump;
-use Type::Declare;
+use Specio::Declare;
 
 my $dpd = Devel::PartialDump->new();
 
@@ -199,7 +199,7 @@ my $dpd = Devel::PartialDump->new();
 }
 
 {
-    require Type::Constraint::Enum;
+    require Specio::Constraint::Enum;
 
     my $tc = enum(
         'Enum1',

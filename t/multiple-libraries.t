@@ -4,10 +4,10 @@ use warnings;
 use Test::Fatal;
 use Test::More 0.88;
 
-use Type::Library::Builtins;
+use Specio::Library::Builtins;
 
 use lib 't/lib';
-use Type::Library::XY;
+use Specio::Library::XY;
 
 {
     for my $type (qw( X Y Str Undef )) {

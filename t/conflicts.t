@@ -5,12 +5,12 @@ use Test::Fatal;
 use Test::More 0.88;
 
 use lib 't/lib';
-use Type::Library::XY;
+use Specio::Library::XY;
 
-require Type::Library::Conflict;
+require Specio::Library::Conflict;
 
 like(
-    exception { Type::Library::Conflict->import() },
+    exception { Specio::Library::Conflict->import() },
     qr/\QThe main package already has a type named X/,
     'Got an exception when a library import conflicts with already declared types'
 );

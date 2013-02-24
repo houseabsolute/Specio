@@ -5,7 +5,7 @@ use Test::Fatal;
 use Test::More 0.88;
 
 use Class::Load qw( try_load_class );
-use Type::Declare;
+use Specio::Declare;
 
 {
     package Class::DoesNoRoles;

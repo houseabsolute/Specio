@@ -20,7 +20,7 @@
 
 0.03     2012-09-30
 
-- Various hacks to make Type::Constraint objects play nice with Moose. Needs
+- Various hacks to make Specio::Constraint objects play nice with Moose. Needs
   changes to Moose to work properly, however.
 
 - The message generator sub is no longer called as a method. It is called as a

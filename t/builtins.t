@@ -5,14 +5,14 @@ use encoding 'utf8';
 use Test::More 0.88;
 
 use Devel::PartialDump;
-use Type::Declare;
-use Type::Library::Builtins;
+use Specio::Declare;
+use Specio::Library::Builtins;
 
 my $dpd = Devel::PartialDump->new();
 
 {
     my $str = t('Str');
-    isa_ok( $str, 'Type::Constraint::Simple' );
+    isa_ok( $str, 'Specio::Constraint::Simple' );
     like(
         $str->declared_at()->filename(),
         qr/Builtins\.pm/,
