@@ -58,7 +58,7 @@ my $CLASS_NAME = 'Thing';
 
     use overload
         'bool' => sub { ${ $_[0] } },
-        fallback => 1;
+        fallback => 0;
 
     sub new {
         my $bool = $_[1];
@@ -74,7 +74,7 @@ my $BOOL_OVERLOAD_FALSE = BoolOverload->new(0);
 
     use overload
         q{""} => sub { ${ $_[0] } },
-        fallback => 1;
+        fallback => 0;
 
     sub new {
         my $str = $_[1];
@@ -91,7 +91,8 @@ my $STR_OVERLOAD_CLASS_NAME = StrOverload->new('StrOverload');
 
     use overload
         q{0+} => sub { ${ $_[0] } },
-        fallback => 1;
+        '+'   => sub { ${ $_[0] } + $_[1] },
+        fallback => 0;
 
     sub new {
         my $num = $_[1];
@@ -110,7 +111,7 @@ my $NUM_OVERLOAD_NEG_DECIMAL = NumOverload->new(42.42);
 
     use overload
         q{&{}} => sub { ${ $_[0] } },
-        fallback => 1;
+        fallback => 0;
 
     sub new {
         my $code = $_[1];
@@ -125,7 +126,7 @@ my $CODE_OVERLOAD = CodeOverload->new( sub { } );
 
     use overload
         q{qr} => sub { ${ $_[0] } },
-        fallback => 1;
+        fallback => 0;
 
     sub new {
         my $regex = $_[1];
@@ -140,7 +141,7 @@ my $REGEX_OVERLOAD = RegexOverload->new(qr/foo/);
 
     use overload
         q[*{}] => sub { ${ $_[0] } },
-        fallback => 1;
+        fallback => 0;
 
     sub new {
         my $glob = $_[1];
@@ -160,7 +161,7 @@ my $GLOB_OVERLOAD_FH = GlobOverload->new(\*BAR);
 
     use overload
         q[${}] => sub { ${ $_[0] } },
-        fallback => 1;
+        fallback => 0;
 
     sub new {
         my $scalar = $_[1];
@@ -175,7 +176,7 @@ my $SCALAR_OVERLOAD = ScalarOverload->new('x');
 
     use overload
         q[@{}] => sub { $_[0] },
-        fallback => 1;
+        fallback => 0;
 
     sub new {
         my $array = $_[1];
@@ -190,7 +191,7 @@ my $ARRAY_OVERLOAD = ArrayOverload->new( [ 1, 2, 3 ] );
 
     use overload
         q[%{}] => sub { $_[0] },
-        fallback => 1;
+        fallback => 0;
 
     sub new {
         my $hash = $_[1];
@@ -1289,7 +1290,7 @@ sub describe {
             $desc .= ' (' . ( $val ? 'true' : 'false' ) . ')';
         }
         elsif ( $val->isa('NumOverload') ) {
-            $desc .= ' (' . describe( $val + 0 ) . ')';
+            $desc .= ' (' . describe( ${$val} ) . ')';
         }
 
         return $desc;

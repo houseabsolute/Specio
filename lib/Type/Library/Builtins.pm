@@ -225,10 +225,12 @@ declare(
     'ClassName',
     parent => t('Str'),
     inline => sub {
-        'defined( '
+        '('
+            . $_[0]->parent()->inline_check( $_[1] ) . ')'
+            . ' && ( defined( '
             . $_[1]
             . ') && Class::Load::is_class_loaded("'
-            . $_[1] . '")';
+            . $_[1] . '") )';
     },
 );
 
