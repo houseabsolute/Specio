@@ -57,7 +57,7 @@ sub parameterize {
 
     # This isn't a default so as to avoid generating it even when they
     # parameter is already set.
-    $declared_at //= Specio::DeclaredAt->new_from_caller(1),
+    $declared_at //= Specio::DeclaredAt->new_from_caller(1);
 
     my %p = (
         parent      => $self,
