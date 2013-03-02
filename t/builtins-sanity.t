@@ -29,7 +29,7 @@ my $ARRAY_REF      = [];
 my $HASH_REF       = {};
 my $CODE_REF       = sub { };
 
-my $GLOB     = do { no warnings 'once'; *GLOB_REF };
+my $GLOB = do { no warnings 'once'; *GLOB_REF };
 my $GLOB_REF = \$GLOB;
 
 open my $FH, '<', $0 or die "Could not open $0 for the test";
@@ -150,11 +150,11 @@ my $REGEX_OVERLOAD = RegexOverload->new(qr/foo/);
 }
 
 local *FOO;
-my $GLOB_OVERLOAD = GlobOverload->new(\*FOO);
+my $GLOB_OVERLOAD = GlobOverload->new( \*FOO );
 
 local *BAR;
 open BAR, '<', $0 or die "Could not open $0 for the test";
-my $GLOB_OVERLOAD_FH = GlobOverload->new(\*BAR);
+my $GLOB_OVERLOAD_FH = GlobOverload->new( \*BAR );
 
 {
     package ScalarOverload;
@@ -1185,7 +1185,8 @@ foreach my $type_name (qw( Str Num Int ClassName )) {
 
     ok(
         $type->value_is_valid( substr( $str, 0, 0 ) ),
-        $type_name . ' accepts empty return val from substr using ->value_is_valid'
+        $type_name
+            . ' accepts empty return val from substr using ->value_is_valid'
     );
     ok(
         $not_inlined->( substr( $str, 0, 0 ) ),

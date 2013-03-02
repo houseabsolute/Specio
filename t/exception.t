@@ -22,19 +22,21 @@ use Specio::Library::Builtins;
     isa_ok( $e, 'Specio::Exception' );
 
     like(
-        $e->message(), qr/Validation failed for type named Str .+ with value undef/,
+        $e->message(),
+        qr/Validation failed for type named Str .+ with value undef/,
         'exception contains expected error'
     );
 
     try {
-        $str->validate_or_die([]);
+        $str->validate_or_die( [] );
     }
     catch {
         $e = $_;
     };
 
     like(
-        $e->message(), qr/Validation failed for type named Str .+ with value \[\s*\]/,
+        $e->message(),
+        qr/Validation failed for type named Str .+ with value \[\s*\]/,
         'exception contains expected error'
     );
 }

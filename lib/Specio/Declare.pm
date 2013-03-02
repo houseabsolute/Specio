@@ -99,7 +99,7 @@ sub object_can_type {
 
 sub object_does_type {
     my $name = shift;
-    my %p = @_;
+    my %p    = @_;
 
     require Specio::Constraint::ObjectDoes;
 

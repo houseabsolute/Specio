@@ -9,6 +9,6 @@ use Test::More 0.88;
     use Specio::Library::Builtins;
 }
 
-ok( ! Foo->can('t'), 't sub is cleaned by namespace::autoclean' );
+ok( !Foo->can('t'), 't sub is cleaned by namespace::autoclean' );
 
 done_testing();

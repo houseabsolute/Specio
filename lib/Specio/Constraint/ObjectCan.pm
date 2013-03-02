@@ -23,12 +23,13 @@ my $_inline_generator = sub {
     my $val  = shift;
 
     return
-          'Scalar::Util::blessed(' 
+          'Scalar::Util::blessed('
         . $val . ')'
         . ' && List::MoreUtils::all { '
         . $val
         . '->can($_) } ' . '( '
-        . ( join ', ', map { B::perlstring($_) } @{ $self->methods() } ) . ')';
+        . ( join ', ', map { B::perlstring($_) } @{ $self->methods() } )
+        . ')';
 };
 
 has '+_inline_generator' => (

@@ -28,8 +28,11 @@ use Specio::Library::Builtins;
 
     isa_ok( $anon, 'Specio::Constraint::Simple', 'return value from anon()' );
 
-    ok( $anon->value_is_valid('x'),  q{inlinable anon type allows "x"} );
-    ok( !$anon->value_is_valid(q{}), 'inlinable anon type reject empty string' );
+    ok( $anon->value_is_valid('x'), q{inlinable anon type allows "x"} );
+    ok(
+        !$anon->value_is_valid(q{}),
+        'inlinable anon type reject empty string'
+    );
 }
 
 done_testing();

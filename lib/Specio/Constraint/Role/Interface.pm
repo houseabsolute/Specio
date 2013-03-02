@@ -73,8 +73,8 @@ has _coercions => (
 # objects. Because type names can be reused between packages (no global
 # registry) we can't compare types based on name either.
 has _signature => (
-    is        => 'ro',
-    isa       => 'Str',
+    is       => 'ro',
+    isa      => 'Str',
     init_arg => undef,
     lazy     => 1,
     builder  => '_build_signature',
@@ -389,7 +389,7 @@ sub _compiled_type_coercion {
 
     return sub {
         return $self->coerce_value(shift);
-    }
+        }
 }
 
 sub inline_environment {

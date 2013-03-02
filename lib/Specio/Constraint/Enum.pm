@@ -28,7 +28,7 @@ my $_inline_generator = sub {
     my $val  = shift;
 
     return
-          'defined(' 
+          'defined('
         . $val . ') '
         . '&& !ref('
         . $val . ') '

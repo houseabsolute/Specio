@@ -24,9 +24,9 @@ my $_inline_generator = sub {
     my $val  = shift;
 
     return
-          'Scalar::Util::blessed(' 
-        . $val . ')' . ' && ' 
-        . $val 
+          'Scalar::Util::blessed('
+        . $val . ')' . ' && '
+        . $val
         . '->isa('
         . B::perlstring( $self->class ) . ')';
 };

@@ -70,7 +70,7 @@ sub coerce {
 sub inline_coercion {
     my $self = shift;
 
-    return $self->_inline_generator()->( $self, @_ )
+    return $self->_inline_generator()->( $self, @_ );
 }
 
 sub _build_optimized_coercion {

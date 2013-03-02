@@ -10,6 +10,7 @@ with 'Specio::Constraint::Role::Interface' =>
 
 has role => (
     is => 'ro',
+
     # XXX - we can't use Moose's RoleName since that restricts this
     # to only Moose roles.
     isa      => 'Str',

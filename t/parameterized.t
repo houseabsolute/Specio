@@ -82,7 +82,7 @@ use Specio::Library::Builtins;
         );
 
         ok(
-            !$arrayref_of_int->value_is_valid( 42 ),
+            !$arrayref_of_int->value_is_valid(42),
             "ArrayRef of Int [$desc] rejects integer"
         );
 

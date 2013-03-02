@@ -9,7 +9,7 @@ use Class::Load qw( is_class_loaded );
 use List::MoreUtils ();
 use overload        ();
 use re qw( is_regexp );
-use Scalar::Util    ();
+use Scalar::Util ();
 use Specio::Constraint::Parameterizable;
 use Specio::Declare;
 
@@ -258,7 +258,7 @@ declare(
         my $val       = shift;
 
         return
-              'Scalar::Util::blessed(' 
+              'Scalar::Util::blessed('
             . $val . ') ? '
             . 'overload::Overloaded('
             . $val
@@ -297,7 +297,7 @@ declare(
         my $val       = shift;
 
         return
-              '( ( Scalar::Util::blessed(' 
+              '( ( Scalar::Util::blessed('
             . $val . ') && '
             . 'overload::Overloaded('
             . $val
@@ -335,7 +335,7 @@ declare(
         my $val       = shift;
 
         return
-              '( ( Scalar::Util::blessed(' 
+              '( ( Scalar::Util::blessed('
             . $val . ') && '
             . 'overload::Overloaded('
             . $val
@@ -363,7 +363,7 @@ declare(
         my $val       = shift;
 
         return
-              '!defined(' 
+              '!defined('
             . $val . ') ' . '|| ('
             . $parameter->inline_check($val) . ')';
     },

@@ -23,7 +23,7 @@ my $_inline_generator = sub {
     my $val  = shift;
 
     return
-          '( Scalar::Util::blessed(' 
+          '( Scalar::Util::blessed('
         . $val
         . ') || ( '
         . " defined $val && ! ref $val ) )"

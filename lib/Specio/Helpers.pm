@@ -17,18 +17,18 @@ sub install_t_sub {
     my $types  = shift;
 
     # XXX - check to see if their t() is something else entirely?
-    return if  $caller->can('t');
+    return if $caller->can('t');
 
     my $t = sub {
         my $name = shift;
 
         croak 'The t() subroutine requires a single non-empty string argument'
-            unless _STRINGLIKE( $name );
+            unless _STRINGLIKE($name);
 
         croak "There is no type named $name available for the $caller package"
-            unless exists $types->{ $name };
+            unless exists $types->{$name};
 
-        my $found = $types->{ $name };
+        my $found = $types->{$name};
 
         return $found unless @_;
 
@@ -58,8 +58,8 @@ sub _STRINGLIKE ($) {
 
     return $_[0]
         if blessed $_[0]
-            && overload::Method( $_[0], q{""} )
-            && length "$_[0]";
+        && overload::Method( $_[0], q{""} )
+        && length "$_[0]";
 
     return undef;
 }
