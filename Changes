@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Renamed Type to Specio.
+
+
 0.05     2012-10-14
 
 - This module didn't really need XS. It turns out that 5.10 added
