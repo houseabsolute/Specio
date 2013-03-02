@@ -246,7 +246,7 @@ __END__
   );
 
   coerce(
-      'ArrayRef',
+      t('ArrayRef'),
       from  => t('Foo'),
       using => sub { [ $_[0] ] },
   );
