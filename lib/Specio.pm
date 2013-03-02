@@ -80,7 +80,7 @@ a value and returns true or false. Most constraints are represented by
 L<Specio::Constraint::Simple> objects though there are other type constraint
 classes for specialized kinds of constraints.
 
-Typess can be named or anonymous, and each type can have a parent type. A
+Types can be named or anonymous, and each type can have a parent type. A
 type's constraint is optional because it can be used to create a named subtype
 of some existing type without adding additional constraints.
 
@@ -202,7 +202,7 @@ all. This usually makes for a simpler API.
 
 =head1 REGISTRIES AND IMPORTING
 
-Typess are local to each package where they are used. When you "import" types
+Types are local to each package where they are used. When you "import" types
 from some other library, you are actually making a copy of that type.
 
 This means that a type named "Foo" in one package may not be the same as "Foo"
