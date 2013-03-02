@@ -202,7 +202,8 @@ sub coerce {
 
     return $to->add_coercion(
         Specio::Coercion->new(
-            to          => $to, @_,
+            to => $to,
+            @_,
             declared_at => Specio::DeclaredAt->new_from_caller(1),
         )
     );
