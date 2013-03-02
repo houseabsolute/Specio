@@ -77,8 +77,8 @@ with this module.
 
 At it's core, a type is simply a constraint. A constraint is code that checks
 a value and returns true or false. Most constraints are represented by
-L<Specio::Constraint::Simple> objects though there are other type constraint
-classes for specialized kinds of constraints.
+L<Specio::Constraint::Simple> objects. However, there are other type
+constraint classes for specialized kinds of constraints.
 
 Types can be named or anonymous, and each type can have a parent type. A
 type's constraint is optional because it can be used to create a named subtype
@@ -90,7 +90,7 @@ to write but the latter is preferred because it allow for better optimization.
 
 A type can also have an optional message generator subroutine reference. You
 can use this to provide a more intelligent error message when a value does not
-pass the constraint, though the default message should suffice for more cases.
+pass the constraint, though the default message should suffice for most cases.
 
 Finally, you can associate a set of coercions with a type. A coercion is a
 subroutine reference (or inline generator, like constraints), that takes a
@@ -154,9 +154,9 @@ they make sense.
 For types where overloading makes sense, we explicitly check that the object
 provides the type overloading we expect. We I<do not> simply try to use the
 object as the type and question and hope it works. This means that these
-checks effective ignore the C<fallback> setting for the overloaded object. In
-other words, an object that overloads stringification will not pass the
-C<Bool> type check unless it I<also> overloads boolification.
+checks effectively ignore the C<fallback> setting for the overloaded
+object. In other words, an object that overloads stringification will not pass
+the C<Bool> type check unless it I<also> overloads boolification.
 
 Most types do not check that the overloaded method actually returns something
 that matches the constraint. This may change in the future.
@@ -173,7 +173,7 @@ The C<ClassName> type will accept an object with string overloading that
 returns a class name.
 
 To make this all more confusing, the C<Value> type will I<never> accept an
-object, even though some it's subtypes will.
+object, even though some of its subtypes will.
 
 The various reference types all accept objects which provide the appropriate
 overloading. The C<FileHandle> type accepts an object which overloads
@@ -194,7 +194,7 @@ the parameter applies to the values (keys are never checked).
 The C<Maybe> type is a special parameterized type. It allows for either
 C<undef> or a value. All by itself, it is meaningless, since it is equivalent
 to "Maybe of Item", which is equivalent to Item. When parameterized, it
-accepts either an C<undef> or the its parameter.
+accepts either an C<undef> or the type of its parameter.
 
 This is useful for optional attributes or parameters. However, whenever
 possible, you're often better off making the parameter not required at
@@ -213,7 +213,7 @@ system.
 The registry is managed internally by the Specio distribution's modules, and is
 not exposed to your code. To access a type, you always call C<t('TypeName')>.
 
-This returns the named type, or dies if no such type exists.
+This returns the named type or dies if no such type exists.
 
 Because types are always copied on import, it's safe to create coercions on
 any type. Your coercion from C<Str> to C<Int> will not be seen by any other
@@ -243,7 +243,7 @@ L<Specio::Exporter> package:
   );
 
 Now the MyApp::Type::Library package will export a single type named
-C<Foo>. It I<does not> (yet) re-export the types provided by
+C<Foo>. It I<does not> re-export the types provided by
 L<Specio::Library::Builtins>.
 
 If you want to make your library re-export some other libraries types, you can
@@ -281,7 +281,7 @@ Here are some of the salient differences:
 
 Unlike Moose and MooseX::Types, type names are always local to the current
 package. There is no possibility of name collision between different modules,
-so you can safely use short types names for code.
+so you can safely use short types names.
 
 Unlike MooseX::Types, types are strings, so there is no possibility of
 colliding with existing class or subroutine names.

@@ -329,7 +329,8 @@ The inline generator subroutine should return a I<string> of code representing
 a single term, and it I<should not> be terminated with a semicolon. This
 allows the inlined code to be safely included in an C<if> statement, for
 example. You can use C<do { }> blocks and ternaries to get everything into one
-term. This single term should evaluate to true or false.
+term. Do not assign to the variable you are testing. This single term should
+evaluate to true or false.
 
 The inline generator is expected to include code to implement both the current
 type and all its parents. Typically, the easiest way to do this is to write a
@@ -420,8 +421,8 @@ This module also exports some helper subs for declaring certain kinds of types:
 
 =head2 any_isa_type(), object_isa_type()
 
-The C<any_isa_type()> helpers creates a type which accepts a class name or
-object of the given class. The C<object_isa_type()> helpers creates a type
+The C<any_isa_type()> helper creates a type which accepts a class name or
+object of the given class. The C<object_isa_type()> helper creates a type
 which only accepts an object of the given class.
 
 These subroutines take a type name as the first argument. The remaining
@@ -432,8 +433,8 @@ The type name argument can be omitted to create an anonymous type.
 
 =head2 any_does_type(), object_does_type()
 
-The C<any_does_type()> helpers creates a type which accepts a class name or
-object which does the given role. The C<object_does_type()> helpers creates a
+The C<any_does_type()> helper creates a type which accepts a class name or
+object which does the given role. The C<object_does_type()> helper creates a
 type which only accepts an object which does the given role.
 
 These subroutines take a type name as the first argument. The remaining
@@ -447,8 +448,8 @@ The type name argument can be omitted to create an anonymous type.
 
 =head2 any_can_type(), object_can_type()
 
-The C<any_can_type()> helpers creates a type which accepts a class name or
-object with the given methods. The C<object_can_type()> helpers creates a type
+The C<any_can_type()> helper creates a type which accepts a class name or
+object with the given methods. The C<object_can_type()> helper creates a type
 which only accepts an object with the given methods.
 
 These subroutines take a type name as the first argument. The remaining
