@@ -59,13 +59,6 @@ has _message_generator => (
 
 has _coercions => (
     traits  => [ 'Clone', 'Hash' ],
-    handles => {
-        coercions               => 'values',
-        coercion_from_type      => 'get',
-        _has_coercion_from_type => 'exists',
-        _add_coercion           => 'set',
-        has_coercions           => 'count',
-    },
     default => sub { {} },
 );
 
@@ -251,7 +244,7 @@ sub add_coercion {
     confess "Cannot add two coercions fom the same type: $from_id"
         if $self->_has_coercion_from_type($from_id);
 
-    $self->_add_coercion( $from_id => $coercion );
+    $self->{_coercions}{ $from_id} = $coercion;
 
     return;
 }
@@ -362,6 +355,47 @@ sub _build_signature {
     return join "\n",
         ( $self->_has_parent() ? $self->parent()->_signature() : () ),
         . ( $self->_constraint() // $self->_inline_generator() );
+}
+
+sub _message_generator {
+    return $_[0]->{_message_generator};
+}
+
+sub _set_message_generator {
+    my $self = shift;
+
+    unless ( ref( $_[1] ) eq "CODE" ) {
+        die
+            "Attribute (_message_generator) does not pass the type constraint because it is not a code reference";
+    }
+
+    $_[0]->{_message_generator} = $_[1];
+
+    return;
+}
+
+sub _has_coercion_from_type {
+    my $self = shift;
+
+    return exists $self->{_coercions}{ $_[0] };
+}
+
+sub coercion_from_type {
+    my $self = shift;
+
+    return $self->{_coercions}{ $_[0] };
+}
+
+sub coercions {
+    my $self = shift;
+
+    return values %{ ( $self->{_coercions} ) };
+}
+
+sub has_coercions {
+    my $self = shift;
+
+    return scalar keys %{ ( $self->{_coercions} ) };
 }
 
 # Moose compatibility methods - these exist as a temporary hack to make Specio
