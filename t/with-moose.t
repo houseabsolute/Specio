@@ -5,8 +5,7 @@ use Test::Fatal;
 use Test::More 0.88;
 
 plan skip_all =>
-    'These tests require a version of Moose that does not yet exist'
-    unless grep { $_ =~ /Moose.+blib/ } @INC;
+    'These tests require a version of Moose that does not yet exist';
 
 {
     package Foo;
