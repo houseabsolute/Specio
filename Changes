@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.07     2013-03-03
+
 - Disabled the tests that rely on an as-yet-unreleased Moose. These were
   mostly disabled but some cpan testers boxes were set up in a way that made
   them run.
