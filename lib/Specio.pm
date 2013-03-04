@@ -341,9 +341,9 @@ coercions and parameterizable types. This is a misfeature.
 =head1 WHY THE NAME?
 
 This distro was originally called "Type", but that's an awfully generic top
-level namespace. Specio is Latin for for "look at" and is the root for the
-word "species". It's short, relatively easy to type, and not used by any other
-distro.
+level namespace. Specio is Latin for for "look at" and "spec" is the root for
+the word "species". It's short, relatively easy to type, and not used by any
+other distro.
 
 =head1 LONG-TERM PLANS
 
