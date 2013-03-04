@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Disabled the tests that rely on an as-yet-unreleased Moose. These were
+  mostly disabled but some cpan testers boxes were set up in a way that made
+  them run.
+
+
 0.06     2013-03-02
 
 - Renamed Type to Specio.
