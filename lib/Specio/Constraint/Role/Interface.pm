@@ -291,8 +291,6 @@ sub can_inline_coercion_and_check {
         die 'Cannot inline coercion and check'
             unless $self->can_inline_coercion_and_check();
 
-        my $unique_id = sprintf( '%016d', $counter++ );
-
         my $type_var_name = '$_Specio_Constraint_Interface_type' . $counter;
         my $message_generator_var_name
             = '$_Specio_Constraint_Interface_message_generator' . $counter;
