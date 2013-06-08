@@ -321,6 +321,8 @@ sub can_inline_coercion_and_check {
         #>>>
         $source .= '$value };';
 
+        $counter++;
+
         return ( $source, \%env );
     }
 }
