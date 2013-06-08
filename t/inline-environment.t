@@ -1,6 +1,5 @@
 use strict;
 use warnings;
-use encoding 'utf8';
 
 use Test::Fatal;
 use Test::More 0.88;

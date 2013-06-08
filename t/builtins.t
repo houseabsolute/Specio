@@ -1,6 +1,7 @@
 use strict;
 use warnings;
-use encoding 'utf8';
+use utf8;
+use open ':encoding(UTF-8)', ':std';
 
 use Test::More 0.88;
 

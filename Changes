@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Removed the use of the encoding pragma from the tests. This pragma is
+  deprecated in 5.18.
+
+
 0.07     2013-03-03
 
 - Disabled the tests that rely on an as-yet-unreleased Moose. These were
