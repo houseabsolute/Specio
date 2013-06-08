@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.08     2013-06-08
+
 - Removed the use of the encoding pragma from the tests. This pragma is
   deprecated in 5.18.
 
