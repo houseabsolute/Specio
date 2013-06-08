@@ -55,7 +55,7 @@ sub parameterize {
         },
     );
 
-    # This isn't a default so as to avoid generating it even when they
+    # This isn't a default so as to avoid generating it even when the
     # parameter is already set.
     $declared_at //= Specio::DeclaredAt->new_from_caller(1);
 
