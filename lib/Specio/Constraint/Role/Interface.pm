@@ -389,7 +389,7 @@ sub _compiled_type_coercion {
 
     return sub {
         return $self->coerce_value(shift);
-        }
+    };
 }
 
 sub inline_environment {
