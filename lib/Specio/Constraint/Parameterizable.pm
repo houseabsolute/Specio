@@ -65,14 +65,8 @@ sub parameterize {
         declared_at => $declared_at,
     );
 
-    if ( $self->_has_parameterized_constraint_generator() ) {
-        $p{constraint}
-            = $self->_parameterized_constraint_generator()->($parameter);
-    }
-    else {
-        my $ig = $self->_parameterized_inline_generator();
-        $p{inline_generator} = sub { $ig->( shift, $parameter, @_ ) };
-    }
+    $p{constraint}
+        = $self->_parameterized_inline_generator()->( $self, $parameter );
 
     return Specio::Constraint::Parameterized->new(%p);
 }

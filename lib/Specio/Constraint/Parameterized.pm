@@ -22,7 +22,7 @@ has parameter => (
 sub can_be_inlined {
     my $self = shift;
 
-    return $self->_has_inline_generator()
+    return $self->_can_be_inlined()
         && $self->parameter()->can_be_inlined();
 }
 

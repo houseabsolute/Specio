@@ -7,6 +7,7 @@ use namespace::autoclean;
 use Devel::PartialDump;
 use List::AllUtils qw( all any );
 use Sub::Name qw( subname );
+use Sub::Quote qw( quote_sub );
 use Try::Tiny;
 use Specio::Exception;
 
@@ -80,6 +81,9 @@ has _signature => (
     builder  => '_build_signature',
 );
 
+# This can't be a Sub::Quote sub or else the code that checks for
+# ->can_be_inlined will get confused and inline this instead of inlining the
+# parent's constraint.
 my $NullConstraint = sub { 1 };
 
 around BUILDARGS => sub {
@@ -101,19 +105,17 @@ around BUILD => sub {
     my $self = shift;
     my $p    = shift;
 
-    unless ( $self->_has_constraint() || $self->_has_inline_generator() ) {
+    unless ( $self->_has_constraint() ) {
         $self->_set_constraint($NullConstraint);
     }
-
-    die
-        'A type constraint should have either a constraint or inline_generator parameter, not both'
-        if $self->_has_constraint() && $self->_has_inline_generator();
 
     $self->_set_message_generator(
         $self->_wrap_message_generator( $p->{message_generator} ) );
 
     return;
 };
+
+sub _inlinable_thing { $_[0]->_constraint() }
 
 sub _wrap_message_generator {
     my $self      = shift;
@@ -182,18 +184,18 @@ sub is_anon {
 sub has_real_constraint {
     my $self = shift;
 
-    return (   $self->_has_constraint
-            && $self->_constraint() ne $NullConstraint )
-        || $self->_has_inline_generator();
+    return $self->_constraint() ne $NullConstraint;
 }
 
 sub inline_check {
     my $self = shift;
 
-    die 'Cannot inline' unless $self->_has_inline_generator();
+    die 'Cannot inline' unless $self->can_be_inlined();
 
-    return $self->_inline_generator()->( $self, @_ );
+    return $self->_inline_thing(@_);
 }
+
+sub can_be_inlined { $_[0]->_can_be_inlined() }
 
 sub _build_optimized_constraint {
     my $self = shift;
@@ -361,7 +363,7 @@ sub _build_signature {
     # threads?
     return join "\n",
         ( $self->_has_parent() ? $self->parent()->_signature() : () ),
-        . ( $self->_constraint() // $self->_inline_generator() );
+        . ( $self->_constraint() );
 }
 
 # Moose compatibility methods - these exist as a temporary hack to make Specio

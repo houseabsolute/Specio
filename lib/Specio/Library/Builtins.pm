@@ -6,67 +6,55 @@ use warnings;
 use parent 'Specio::Exporter';
 
 use Class::Load qw( is_class_loaded );
-use List::MoreUtils ();
-use overload        ();
+use overload ();
 use re qw( is_regexp );
 use Scalar::Util ();
 use Specio::Constraint::Parameterizable;
 use Specio::Declare;
+use Sub::Quote qw( quote_sub quoted_from_sub );
 
 declare(
     'Any',
-    inline => sub { '1' }
+    where => quote_sub(q{1}),
 );
 
 declare(
     'Item',
-    inline => sub { '1' }
+    where => quote_sub(q{1}),
 );
 
 declare(
     'Undef',
     parent => t('Item'),
-    inline => sub {
-        '!defined(' . $_[1] . ')';
-    }
+    where  => quote_sub(q{!defined( $_[0] )}),
 );
 
 declare(
     'Defined',
     parent => t('Item'),
-    inline => sub {
-        'defined(' . $_[1] . ')';
-    }
+    where  => quote_sub(q{defined( $_[0] )}),
 );
 
 declare(
     'Bool',
     parent => t('Item'),
-    inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . ' overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "bool")' . ' : ('
-            . '!defined('
-            . $_[1] . ') ' . '|| '
-            . $_[1]
-            . ' eq "" ' . '|| ('
-            . $_[1]
-            . '."") eq "1" ' . '|| ('
-            . $_[1]
-            . '."") eq "0"' . ')';
-    }
+    where  => quote_sub(
+              'Scalar::Util::blessed( $_[0] )' . ' ? '
+            . ' overload::Overloaded( $_[0] )'
+            . ' && defined overload::Method( $_[0], q{bool} )' . ' : ('
+            . ' !defined( $_[0] )'
+            . ' || $_[0] eq q{}'
+            . ' || ( $_[0] eq q{1} )'
+            . ' || ( $_[0] eq q{0} )' . ' )'
+    ),
 );
 
 declare(
     'Value',
     parent => t('Defined'),
-    inline => sub {
-        $_[0]->parent()->inline_check( $_[1] ) . ' && !ref(' . $_[1] . ')';
-    }
+    where  => quote_sub(
+        '( ' . t('Defined')->inline_check('embedded') . ' ) && !ref( $_[0] )'
+    ),
 );
 
 declare(
@@ -74,120 +62,82 @@ declare(
     parent => t('Defined'),
 
     # no need to call parent - ref also checks for definedness
-    inline => sub { 'ref(' . $_[1] . ')' }
-);
-
-declare(
-    'Str',
-    parent => t('Value'),
-    inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ')'
-            . ' && overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', q{""})'
-            . ' ? 1 : '
-            . $_[0]->parent()->inline_check( $_[1] ) . ' && '
-            . '( ref(\\'
-            . $_[1]
-            . ') eq "SCALAR"'
-            . ' || ref(\\(my $val = '
-            . $_[1]
-            . ')) eq "SCALAR"' . ')';
-    }
+    where => quote_sub('ref( $_[0] )'),
 );
 
 my $value_type = t('Value');
 declare(
+    'Str',
+    parent => t('Value'),
+    where  => quote_sub(
+              'Scalar::Util::blessed( $_[0] )'
+            . ' && overload::Overloaded( $_[0] )'
+            . ' && defined overload::Method( $_[0], q{""} )'
+            . ' ? 1 : ' . '( '
+            . $value_type->inline_check('embedded') . ' )'
+            . ' && ( ref( \\$_[0] ) eq q{SCALAR}'
+            . '      || ref( \\(my $val = $_[0]) ) eq q{SCALAR} )'
+    ),
+);
+
+declare(
     'Num',
     parent => t('Str'),
-    inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . ' overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "0+")' . ' : ( '
-            . $value_type->inline_check( $_[1] )
-            . ' && ( my $val = '
-            . $_[1]
-            . ' ) =~ /\\A-?[0-9]+(?:\\.[0-9]+)?\\z/ )';
-    }
+    where  => quote_sub(
+              'Scalar::Util::blessed( $_[0] )'
+            . ' ? overload::Overloaded( $_[0] )'
+            . '   && defined overload::Method( $_[0], q{0+} )' . ' : '
+            . '( '
+            . $value_type->inline_check('embedded') . ' )'
+            . ' && do { ( my $val = $_[0] ) =~ /\\A-?[0-9]+(?:\\.[0-9]+)?\\z/ }'
+    ),
 );
 
 declare(
     'Int',
     parent => t('Num'),
-    inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . ' overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "0+") && '
-            . ' ( ( my $val1 = '
-            . $_[1]
-            . ' + 0 ) =~ /\A-?[0-9]+\z/ )'
-            . ' : ( ( '
-            . $value_type->inline_check( $_[1] )
-            . ') && ( my $val2 = '
-            . $_[1]
-            . ' ) =~ /\A-?[0-9]+\z/ )';
-    }
+    where  => quote_sub(
+              'Scalar::Util::blessed( $_[0] )'
+            . ' ? overload::Overloaded( $_[0] )'
+            . '   && defined overload::Method( $_[0], q{0+} )'
+            . '   && do { ( my $val = $_[0] + 0 ) =~ /\A-?[0-9]+\z/ }'
+            . ' : ' . '( ( '
+            . $value_type->inline_check( $_[0] ) . ')'
+            . ' && do { ( my $val = $_[0] ) =~ /\A-?[0-9]+\z/; } )'
+    ),
 );
 
 declare(
     'CodeRef',
     parent => t('Ref'),
-    inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . ' overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "&{}") '
-            . ' : ref('
-            . $_[1]
-            . ') eq "CODE"';
-    },
+    where  => quote_sub(
+              'Scalar::Util::blessed( $_[0] )'
+            . ' ? overload::Overloaded( $_[0] )'
+            . '   && defined overload::Method( $_[0], q[&{}] )'
+            . ' : ref( $_[0] ) eq q{CODE}'
+    ),
 );
 
 declare(
     'RegexpRef',
     parent => t('Ref'),
-    inline => sub {
-        '( Scalar::Util::blessed('
-            . $_[1] . ') && '
-            . ' overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "qr") ) || '
-            . 're::is_regexp('
-            . $_[1] . ')';
-    },
+    where  => quote_sub(
+              'Scalar::Util::blessed( $_[0] )'
+            . '    && overload::Overloaded( $_[0] )'
+            . '    && defined overload::Method( $_[0], q{qr} )'
+            . '|| re::is_regexp( $_[0] )'
+    ),
 );
 
 declare(
     'GlobRef',
     parent => t('Ref'),
-    inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . 'overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "*{}") '
-            . ' : ( ref('
-            . $_[1]
-            . ') eq "GLOB" )';
-    },
+    where  => quote_sub(
+              'Scalar::Util::blessed( $_[0] )'
+            . ' ? overload::Overloaded( $_[0] )'
+            . '   && defined overload::Method( $_[0], q[*{}] )'
+            . ' : ref( $_[0] ) eq q{GLOB}'
+    ),
 );
 
 # NOTE: scalar filehandles are GLOB refs, but a GLOB ref is not always a
@@ -195,83 +145,63 @@ declare(
 declare(
     'FileHandle',
     parent => t('Ref'),
-    inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . $_[1]
-            . '->isa("IO::Handle") || '
-            . '( overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "*{}") '
-            . '&& Scalar::Util::openhandle( *{'
-            . $_[1] . '} ) )'
-            . ' : ref('
-            . $_[1]
-            . ') eq "GLOB" '
-            . '&& Scalar::Util::openhandle('
-            . $_[1] . ')';
-    },
+    where  => quote_sub(
+              'Scalar::Util::blessed( $_[0] )'
+            . ' ? $_[0]->isa( q{IO::Handle} )'
+            . '   || ( overload::Overloaded( $_[0] )'
+            . '        && defined overload::Method( $_[0], q[*{}] )'
+            . '        && Scalar::Util::openhandle( *{ $_[0] } ) )'
+            . ' : ref( $_[0] ) eq q{GLOB} '
+            . '        && Scalar::Util::openhandle( $_[0] )'
+    ),
 );
 
 declare(
     'Object',
     parent => t('Ref'),
-    inline => sub { 'Scalar::Util::blessed(' . $_[1] . ')' },
+    where  => quote_sub('Scalar::Util::blessed( $_[0] )'),
 );
 
 declare(
     'ClassName',
     parent => t('Str'),
-    inline => sub {
-        '('
-            . $_[0]->parent()->inline_check( $_[1] ) . ')'
-            . ' && ( defined( '
-            . $_[1]
-            . ') && Class::Load::is_class_loaded("'
-            . $_[1] . '") )';
-    },
+    where  => quote_sub(
+              '( '
+            . t('Str')->inline_check('embedded') . ' )'
+            . ' && defined( $_[0] )'
+            . ' && Class::Load::is_class_loaded( "$_[0]" )'
+    ),
 );
 
 declare(
     'ScalarRef',
     type_class => 'Specio::Constraint::Parameterizable',
     parent     => t('Ref'),
-    inline     => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . 'overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "\\${}") '
-            . ' : ref( '
-            . $_[1]
-            . q{ ) eq 'SCALAR' || ref( }
-            . $_[1]
-            . q{ ) eq 'REF' };
-    },
+    where      => quote_sub(
+              'Scalar::Util::blessed($_[0])'
+            . ' ? overload::Overloaded( $_[0] )'
+            . '   && defined overload::Method( $_[0], q[${}] )'
+            . ' : ref( $_[0] ) eq q{SCALAR}'
+            . '   || ref( $_[0] ) eq q{REF}'
+    ),
     parameterized_inline_generator => sub {
         my $self      = shift;
         my $parameter = shift;
-        my $val       = shift;
 
-        return
-              'Scalar::Util::blessed('
-            . $val . ') ? '
-            . 'overload::Overloaded('
-            . $val
-            . ') && defined overload::Method('
-            . $val
-            . ', "\\${}") ' . ' && '
-            . $parameter->inline_check( '${ ( ' . $val . ' ) }' )
-            . ' : ( ref( '
-            . $val
-            . q{ ) eq 'SCALAR' || ref( }
-            . $val
-            . q{ ) eq 'REF' ) } . ' && '
-            . $parameter->inline_check( '${ ( ' . $val . ' ) }' );
+        my $container_quoted = quoted_from_sub( $self->_constraint() );
+        my $parameter_quoted = quoted_from_sub( $parameter->_constraint() );
+
+        return quote_sub(
+            'do { '
+                . $container_quoted->[1] . '}'
+                . ' && do {'
+                . 'local @_ = ( ${ $_[0] } );'
+                . $parameter->inline_check('embedded') . '}',
+            {
+                %{ $container_quoted->[2] || {} },
+                %{ $parameter_quoted->[2] || {} },
+            },
+        );
     },
 );
 
@@ -279,37 +209,31 @@ declare(
     'ArrayRef',
     type_class => 'Specio::Constraint::Parameterizable',
     parent     => t('Ref'),
-    inline     => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . 'overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "\\@{}") '
-            . ' : ref('
-            . $_[1]
-            . q{) eq 'ARRAY'};
-    },
+    where      => quote_sub(
+              'Scalar::Util::blessed($_[0])'
+            . ' ? overload::Overloaded( $_[0] )'
+            . '   && defined overload::Method( $_[0], q[@{}] )'
+            . ' : ref( $_[0] ) eq q{ARRAY}'
+    ),
     parameterized_inline_generator => sub {
         my $self      = shift;
         my $parameter = shift;
-        my $val       = shift;
 
-        return
-              '( ( Scalar::Util::blessed('
-            . $val . ') && '
-            . 'overload::Overloaded('
-            . $val
-            . ') && defined overload::Method('
-            . $val
-            . ', "\\@{}") ) || '
-            . '( ref('
-            . $val
-            . ') eq "ARRAY" )'
-            . '&& List::MoreUtils::all {'
-            . $parameter->inline_check('$_') . ' } ' . '@{'
-            . $val . '}' . ' )';
+        my $container_quoted = quoted_from_sub( $self->_constraint() );
+        my $parameter_quoted = quoted_from_sub( $parameter->_constraint() );
+
+        return quote_sub(
+            'do { '
+                . $container_quoted->[1] . '}'
+                . ' && do {'
+                . 'for my $member ( @{ $_[0] } ) {'
+                . 'local @_ = $member;'
+                . $parameter->inline_check('embedded') . '}' . '}',
+            {
+                %{ $container_quoted->[2] || {} },
+                %{ $parameter_quoted->[2] || {} },
+            },
+        );
     },
 );
 
@@ -317,38 +241,31 @@ declare(
     'HashRef',
     type_class => 'Specio::Constraint::Parameterizable',
     parent     => t('Ref'),
-    inline     => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . 'overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "%{}") '
-            . ' : ref('
-            . $_[1]
-            . q{) eq 'HASH'};
-    },
+    where      => quote_sub(
+              'Scalar::Util::blessed($_[0])'
+            . ' ? overload::Overloaded( $_[0] )'
+            . '   && defined overload::Method( $_[0], q[%{}] )'
+            . ' : ref( $_[0] ) eq q{HASH}'
+    ),
     parameterized_inline_generator => sub {
         my $self      = shift;
         my $parameter = shift;
-        my $val       = shift;
 
-        return
-              '( ( Scalar::Util::blessed('
-            . $val . ') && '
-            . 'overload::Overloaded('
-            . $val
-            . ') && defined overload::Method('
-            . $val
-            . ', "%{}") ) || '
-            . '( ref('
-            . $val
-            . ') eq "HASH" )'
-            . '&& List::MoreUtils::all {'
-            . $parameter->inline_check('$_') . ' } '
-            . 'values %{'
-            . $val . '}' . ' )';
+        my $container_quoted = quoted_from_sub( $self->_constraint() );
+        my $parameter_quoted = quoted_from_sub( $parameter->_constraint() );
+
+        return quote_sub(
+            'do { '
+                . $container_quoted->[1] . '}'
+                . ' && do {'
+                . 'for my $member ( values %{ $_[0] } ) {'
+                . 'local @_ = $member;'
+                . $parameter->inline_check('embedded') . '}' . '}',
+            {
+                %{ $container_quoted->[2] || {} },
+                %{ $parameter_quoted->[2] || {} },
+            },
+        );
     },
 );
 
@@ -356,16 +273,14 @@ declare(
     'Maybe',
     type_class                     => 'Specio::Constraint::Parameterizable',
     parent                         => t('Item'),
-    inline                         => sub { '1' },
+    where                          => quote_sub('1'),
     parameterized_inline_generator => sub {
         my $self      = shift;
         my $parameter = shift;
-        my $val       = shift;
 
         return
-              '!defined('
-            . $val . ') ' . '|| ('
-            . $parameter->inline_check($val) . ')';
+            '!defined( $_[0] ) || ( '
+            . $parameter->inline_check('embedded') . ' )';
     },
 );
 

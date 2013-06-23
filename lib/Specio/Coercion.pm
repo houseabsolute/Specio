@@ -67,6 +67,8 @@ sub coerce {
     return $self->_optimized_coercion()->($value);
 }
 
+sub _inlinable_thing { $_[0]->_coercion() }
+
 sub inline_coercion {
     my $self = shift;
 
@@ -76,18 +78,15 @@ sub inline_coercion {
 sub _build_optimized_coercion {
     my $self = shift;
 
-    if ( $self->_has_inline_generator() ) {
-        return $self->_generated_inline_sub();
-    }
-    else {
-        return $self->_coercion();
-    }
+    return $self->can_be_inlined()
+        ? $self->_generated_inline_sub()
+        : $self->_coercion();
 }
 
 sub can_be_inlined {
     my $self = shift;
 
-    return $self->_has_inline_generator() && $self->from()->can_be_inlined();
+    return $self->_can_be_inlined() && $self->from()->can_be_inlined();
 }
 
 sub _build_description {

@@ -4,26 +4,16 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-use Eval::Closure qw( eval_closure );
+use Sub::Quote qw( quoted_from_sub unquote_sub );
+
+BEGIN {
+    my $has_sub_name = eval { require Sub::Name; 1 };
+    use constant HAS_SUB_NAME => $has_sub_name;
+}
 
 use Moose::Role;
 
-requires '_build_description';
-
-has _inline_generator => (
-    is        => 'ro',
-    isa       => 'CodeRef',
-    predicate => '_has_inline_generator',
-    init_arg  => 'inline_generator',
-);
-
-has _inline_environment => (
-    is       => 'ro',
-    isa      => 'HashRef[Any]',
-    lazy     => 1,
-    init_arg => 'inline_environment',
-    builder  => '_build_inline_environment',
-);
+requires '_build_description', '_inlinable_thing';
 
 has _generated_inline_sub => (
     is       => 'ro',
@@ -31,6 +21,14 @@ has _generated_inline_sub => (
     init_arg => undef,
     lazy     => 1,
     builder  => '_build_generated_inline_sub',
+);
+
+has _can_be_inlined => (
+    is       => 'ro',
+    isa      => 'Bool',
+    init_arg => undef,
+    lazy     => 1,
+    builder  => '_build_can_be_inlined',
 );
 
 has declared_at => (
@@ -47,38 +45,42 @@ has _description => (
     builder  => '_build_description',
 );
 
-around BUILDARGS => sub {
-    my $orig  = shift;
-    my $class = shift;
-
-    my $p = $class->$orig(@_);
-
-    $p->{inline_generator} = delete $p->{inline} if exists $p->{inline};
-
-    return $p;
-};
-
-sub can_be_inlined {
+sub _build_can_be_inlined {
     my $self = shift;
 
-    return $self->_has_inline_generator();
+    my $thing = $self->_inlinable_thing();
+
+    return quoted_from_sub($thing) ? 1 : 0;
 }
 
 sub _build_generated_inline_sub {
     my $self = shift;
 
-    my $source
-        = 'sub { ' . $self->_inline_generator()->( $self, '$_[0]' ) . '}';
+    my $sub = unquote_sub( $self->_inlinable_thing() );
 
-    return eval_closure(
-        source      => $source,
-        environment => $self->_inline_environment(),
-        description => 'inlined sub for ' . $self->_description(),
-    );
+    return $sub unless HAS_SUB_NAME;
+    return Sub::Name::subname(
+        'inlined sub for ' . $self->_description() => $sub );
 }
 
-sub _build_inline_environment {
-    return {};
+sub _clean_eval { eval $_[0] }
+
+# The $embedded parameter basically means "use the @_ from the existing scope
+# because $_[0] contains the value we are validating."
+sub _inline_thing {
+    my $self     = shift;
+    my $embedded = shift;
+
+    my $quoted = quoted_from_sub( $self->_inlinable_thing() );
+
+    my $code = Sub::Quote::inlinify(
+        $quoted->[1],
+        '@_',
+        Sub::Quote::capture_unroll( '$_[1]', $quoted->[2], 4 ),
+        ( $embedded ? () : 'local' )
+    );
+
+    return $code;
 }
 
 1;
