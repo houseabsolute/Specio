@@ -34,7 +34,8 @@ harder than it should be because it doesn't have a very nice API. Oh well.
 
 =head1 De-Moose all the code
 
-This is started in the de-moosify branch.
+This is started in the de-moose branch. Also see de-moose-ify (doh, naming)
+for an older start on this.
 
 Basically, rewrite the code to not use Moose or Moo. Using Role::Tiny is okay
 though.
