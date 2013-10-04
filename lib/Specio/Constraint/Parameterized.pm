@@ -4,8 +4,6 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-use Specio::Constraint::Parameterized;
-
 use Moose;
 
 with 'Specio::Constraint::Role::Interface';
