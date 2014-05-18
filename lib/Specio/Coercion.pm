@@ -35,17 +35,6 @@ has _optimized_coercion => (
     builder  => '_build_optimized_coercion',
 );
 
-around BUILDARGS => sub {
-    my $orig  = shift;
-    my $class = shift;
-
-    my $p = $class->$orig(@_);
-
-    $p->{coercion} = delete $p->{using} if exists $p->{using};
-
-    return $p;
-};
-
 sub BUILD {
     my $self = shift;
 

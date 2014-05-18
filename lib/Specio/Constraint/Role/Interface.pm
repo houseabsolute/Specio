@@ -82,18 +82,6 @@ has _signature => (
 
 my $NullConstraint = sub { 1 };
 
-around BUILDARGS => sub {
-    my $orig  = shift;
-    my $class = shift;
-
-    my $p = $class->$orig(@_);
-
-    $p->{constraint}        = delete $p->{where}   if exists $p->{where};
-    $p->{message_generator} = delete $p->{message} if exists $p->{message};
-
-    return $p;
-};
-
 sub BUILD { }
 
 around BUILD => sub {

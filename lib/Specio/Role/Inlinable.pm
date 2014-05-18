@@ -47,17 +47,6 @@ has _description => (
     builder  => '_build_description',
 );
 
-around BUILDARGS => sub {
-    my $orig  = shift;
-    my $class = shift;
-
-    my $p = $class->$orig(@_);
-
-    $p->{inline_generator} = delete $p->{inline} if exists $p->{inline};
-
-    return $p;
-};
-
 sub can_be_inlined {
     my $self = shift;
 

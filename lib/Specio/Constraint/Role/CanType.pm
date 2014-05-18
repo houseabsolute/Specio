@@ -17,18 +17,6 @@ has methods => (
     required => 1,
 );
 
-override BUILDARGS => sub {
-    my $self = shift;
-
-    my $p = super();
-
-    if ( defined $p->{can} && !ref $p->{can} ) {
-        $p->{can} = [ $p->{can} ];
-    }
-
-    return $p;
-};
-
 sub _wrap_message_generator {
     my $self      = shift;
     my $generator = shift;
