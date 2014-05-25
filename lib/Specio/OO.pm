@@ -5,20 +5,23 @@ use warnings;
 
 use Carp qw( confess );
 use Exporter qw( import );
-use Module::Runtime qw( is_module_name );
 use Scalar::Util qw( blessed weaken );
+use Specio::TypeChecks qw(
+    does_role
+    is_ArrayRef
+    is_ClassName
+    is_CodeRef
+    is_HashRef
+    is_Int
+    is_Str
+    isa_class
+);
 use Storable qw( dclone );
 
 our @EXPORT_OK = qw(
     new
     clone
     _accessorize
-    is_ArrayRef
-    is_HashRef
-    is_CodeRef
-    is_Str
-    does_role
-    _attr_to_hashref
 );
 
 sub new {
@@ -46,7 +49,7 @@ sub _BUILDARGS {
 
     my %p = _validate_args( $class, @_ );
 
-    my $attrs = _attrs($class);
+    my $attrs = $class->_attrs();
     for my $name ( sort keys %{$attrs} ) {
         my $attr = $attrs->{$name};
         my $key_name = $attr->{init_arg} // $name;
@@ -155,7 +158,7 @@ sub _BUILDALL {
 sub _accessorize {
     my $class = shift;
 
-    my $attrs = _attrs($class);
+    my $attrs = $class->_attrs();
     for my $name ( sort keys %{$attrs} ) {
         my $attr = $attrs->{$name};
 
@@ -185,15 +188,6 @@ sub _accessorize {
     }
 }
 
-sub _attrs {
-    my $class = shift;
-
-    return $class->_attrs() if $class->can('_attrs');
-
-    return { map { $_->name() => _attr_to_hashref($_) }
-            $class->meta()->get_all_attributes() };
-}
-
 sub clone {
     my $self = shift;
 
@@ -209,75 +203,6 @@ sub clone {
     }
 
     return bless \%new, ( ref $self );
-}
-
-sub is_ArrayRef {
-    return ref $_[0] eq 'ARRAY';
-}
-
-sub is_CodeRef {
-    return ref $_[0] eq 'CODE';
-}
-
-sub is_HashRef {
-    return ref $_[0] eq 'HASH';
-}
-
-sub is_Str {
-    defined( $_[0] ) && !ref( $_[0] ) && ref( \$_[0] ) eq 'SCALAR'
-        || ref( \( my $val = $_[0] ) eq 'SCALAR' );
-}
-
-sub is_Int {
-    ( defined( $_[0] ) && !ref( $_[0] ) && ref( \$_[0] ) eq 'SCALAR'
-            || ref( \( my $val = $_[0] ) eq 'SCALAR' ) )
-        && $_[0] =~ /^[0-9]+$/;
-}
-
-sub is_ClassName {
-    is_module_name( $_[0] );
-}
-
-sub isa_class {
-    blessed( $_[0] ) && $_[0]->isa( $_[1] );
-}
-
-sub does_role {
-    blessed( $_[0] ) && $_[0]->can('does') && $_[0]->does( $_[1] );
-}
-
-sub _attr_to_hashref {
-    my $attr = shift;
-
-    my %h = (
-        init_arg => $attr->init_arg(),
-        lazy     => $attr->is_lazy(),
-        weak_ref => $attr->is_weak_ref(),
-    );
-
-    if ( $attr->has_type_constraint() ) {
-        if (
-            $attr->type_constraint()->isa('Moose::Meta::TypeConstraint::Role')
-            ) {
-            $h{does} = $attr->type_constraint()->role();
-        }
-        else {
-            $h{isa} = $attr->type_constraint()->name();
-        }
-    }
-
-    if ( $attr->has_builder() ) {
-        $h{builder} = $attr->builder();
-    }
-
-    if ( $attr->has_predicate() ) {
-        $h{predicate} = $attr->predicate();
-    }
-
-    die $attr->associated_class->name . ' - ' . $attr->name . ' has default'
-        if $attr->has_default();
-
-    return \%h;
 }
 
 1;

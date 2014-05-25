@@ -7,7 +7,7 @@ use Carp qw( confess );
 use Devel::PartialDump;
 use List::AllUtils qw( all any );
 use Specio::Exception;
-use Specio::OO qw( is_CodeRef );
+use Specio::TypeChecks qw( is_CodeRef );
 use Sub::Name qw( subname );
 use Try::Tiny;
 
