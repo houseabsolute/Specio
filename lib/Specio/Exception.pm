@@ -11,37 +11,31 @@ use Devel::StackTrace;
 use Scalar::Util qw( blessed );
 use Specio::OO qw( new _accessorize );
 
+sub _attrs {
+    return {
+        message => {
+            isa      => 'Str',
+            required => 1,
+        },
+        type => {
+            does     => 'Specio::Constraint::Role::Interface',
+            required => 1,
+        },
+        value => {
+            required => 1,
+        },
+        stack_trace => {
+            init_arg => undef,
+        },
+    };
+}
+
 sub BUILD {
     my $self = shift;
 
     $self->{stack_trace} = Devel::StackTrace->new();
 
     return;
-}
-
-sub _attrs {
-    my $class = shift;
-
-    return [
-        {
-            name     => 'message',
-            isa      => 'Str',
-            required => 1,
-        },
-        {
-            name     => 'type',
-            does     => 'Specio::Constraint::Role::Interface',
-            required => 1,
-        },
-        {
-            name     => 'value',
-            required => 1,
-        },
-        {
-            name     => 'stack_trace',
-            init_arg => undef,
-        },
-    ];
 }
 
 sub as_string {

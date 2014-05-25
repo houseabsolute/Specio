@@ -12,32 +12,26 @@ use Moose;
 
 with 'Specio::Constraint::Role::Interface';
 
-has _parameterized_constraint_generator => (
-    is       => 'bare',
-    isa      => 'CodeRef',
-    init_arg => 'parameterized_constraint_generator',
-);
+sub _attrs {
+    my $role_attrs = Specio::Constraint::Role::Interface::_attrs();
 
-has _parameterized_inline_generator => (
-    is       => 'bare',
-    isa      => 'CodeRef',
-    init_arg => 'parameterized_inline_generator',
-);
+    my %self_attrs = map { $_->name() => Specio::OO::_attr_to_hashref($_) }
+        map { __PACKAGE__->meta()->get_attribute($_) }
+        __PACKAGE__->meta()->get_attribute_list();
 
-sub _parameterized_constraint_generator {
-    $_[0]->{_parameterized_constraint_generator};
-}
-
-sub _has_parameterized_constraint_generator {
-    exists $_[0]->{_parameterized_constraint_generator};
-}
-
-sub _parameterized_inline_generator {
-    $_[0]->{_parameterized_inline_generator};
-}
-
-sub _has_parameterized_inline_generator {
-    exists $_[0]->{_parameterized_inline_generator};
+    return {
+        %{$role_attrs},
+        _parameterized_constraint_generator => {
+            isa       => 'CodeRef',
+            init_arg  => 'parameterized_constraint_generator',
+            predicate => '_has_parameterized_constraint_generator',
+        },
+        _parameterized_inline_generator => {
+            isa       => 'CodeRef',
+            init_arg  => 'parameterized_inline_generator',
+            predicate => '_has_parameterized_inline_generator',
+        },
+    };
 }
 
 sub BUILD {

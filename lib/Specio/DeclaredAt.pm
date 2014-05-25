@@ -3,33 +3,32 @@ package Specio::DeclaredAt;
 use strict;
 use warnings;
 
-use Specio::OO qw( new _accessorize );
+use Specio::OO qw( new clone _accessorize );
 
-use Moose;
-
-has package => (
-    is       => 'bare',
-    isa      => 'Str',
-    required => 1,
-);
-
-has filename => (
-    is       => 'bare',
-    isa      => 'Str',
-    required => 1,
-);
-
-has line => (
-    is       => 'bare',
-    isa      => 'Int',
-    required => 1,
-);
-
-has subroutine => (
-    is        => 'bare',
-    isa       => 'Str',
-    predicate => 'has_subroutine',
-);
+sub _attrs {
+    return {
+        package => {
+            is       => 'bare',
+            isa      => 'Str',
+            required => 1,
+        },
+        filename => {
+            is       => 'bare',
+            isa      => 'Str',
+            required => 1,
+        },
+        line => {
+            is       => 'bare',
+            isa      => 'Int',
+            required => 1,
+        },
+        subroutine => {
+            is        => 'bare',
+            isa       => 'Str',
+            predicate => 'has_subroutine',
+        },
+    };
+}
 
 sub new_from_caller {
     my $class = shift;

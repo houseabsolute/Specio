@@ -13,20 +13,10 @@ use Moose;
 
 with 'Specio::Constraint::Role::DoesType';
 
-has '+parent' => (
-    init_arg => undef,
-    builder  => '_build_parent',
-);
-
 {
     my $Object = t('Object');
     sub _build_parent { $Object }
 }
-
-has '+_inline_generator' => (
-    init_arg => undef,
-    builder  => '_build_inline_generator',
-);
 
 {
     my $_inline_generator = sub {

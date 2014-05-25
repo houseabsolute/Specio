@@ -7,9 +7,11 @@ use Carp qw( confess );
 use Exporter qw( import );
 use Module::Runtime qw( is_module_name );
 use Scalar::Util qw( blessed weaken );
+use Storable qw( dclone );
 
 our @EXPORT_OK = qw(
     new
+    clone
     _accessorize
     is_ArrayRef
     is_HashRef
@@ -44,8 +46,11 @@ sub _BUILDARGS {
 
     my %p = _validate_args( $class, @_ );
 
-    for my $attr ( @{ _attrs($class) } ) {
-        my $key_name = $attr->{init_arg} // $attr->{name};
+    my $attrs = _attrs($class);
+    for my $name ( sort keys %{$attrs} ) {
+        my $attr = $attrs->{$name};
+        my $key_name = $attr->{init_arg} // $name;
+
         if ( $attr->{required} ) {
             _constructor_confess(
                 "$class->new() requires a $key_name argument.")
@@ -78,10 +83,10 @@ sub _BUILDARGS {
                 );
         }
 
-        $p{ $attr->{name} } = delete $p{$key_name};
+        $p{$name} = delete $p{$key_name};
 
         if ( $attr->{weak_ref} ) {
-            weaken $p{ $attr->{name} };
+            weaken $p{$name};
         }
     }
 
@@ -136,7 +141,9 @@ sub _BUILDALL {
     for my $class ( @{ mro::get_linear_isa( ref $self ) } ) {
         my $build = do {
             no strict 'refs';
-            \&{ $class . '::BUILD' };
+            defined &{ $class . '::BUILD' }
+                ? \&{ $class . '::BUILD' }
+                : undef;
         };
 
         next unless $build;
@@ -148,8 +155,9 @@ sub _BUILDALL {
 sub _accessorize {
     my $class = shift;
 
-    for my $attr ( @{ _attrs($class) } ) {
-        my $name = $attr->{name};
+    my $attrs = _attrs($class);
+    for my $name ( sort keys %{$attrs} ) {
+        my $attr = $attrs->{$name};
 
         my $reader;
         if ( $attr->{lazy} && ( my $builder = $attr->{builder} ) ) {
@@ -182,8 +190,25 @@ sub _attrs {
 
     return $class->_attrs() if $class->can('_attrs');
 
-    return [ map { _attr_to_hashref($_) }
-            $class->meta()->get_all_attributes() ];
+    return { map { $_->name() => _attr_to_hashref($_) }
+            $class->meta()->get_all_attributes() };
+}
+
+sub clone {
+    my $self = shift;
+
+    my %new;
+    for my $key ( keys %{$self} ) {
+        my $value = $self->{$key};
+
+        $new{$key}
+            = blessed $value           ? $value->clone()
+            : ( ref $value eq 'CODE' ) ? $value
+            : ref $value               ? dclone($value)
+            :                            $value;
+    }
+
+    return bless \%new, ( ref $self );
 }
 
 sub is_ArrayRef {
@@ -225,8 +250,9 @@ sub _attr_to_hashref {
     my $attr = shift;
 
     my %h = (
-        name     => $attr->name(),
         init_arg => $attr->init_arg(),
+        lazy     => $attr->is_lazy(),
+        weak_ref => $attr->is_weak_ref(),
     );
 
     if ( $attr->has_type_constraint() ) {
@@ -247,10 +273,6 @@ sub _attr_to_hashref {
     if ( $attr->has_predicate() ) {
         $h{predicate} = $attr->predicate();
     }
-
-    $h{lazy} = $attr->is_lazy();
-
-    $h{weak_ref} = $attr->is_weak_ref();
 
     die $attr->associated_class->name . ' - ' . $attr->name . ' has default'
         if $attr->has_default();

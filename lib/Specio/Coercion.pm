@@ -3,39 +3,39 @@ package Specio::Coercion;
 use strict;
 use warnings;
 
-use Specio::OO qw( new _accessorize );
+use Specio::OO qw( new clone _accessorize );
 
 use Moose;
 
-with 'MooseX::Clone', 'Specio::Role::Inlinable';
+with 'Specio::Role::Inlinable';
 
-has from => (
-    is       => 'bare',
-    does     => 'Specio::Constraint::Role::Interface',
-    required => 1,
-);
+sub _attrs {
+    my $role_attrs = Specio::Role::Inlinable::_attrs();
 
-has to => (
-    is       => 'bare',
-    does     => 'Specio::Constraint::Role::Interface',
-    required => 1,
-    weak_ref => 1,
-);
-
-has _coercion => (
-    is        => 'bare',
-    isa       => 'CodeRef',
-    predicate => '_has_coercion',
-    init_arg  => 'coercion',
-);
-
-has _optimized_coercion => (
-    is       => 'bare',
-    isa      => 'CodeRef',
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_optimized_coercion',
-);
+    return {
+        %{$role_attrs},
+        from => {
+            does     => 'Specio::Constraint::Role::Interface',
+            required => 1,
+        },
+        to => {
+            does     => 'Specio::Constraint::Role::Interface',
+            required => 1,
+            weak_ref => 1,
+        },
+        _coercion => {
+            isa       => 'CodeRef',
+            predicate => '_has_coercion',
+            init_arg  => 'coercion',
+        },
+        _optimized_coercion => {
+            isa      => 'CodeRef',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_optimized_coercion',
+        },
+    };
+}
 
 sub BUILD {
     my $self = shift;

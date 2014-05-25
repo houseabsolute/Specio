@@ -6,16 +6,7 @@ use warnings;
 use Moose::Role;
 
 with 'Specio::Constraint::Role::Interface' =>
-    { -excludes => ['_wrap_message_generator'] };
-
-has role => (
-    is => 'ro',
-
-    # XXX - we can't use Moose's RoleName since that restricts this
-    # to only Moose roles.
-    isa      => 'Str',
-    required => 1,
-);
+    { -excludes => [ '_attrs', '_wrap_message_generator' ] };
 
 sub _wrap_message_generator {
     my $self      = shift;
@@ -37,6 +28,31 @@ sub _wrap_message_generator {
     my $d = $self->_description();
 
     return sub { $generator->( $d, @_ ) };
+}
+
+sub _attrs {
+    my $role_attrs = Specio::Constraint::Role::Interface::_attrs();
+
+    my %self_attrs = map { $_->name() => Specio::OO::_attr_to_hashref($_) }
+        map { __PACKAGE__->meta()->get_attribute($_) }
+        __PACKAGE__->meta()->get_attribute_list();
+
+    my $attrs = {
+        %{$role_attrs},
+        %self_attrs,
+    };
+
+    for my $name (qw( parent _inline_generator )) {
+        $attrs->{$name}{init_arg} = undef;
+        $attrs->{$name}{builder} = '_build_' . ( $name =~ s/^_//r );
+    }
+
+    $attrs->{role} = {
+        isa      => 'Str',
+        required => 1,
+    };
+
+    return $attrs;
 }
 
 1;

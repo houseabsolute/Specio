@@ -4,21 +4,25 @@ use strict;
 use warnings;
 
 use Specio::OO qw( new _accessorize );
+use Storable qw( dclone );
 
 use Moose;
 
 with 'Specio::Constraint::Role::Interface';
 
-has '+parent' => (
-    isa      => 'Specio::Constraint::Parameterizable',
-    required => 1,
-);
+sub _attrs {
+    my $attrs = dclone( Specio::Constraint::Role::Interface::_attrs() );
 
-has parameter => (
-    is       => 'bare',
-    does     => 'Specio::Constraint::Role::Interface',
-    required => 1,
-);
+    $attrs->{parent}{isa}      = 'Specio::Constraint::Parameterizable';
+    $attrs->{parent}{required} = 1;
+
+    $attrs->{parameter} = {
+        does     => 'Specio::Constraint::Role::Interface',
+        required => 1,
+    };
+
+    return $attrs;
+}
 
 sub can_be_inlined {
     my $self = shift;

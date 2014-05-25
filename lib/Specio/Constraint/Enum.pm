@@ -6,31 +6,32 @@ use warnings;
 use B ();
 use Specio::Library::Builtins;
 use Specio::OO qw( new _accessorize );
+use Storable qw( dclone );
 
 use Moose;
 
 with 'Specio::Constraint::Role::Interface';
 
-has '+parent' => (
-    init_arg => undef,
-    builder  => '_build_parent',
-);
+sub _attrs {
+    my $attrs = dclone( Specio::Constraint::Role::Interface::_attrs() );
+
+    for my $name (qw( parent _inline_generator )) {
+        $attrs->{$name}{init_arg} = undef;
+        $attrs->{$name}{builder} = '_build_' . ( $name =~ s/^_//r );
+    }
+
+    $attrs->{values} = {
+        isa      => 'ArrayRef',
+        required => 1,
+    };
+
+    return $attrs;
+}
 
 {
     my $Str = t('Str');
     sub _build_parent { $Str }
 }
-
-has values => (
-    is       => 'bare',
-    isa      => 'ArrayRef',
-    required => 1,
-);
-
-has '+_inline_generator' => (
-    init_arg => undef,
-    builder  => '_build_inline_generator',
-);
 
 {
     my $_inline_generator = sub {

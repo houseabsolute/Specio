@@ -7,25 +7,16 @@ use B ();
 use Scalar::Util;
 use Specio::Library::Builtins;
 use Specio::OO qw( new _accessorize );
+use Storable qw( dclone );
 
 use Moose;
 
 with 'Specio::Constraint::Role::CanType';
 
-has '+parent' => (
-    init_arg => undef,
-    builder  => '_build_parent',
-);
-
 {
     my $Defined = t('Defined');
     sub _build_parent { $Defined }
 }
-
-has '+_inline_generator' => (
-    init_arg => undef,
-    builder  => '_build_inline_generator',
-);
 
 {
     my $_inline_generator = sub {
