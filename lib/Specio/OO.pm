@@ -31,13 +31,7 @@ sub new {
 
     my $self = bless $p, $class;
 
-    #XXX - Moose::Object
-    if ( $self->can('BUILDALL') ) {
-        $self->BUILDALL();
-    }
-    else {
-        _BUILDALL($self);
-    }
+    _BUILDALL($self);
 
     return $self;
 }
