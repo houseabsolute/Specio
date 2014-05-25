@@ -18,10 +18,12 @@ has '+parent' => (
 );
 
 has values => (
-    is       => 'ro',
+    is       => 'bare',
     isa      => 'ArrayRef[Str]',
     required => 1,
 );
+
+sub values { $_[0]->{values} }
 
 my $_inline_generator = sub {
     my $self = shift;

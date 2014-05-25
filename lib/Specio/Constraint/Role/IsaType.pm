@@ -9,10 +9,12 @@ with 'Specio::Constraint::Role::Interface' =>
     { -excludes => ['_wrap_message_generator'] };
 
 has class => (
-    is       => 'ro',
+    is       => 'bare',
     isa      => 'ClassName',
     required => 1,
 );
+
+sub class { $_[0]->{class} }
 
 sub _wrap_message_generator {
     my $self      = shift;

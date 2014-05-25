@@ -19,7 +19,7 @@ has _inline_generator => (
 
 has _inline_environment => (
     is       => 'ro',
-    isa      => 'HashRef[Any]',
+    isa      => 'HashRef',
     lazy     => 1,
     init_arg => 'inline_environment',
     builder  => '_build_inline_environment',

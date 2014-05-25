@@ -14,10 +14,12 @@ has '+parent' => (
 );
 
 has parameter => (
-    is       => 'ro',
+    is       => 'bare',
     does     => 'Specio::Constraint::Role::Interface',
     required => 1,
 );
+
+sub parameter { $_[0]->{parameter} }
 
 sub can_be_inlined {
     my $self = shift;

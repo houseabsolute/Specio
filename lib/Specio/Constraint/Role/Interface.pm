@@ -9,6 +9,7 @@ use List::AllUtils qw( all any );
 use Sub::Name qw( subname );
 use Try::Tiny;
 use Specio::Exception;
+use Specio::OO qw( is_CodeRef );
 
 use Moose::Role;
 use MooseX::SemiAffordanceAccessor;
@@ -16,56 +17,42 @@ use MooseX::SemiAffordanceAccessor;
 with 'MooseX::Clone', 'Specio::Role::Inlinable';
 
 has name => (
-    is        => 'ro',
-    isa       => 'Str',
-    predicate => '_has_name',
+    is  => 'bare',
+    isa => 'Str',
 );
 
 has parent => (
-    is        => 'ro',
-    does      => 'Specio::Constraint::Role::Interface',
-    predicate => '_has_parent',
+    is   => 'bare',
+    does => 'Specio::Constraint::Role::Interface',
 );
 
 has _constraint => (
-    is        => 'rw',
-    writer    => '_set_constraint',
-    isa       => 'CodeRef',
-    predicate => '_has_constraint',
-    init_arg  => 'constraint',
+    is       => 'bare',
+    isa      => 'CodeRef',
+    init_arg => 'constraint',
 );
 
 has _optimized_constraint => (
-    is       => 'ro',
+    is       => 'bare',
     isa      => 'CodeRef',
     init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_optimized_constraint',
 );
 
 has _ancestors => (
-    is       => 'ro',
+    is       => 'bare',
     isa      => 'ArrayRef',
     init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_ancestors',
 );
 
 has _message_generator => (
-    is       => 'rw',
+    is       => 'bare',
     isa      => 'CodeRef',
     init_arg => undef,
 );
 
 has _coercions => (
-    traits  => [ 'Clone', 'Hash' ],
-    handles => {
-        coercions               => 'values',
-        coercion_from_type      => 'get',
-        _has_coercion_from_type => 'exists',
-        _add_coercion           => 'set',
-        has_coercions           => 'count',
-    },
+    is      => 'bare',
+    traits  => ['Clone'],
     default => sub { {} },
 );
 
@@ -73,11 +60,9 @@ has _coercions => (
 # objects. Because type names can be reused between packages (no global
 # registry) we can't compare types based on name either.
 has _signature => (
-    is       => 'ro',
+    is       => 'bare',
     isa      => 'Str',
     init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_signature',
 );
 
 my $NullConstraint = sub { 1 };
@@ -97,11 +82,29 @@ around BUILD => sub {
         'A type constraint should have either a constraint or inline_generator parameter, not both'
         if $self->_has_constraint() && $self->_has_inline_generator();
 
-    $self->_set_message_generator(
-        $self->_wrap_message_generator( $p->{message_generator} ) );
+    $self->{_message_generator}
+        = $self->_wrap_message_generator( $p->{message_generator} );
 
     return;
 };
+
+sub name      { $_[0]->{name} }
+sub _has_name { exists $_[0]->{name} }
+
+sub parent      { $_[0]->{parent} }
+sub _has_parent { exists $_[0]->{parent} }
+
+sub _constraint     { $_[0]->{_constraint} }
+sub _has_constraint { exists $_[0]->{_constraint} }
+
+sub _set_constraint {
+    is_CodeRef( $_[1] )
+        or confess '_set_constraint() must be given a coderef, not a '
+        . Devel::PartialDump->new()->dump( $_[1] );
+    $_[0]->{_constraint} = $_[1];
+}
+
+sub _message_generator { $_[0]->{_message_generator} }
 
 sub _wrap_message_generator {
     my $self      = shift;
@@ -119,6 +122,12 @@ sub _wrap_message_generator {
 
     return sub { $generator->( $d, @_ ) };
 }
+
+sub coercions               { values %{ $_[0]->{coercions} } }
+sub coercion_from_type      { $_[0]->{coercions}{ $_[1] } }
+sub _has_coercion_from_type { exists $_[0]->{coercions}{ $_[1] } }
+sub _add_coercion           { $_[0]->{coercions}{ $_[1] } = $_[2] }
+sub has_coercions           { scalar keys %{ $_[0]->{coercions} } }
 
 sub validate_or_die {
     my $self  = shift;
@@ -181,6 +190,11 @@ sub inline_check {
     die 'Cannot inline' unless $self->_has_inline_generator();
 
     return $self->_inline_generator()->( $self, @_ );
+}
+
+sub _optimized_constraint {
+    return $_[0]->{_optimized_constraint}
+        ||= $_[0]->_build_optimized_constraint();
 }
 
 sub _build_optimized_constraint {
@@ -315,6 +329,11 @@ sub can_inline_coercion_and_check {
     }
 }
 
+sub _ancestors {
+    return $_[0]->{_ancestors}
+        ||= $_[0]->_build_ancestors();
+}
+
 sub _build_ancestors {
     my $self = shift;
 
@@ -338,6 +357,11 @@ sub _build_description {
     $desc .= q{ } . $self->declared_at()->description();
 
     return $desc;
+}
+
+sub _signature {
+    return $_[0]->{_signature}
+        ||= $_[0]->_build_signature();
 }
 
 sub _build_signature {

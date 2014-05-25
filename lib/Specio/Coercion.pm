@@ -8,32 +8,40 @@ use Moose;
 with 'MooseX::Clone', 'Specio::Role::Inlinable';
 
 has from => (
-    is       => 'ro',
+    is       => 'bare',
     does     => 'Specio::Constraint::Role::Interface',
     required => 1,
 );
 
 has to => (
-    is       => 'ro',
+    is       => 'bare',
     does     => 'Specio::Constraint::Role::Interface',
     required => 1,
     weak_ref => 1,
 );
 
 has _coercion => (
-    is        => 'ro',
+    is        => 'bare',
     isa       => 'CodeRef',
     predicate => '_has_coercion',
     init_arg  => 'coercion',
 );
 
 has _optimized_coercion => (
-    is       => 'ro',
+    is       => 'bare',
     isa      => 'CodeRef',
     init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_optimized_coercion',
 );
+
+sub from { $_[0]->{from} }
+
+sub to { $_[0]->{to} }
+
+sub _coercion { $_[0]->{_coercion} }
+
+sub _optimized_coercion {
+    $_[0]->{_optimized_coercion} ||= $_[0]->_build_optimized_coercion();
+}
 
 sub BUILD {
     my $self = shift;
