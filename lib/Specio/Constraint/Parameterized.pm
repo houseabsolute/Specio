@@ -2,7 +2,8 @@ package Specio::Constraint::Parameterized;
 
 use strict;
 use warnings;
-use namespace::autoclean;
+
+use Specio::OO qw( new _accessorize );
 
 use Moose;
 
@@ -19,8 +20,6 @@ has parameter => (
     required => 1,
 );
 
-sub parameter { $_[0]->{parameter} }
-
 sub can_be_inlined {
     my $self = shift;
 
@@ -35,7 +34,7 @@ sub type_parameter {
     shift->parameter();
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 

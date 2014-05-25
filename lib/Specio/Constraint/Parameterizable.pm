@@ -2,11 +2,11 @@ package Specio::Constraint::Parameterizable;
 
 use strict;
 use warnings;
-use namespace::autoclean;
 
 use MooseX::Params::Validate qw( validated_list );
 use Specio::Constraint::Parameterized;
 use Specio::DeclaredAt;
+use Specio::OO qw( new _accessorize );
 
 use Moose;
 
@@ -91,7 +91,7 @@ sub parameterize {
     return Specio::Constraint::Parameterized->new(%p);
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 

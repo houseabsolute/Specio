@@ -2,42 +2,50 @@ package Specio::Constraint::ObjectCan;
 
 use strict;
 use warnings;
-use namespace::autoclean;
 
 use B ();
 use Scalar::Util;
 use Specio::Library::Builtins;
+use Specio::OO qw( new _accessorize );
 
 use Moose;
 
 with 'Specio::Constraint::Role::CanType';
 
-my $Object = t('Object');
 has '+parent' => (
     init_arg => undef,
-    default  => sub { $Object },
+    builder  => '_build_parent',
 );
 
-my $_inline_generator = sub {
-    my $self = shift;
-    my $val  = shift;
-
-    return
-          'Scalar::Util::blessed('
-        . $val . ')'
-        . ' && List::MoreUtils::all { '
-        . $val
-        . '->can($_) } ' . '( '
-        . ( join ', ', map { B::perlstring($_) } @{ $self->methods() } )
-        . ')';
-};
+{
+    my $Object = t('Object');
+    sub _build_parent { $Object }
+}
 
 has '+_inline_generator' => (
     init_arg => undef,
-    default  => sub { $_inline_generator },
+    builder  => '_build_inline_generator',
 );
 
-__PACKAGE__->meta()->make_immutable();
+{
+    my $_inline_generator = sub {
+        my $self = shift;
+        my $val  = shift;
+
+        return
+              'Scalar::Util::blessed('
+            . $val . ')'
+            . ' && List::MoreUtils::all { '
+            . $val
+            . '->can($_) } ' . '( '
+            . ( join ', ', map { B::perlstring($_) } @{ $self->methods() } )
+            . ')';
+    };
+
+    sub _build_inline_generator { $_inline_generator }
+}
+
+__PACKAGE__->_accessorize();
 
 1;
 

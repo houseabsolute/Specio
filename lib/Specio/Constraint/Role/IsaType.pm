@@ -14,8 +14,6 @@ has class => (
     required => 1,
 );
 
-sub class { $_[0]->{class} }
-
 sub _wrap_message_generator {
     my $self      = shift;
     my $generator = shift;

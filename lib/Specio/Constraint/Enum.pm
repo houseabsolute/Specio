@@ -2,46 +2,52 @@ package Specio::Constraint::Enum;
 
 use strict;
 use warnings;
-use namespace::autoclean;
 
 use B ();
 use Specio::Library::Builtins;
+use Specio::OO qw( new _accessorize );
 
 use Moose;
 
 with 'Specio::Constraint::Role::Interface';
 
-my $Str = t('Str');
 has '+parent' => (
     init_arg => undef,
-    default  => sub { $Str },
+    builder  => '_build_parent',
 );
+
+{
+    my $Str = t('Str');
+    sub _build_parent { $Str }
+}
 
 has values => (
     is       => 'bare',
-    isa      => 'ArrayRef[Str]',
+    isa      => 'ArrayRef',
     required => 1,
 );
 
-sub values { $_[0]->{values} }
-
-my $_inline_generator = sub {
-    my $self = shift;
-    my $val  = shift;
-
-    return
-          'defined('
-        . $val . ') '
-        . '&& !ref('
-        . $val . ') '
-        . '&& $_Specio_Constraint_Enum_enum_values{'
-        . $val . '}';
-};
-
 has '+_inline_generator' => (
     init_arg => undef,
-    default  => sub { $_inline_generator },
+    builder  => '_build_inline_generator',
 );
+
+{
+    my $_inline_generator = sub {
+        my $self = shift;
+        my $val  = shift;
+
+        return
+              'defined('
+            . $val . ') '
+            . '&& !ref('
+            . $val . ') '
+            . '&& $_Specio_Constraint_Enum_enum_values{'
+            . $val . '}';
+    };
+
+    sub _build_inline_generator { $_inline_generator }
+}
 
 sub _build_inline_environment {
     my $self = shift;
@@ -51,7 +57,7 @@ sub _build_inline_environment {
     return { '%_Specio_Constraint_Enum_enum_values' => \%values };
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 

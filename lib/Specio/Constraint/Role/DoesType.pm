@@ -17,8 +17,6 @@ has role => (
     required => 1,
 );
 
-sub role { $_[0]->{role} }
-
 sub _wrap_message_generator {
     my $self      = shift;
     my $generator = shift;

@@ -17,31 +17,38 @@ use MooseX::SemiAffordanceAccessor;
 with 'MooseX::Clone', 'Specio::Role::Inlinable';
 
 has name => (
-    is  => 'bare',
-    isa => 'Str',
+    is        => 'bare',
+    isa       => 'Str',
+    predicate => '_has_name',
 );
 
 has parent => (
-    is   => 'bare',
-    does => 'Specio::Constraint::Role::Interface',
+    is        => 'bare',
+    does      => 'Specio::Constraint::Role::Interface',
+    predicate => '_has_parent',
 );
 
 has _constraint => (
-    is       => 'bare',
-    isa      => 'CodeRef',
-    init_arg => 'constraint',
+    is        => 'bare',
+    isa       => 'CodeRef',
+    init_arg  => 'constraint',
+    predicate => '_has_constraint',
 );
 
 has _optimized_constraint => (
     is       => 'bare',
     isa      => 'CodeRef',
     init_arg => undef,
+    lazy     => 1,
+    builder  => '_build_optimized_constraint',
 );
 
 has _ancestors => (
     is       => 'bare',
     isa      => 'ArrayRef',
     init_arg => undef,
+    lazy     => 1,
+    builder  => '_build_ancestors',
 );
 
 has _message_generator => (
@@ -53,7 +60,7 @@ has _message_generator => (
 has _coercions => (
     is      => 'bare',
     traits  => ['Clone'],
-    default => sub { {} },
+    builder => '_build_coercions',
 );
 
 # Because types are cloned on import, we can't directly compare type
@@ -63,6 +70,8 @@ has _signature => (
     is       => 'bare',
     isa      => 'Str',
     init_arg => undef,
+    lazy     => 1,
+    builder  => '_build_signature',
 );
 
 my $NullConstraint = sub { 1 };
@@ -88,23 +97,12 @@ around BUILD => sub {
     return;
 };
 
-sub name      { $_[0]->{name} }
-sub _has_name { exists $_[0]->{name} }
-
-sub parent      { $_[0]->{parent} }
-sub _has_parent { exists $_[0]->{parent} }
-
-sub _constraint     { $_[0]->{_constraint} }
-sub _has_constraint { exists $_[0]->{_constraint} }
-
 sub _set_constraint {
     is_CodeRef( $_[1] )
         or confess '_set_constraint() must be given a coderef, not a '
         . Devel::PartialDump->new()->dump( $_[1] );
     $_[0]->{_constraint} = $_[1];
 }
-
-sub _message_generator { $_[0]->{_message_generator} }
 
 sub _wrap_message_generator {
     my $self      = shift;
@@ -190,11 +188,6 @@ sub inline_check {
     die 'Cannot inline' unless $self->_has_inline_generator();
 
     return $self->_inline_generator()->( $self, @_ );
-}
-
-sub _optimized_constraint {
-    return $_[0]->{_optimized_constraint}
-        ||= $_[0]->_build_optimized_constraint();
 }
 
 sub _build_optimized_constraint {
@@ -359,10 +352,7 @@ sub _build_description {
     return $desc;
 }
 
-sub _signature {
-    return $_[0]->{_signature}
-        ||= $_[0]->_build_signature();
-}
+sub _build_coercions { {} }
 
 sub _build_signature {
     my $self = shift;

@@ -2,43 +2,51 @@ package Specio::Constraint::AnyIsa;
 
 use strict;
 use warnings;
-use namespace::autoclean;
 
 use B                  ();
 use Devel::PartialDump ();
 use Scalar::Util       ();
 use Specio::Library::Builtins;
+use Specio::OO qw( new _accessorize );
 
 use Moose;
 
 with 'Specio::Constraint::Role::IsaType';
 
-my $Defined = t('Defined');
 has '+parent' => (
     init_arg => undef,
-    default  => sub { $Defined },
+    builder  => '_build_parent',
 );
 
-my $_inline_generator = sub {
-    my $self = shift;
-    my $val  = shift;
-
-    return
-          '( Scalar::Util::blessed('
-        . $val
-        . ') || ( '
-        . " defined $val && ! ref $val ) ) && "
-        . $val
-        . '->isa('
-        . B::perlstring( $self->class ) . ')';
-};
+{
+    my $Defined = t('Defined');
+    sub _build_parent { $Defined }
+}
 
 has '+_inline_generator' => (
     init_arg => undef,
-    default  => sub { $_inline_generator },
+    builder  => '_build_inline_generator',
 );
 
-__PACKAGE__->meta()->make_immutable();
+{
+    my $_inline_generator = sub {
+        my $self = shift;
+        my $val  = shift;
+
+        return
+              '( Scalar::Util::blessed('
+            . $val
+            . ') || ( '
+            . " defined $val && ! ref $val ) ) && "
+            . $val
+            . '->isa('
+            . B::perlstring( $self->class ) . ')';
+    };
+
+    sub _build_inline_generator { $_inline_generator }
+}
+
+__PACKAGE__->_accessorize();
 
 1;
 

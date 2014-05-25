@@ -3,28 +3,30 @@ package Specio::DeclaredAt;
 use strict;
 use warnings;
 
+use Specio::OO qw( new _accessorize );
+
 use Moose;
 
 has package => (
-    is       => 'ro',
+    is       => 'bare',
     isa      => 'Str',
     required => 1,
 );
 
 has filename => (
-    is       => 'ro',
+    is       => 'bare',
     isa      => 'Str',
     required => 1,
 );
 
 has line => (
-    is       => 'ro',
+    is       => 'bare',
     isa      => 'Int',
     required => 1,
 );
 
 has subroutine => (
-    is        => 'ro',
+    is        => 'bare',
     isa       => 'Str',
     predicate => 'has_subroutine',
 );
@@ -57,7 +59,7 @@ sub description {
     return $desc;
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 

@@ -3,6 +3,8 @@ package Specio::Coercion;
 use strict;
 use warnings;
 
+use Specio::OO qw( new _accessorize );
+
 use Moose;
 
 with 'MooseX::Clone', 'Specio::Role::Inlinable';
@@ -31,17 +33,9 @@ has _optimized_coercion => (
     is       => 'bare',
     isa      => 'CodeRef',
     init_arg => undef,
+    lazy     => 1,
+    builder  => '_build_optimized_coercion',
 );
-
-sub from { $_[0]->{from} }
-
-sub to { $_[0]->{to} }
-
-sub _coercion { $_[0]->{_coercion} }
-
-sub _optimized_coercion {
-    $_[0]->{_optimized_coercion} ||= $_[0]->_build_optimized_coercion();
-}
 
 sub BUILD {
     my $self = shift;
@@ -100,7 +94,7 @@ sub _build_description {
     return $desc;
 }
 
-__PACKAGE__->meta()->make_immutable();
+__PACKAGE__->_accessorize();
 
 1;
 

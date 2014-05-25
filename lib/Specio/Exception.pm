@@ -9,18 +9,14 @@ use overload
 
 use Devel::StackTrace;
 use Scalar::Util qw( blessed );
-use Specio::OO qw( _specio_BUILDARGS );
+use Specio::OO qw( new _accessorize );
 
-sub new {
-    my $class = shift;
-    my $p     = $class->_specio_BUILDARGS(
-        $class->_attrs(),
-        @_,
-    );
+sub BUILD {
+    my $self = shift;
 
-    $p->{stack_trace} = Devel::StackTrace->new();
+    $self->{stack_trace} = Devel::StackTrace->new();
 
-    return bless $p, $class;
+    return;
 }
 
 sub _attrs {
@@ -41,6 +37,10 @@ sub _attrs {
             name     => 'value',
             required => 1,
         },
+        {
+            name     => 'stack_trace',
+            init_arg => undef,
+        },
     ];
 }
 
@@ -53,10 +53,6 @@ sub as_string {
     return $str;
 }
 
-sub message { $_[0]->{message} }
-
-sub stack_trace { $_[0]->{stack_trace} }
-
 sub throw {
     my $self = shift;
 
@@ -64,6 +60,8 @@ sub throw {
 
     die $self->new(@_);
 }
+
+__PACKAGE__->_accessorize();
 
 1;
 

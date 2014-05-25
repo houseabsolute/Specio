@@ -3,32 +3,13 @@ package Specio::Constraint::Simple;
 use strict;
 use warnings;
 
-use Specio::OO qw( _specio_BUILDARGS _attr_to_hashref );
+use Specio::OO qw( new _accessorize );
 
 use Moose;
 
 with 'Specio::Constraint::Role::Interface';
 
-sub new {
-    my $class = shift;
-    my $p     = $class->_specio_BUILDARGS(
-        $class->_attrs(),
-        @_,
-    );
-
-    my $self = bless $p, $class;
-
-    $self->BUILDALL();
-
-    return $self;
-}
-
-sub _attrs {
-    my $class = shift;
-
-    return [ map { _attr_to_hashref($_) }
-            $class->meta()->get_all_attributes() ];
-}
+__PACKAGE__->_accessorize();
 
 1;
 

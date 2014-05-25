@@ -13,11 +13,9 @@ with 'Specio::Constraint::Role::Interface' =>
 
 has methods => (
     is       => 'bare',
-    isa      => 'ArrayRef[Str]',
+    isa      => 'ArrayRef',
     required => 1,
 );
-
-sub methods { $_[0]->{methods} }
 
 sub _wrap_message_generator {
     my $self      = shift;
