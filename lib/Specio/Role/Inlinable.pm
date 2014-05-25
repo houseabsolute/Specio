@@ -10,43 +10,45 @@ use Role::Tiny;
 
 requires '_build_description';
 
-my %attrs = (
-    _inline_generator => {
-        is        => 'ro',
-        isa       => 'CodeRef',
-        predicate => '_has_inline_generator',
-        init_arg  => 'inline_generator',
-    },
-    _inline_environment => {
-        is       => 'ro',
-        isa      => 'HashRef',
-        lazy     => 1,
-        init_arg => 'inline_environment',
-        builder  => '_build_inline_environment',
-    },
-    _generated_inline_sub => {
-        is       => 'ro',
-        isa      => 'CodeRef',
-        init_arg => undef,
-        lazy     => 1,
-        builder  => '_build_generated_inline_sub',
-    },
-    declared_at => {
-        is       => 'ro',
-        isa      => 'Specio::DeclaredAt',
-        required => 1,
-    },
-    _description => {
-        is       => 'ro',
-        isa      => 'Str',
-        init_arg => undef,
-        lazy     => 1,
-        builder  => '_build_description',
-    },
-);
+{
+    my $attrs = {
+        _inline_generator => {
+            is        => 'ro',
+            isa       => 'CodeRef',
+            predicate => '_has_inline_generator',
+            init_arg  => 'inline_generator',
+        },
+        _inline_environment => {
+            is       => 'ro',
+            isa      => 'HashRef',
+            lazy     => 1,
+            init_arg => 'inline_environment',
+            builder  => '_build_inline_environment',
+        },
+        _generated_inline_sub => {
+            is       => 'ro',
+            isa      => 'CodeRef',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_generated_inline_sub',
+        },
+        declared_at => {
+            is       => 'ro',
+            isa      => 'Specio::DeclaredAt',
+            required => 1,
+        },
+        _description => {
+            is       => 'ro',
+            isa      => 'Str',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_description',
+        },
+    };
 
-sub _attrs {
-    return \%attrs;
+    sub _attrs {
+        return $attrs;
+    }
 }
 
 sub can_be_inlined {

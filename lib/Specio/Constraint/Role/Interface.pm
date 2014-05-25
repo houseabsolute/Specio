@@ -16,68 +16,68 @@ use Role::Tiny;
 use Specio::Role::Inlinable;
 with 'Specio::Role::Inlinable';
 
-my %attrs = (
-    name => {
-        is        => 'bare',
-        isa       => 'Str',
-        predicate => '_has_name',
-    },
-    parent => {
-        is        => 'bare',
-        does      => 'Specio::Constraint::Role::Interface',
-        predicate => '_has_parent',
-    },
-    _constraint => {
-        is        => 'bare',
-        isa       => 'CodeRef',
-        init_arg  => 'constraint',
-        predicate => '_has_constraint',
-    },
-    _optimized_constraint => {
-        is       => 'bare',
-        isa      => 'CodeRef',
-        init_arg => undef,
-        lazy     => 1,
-        builder  => '_build_optimized_constraint',
-    },
-    _ancestors => {
-        is       => 'bare',
-        isa      => 'ArrayRef',
-        init_arg => undef,
-        lazy     => 1,
-        builder  => '_build_ancestors',
-    },
-    _message_generator => {
-        is       => 'bare',
-        isa      => 'CodeRef',
-        init_arg => undef,
-    },
-    _coercions => {
-        is      => 'bare',
-        builder => '_build_coercions',
-    },
-
-    # Because types are cloned on import, we can't directly compare type
-    # objects. Because type names can be reused between packages (no global
-    # registry) we can't compare types based on name either.
-    _signature => {
-        is       => 'bare',
-        isa      => 'Str',
-        init_arg => undef,
-        lazy     => 1,
-        builder  => '_build_signature',
-    },
-    );
-
 my $NullConstraint = sub { 1 };
 
-sub _attrs {
+{
     my $role_attrs = Specio::Role::Inlinable::_attrs();
 
-    return {
+    my $attrs = {
         %{$role_attrs},
-        %attrs,
+        name => {
+            is        => 'bare',
+            isa       => 'Str',
+            predicate => '_has_name',
+        },
+        parent => {
+            is        => 'bare',
+            does      => 'Specio::Constraint::Role::Interface',
+            predicate => '_has_parent',
+        },
+        _constraint => {
+            is        => 'bare',
+            isa       => 'CodeRef',
+            init_arg  => 'constraint',
+            predicate => '_has_constraint',
+        },
+        _optimized_constraint => {
+            is       => 'bare',
+            isa      => 'CodeRef',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_optimized_constraint',
+        },
+        _ancestors => {
+            is       => 'bare',
+            isa      => 'ArrayRef',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_ancestors',
+        },
+        _message_generator => {
+            is       => 'bare',
+            isa      => 'CodeRef',
+            init_arg => undef,
+        },
+        _coercions => {
+            is      => 'bare',
+            builder => '_build_coercions',
+        },
+
+        # Because types are cloned on import, we can't directly compare type
+        # objects. Because type names can be reused between packages (no global
+        # registry) we can't compare types based on name either.
+        _signature => {
+            is       => 'bare',
+            isa      => 'Str',
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_signature',
+        },
     };
+
+    sub _attrs {
+        return $attrs;
+    }
 }
 
 sub clone {

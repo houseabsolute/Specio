@@ -11,8 +11,8 @@ use Devel::StackTrace;
 use Scalar::Util qw( blessed );
 use Specio::OO qw( new _accessorize );
 
-sub _attrs {
-    return {
+{
+    my $attrs = {
         message => {
             isa      => 'Str',
             required => 1,
@@ -28,6 +28,10 @@ sub _attrs {
             init_arg => undef,
         },
     };
+
+    sub _attrs {
+        return $attrs;
+    }
 }
 
 sub BUILD {

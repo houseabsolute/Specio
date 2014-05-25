@@ -10,7 +10,7 @@ use Storable qw( dclone );
 use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
-sub _attrs {
+{
     my $attrs = dclone( Specio::Constraint::Role::Interface::_attrs() );
 
     $attrs->{parent}{isa}      = 'Specio::Constraint::Parameterizable';
@@ -21,7 +21,9 @@ sub _attrs {
         required => 1,
     };
 
-    return $attrs;
+    sub _attrs {
+        return $attrs;
+    }
 }
 
 sub can_be_inlined {

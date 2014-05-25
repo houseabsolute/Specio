@@ -10,10 +10,10 @@ use Role::Tiny::With;
 use Specio::Role::Inlinable;
 with 'Specio::Role::Inlinable';
 
-sub _attrs {
+{
     my $role_attrs = Specio::Role::Inlinable::_attrs();
 
-    return {
+    my $attrs      = {
         %{$role_attrs},
         from => {
             does     => 'Specio::Constraint::Role::Interface',
@@ -36,6 +36,10 @@ sub _attrs {
             builder  => '_build_optimized_coercion',
         },
     };
+
+    sub _attrs {
+        return $attrs;
+    }
 }
 
 sub BUILD {

@@ -10,6 +10,24 @@ use Role::Tiny;
 use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
+{
+    my $attrs = dclone( Specio::Constraint::Role::Interface::_attrs() );
+
+    for my $name (qw( parent _inline_generator )) {
+        $attrs->{$name}{init_arg} = undef;
+        $attrs->{$name}{builder} = '_build_' . ( $name =~ s/^_//r );
+    }
+
+    $attrs->{class} = {
+        isa      => 'ClassName',
+        required => 1,
+    };
+
+    sub _attrs {
+        return $attrs;
+    }
+}
+
 sub _wrap_message_generator {
     my $self      = shift;
     my $generator = shift;
@@ -30,22 +48,6 @@ sub _wrap_message_generator {
     my $d = $self->_description();
 
     return sub { $generator->( $d, @_ ) };
-}
-
-sub _attrs {
-    my $attrs = dclone(Specio::Constraint::Role::Interface::_attrs());
-
-    for my $name (qw( parent _inline_generator )) {
-        $attrs->{$name}{init_arg} = undef;
-        $attrs->{$name}{builder} = '_build_' . ( $name =~ s/^_//r );
-    }
-
-    $attrs->{class} = {
-        isa      => 'ClassName',
-        required => 1,
-    };
-
-    return $attrs;
 }
 
 1;

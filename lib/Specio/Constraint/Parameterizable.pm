@@ -11,10 +11,10 @@ use Specio::OO qw( new _accessorize );
 use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
-sub _attrs {
+{
     my $role_attrs = Specio::Constraint::Role::Interface::_attrs();
 
-    return {
+    my $attrs = {
         %{$role_attrs},
         _parameterized_constraint_generator => {
             isa       => 'CodeRef',
@@ -27,6 +27,10 @@ sub _attrs {
             predicate => '_has_parameterized_inline_generator',
         },
     };
+
+    sub _attrs {
+        return $attrs;
+    }
 }
 
 sub BUILD {

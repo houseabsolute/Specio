@@ -5,8 +5,8 @@ use warnings;
 
 use Specio::OO qw( new clone _accessorize );
 
-sub _attrs {
-    return {
+{
+    my $attrs = {
         package => {
             is       => 'bare',
             isa      => 'Str',
@@ -28,6 +28,10 @@ sub _attrs {
             predicate => 'has_subroutine',
         },
     };
+
+    sub _attrs {
+        return $attrs;
+    }
 }
 
 sub new_from_caller {

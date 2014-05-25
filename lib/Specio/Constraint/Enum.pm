@@ -12,7 +12,7 @@ use Storable qw( dclone );
 use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
-sub _attrs {
+{
     my $attrs = dclone( Specio::Constraint::Role::Interface::_attrs() );
 
     for my $name (qw( parent _inline_generator )) {
@@ -25,7 +25,9 @@ sub _attrs {
         required => 1,
     };
 
-    return $attrs;
+    sub _attrs {
+        return $attrs;
+    }
 }
 
 {
