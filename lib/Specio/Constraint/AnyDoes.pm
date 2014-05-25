@@ -3,14 +3,13 @@ package Specio::Constraint::AnyDoes;
 use strict;
 use warnings;
 
-use B                  ();
-use Devel::PartialDump ();
-use Scalar::Util       ();
+use B ();
+use Role::Tiny::With;
+use Scalar::Util ();
 use Specio::Library::Builtins;
 use Specio::OO qw( new _accessorize );
 
-use Moose;
-
+use Specio::Constraint::Role::DoesType;
 with 'Specio::Constraint::Role::DoesType';
 
 {

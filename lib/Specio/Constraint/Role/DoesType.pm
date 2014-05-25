@@ -3,10 +3,11 @@ package Specio::Constraint::Role::DoesType;
 use strict;
 use warnings;
 
-use Moose::Role;
+use Role::Tiny;
+use Storable qw( dclone );
 
-with 'Specio::Constraint::Role::Interface' =>
-    { -excludes => [ '_attrs', '_wrap_message_generator' ] };
+use Specio::Constraint::Role::Interface;
+with 'Specio::Constraint::Role::Interface';
 
 sub _wrap_message_generator {
     my $self      = shift;
@@ -31,16 +32,7 @@ sub _wrap_message_generator {
 }
 
 sub _attrs {
-    my $role_attrs = Specio::Constraint::Role::Interface::_attrs();
-
-    my %self_attrs = map { $_->name() => Specio::OO::_attr_to_hashref($_) }
-        map { __PACKAGE__->meta()->get_attribute($_) }
-        __PACKAGE__->meta()->get_attribute_list();
-
-    my $attrs = {
-        %{$role_attrs},
-        %self_attrs,
-    };
+    my $attrs = dclone(Specio::Constraint::Role::Interface::_attrs());
 
     for my $name (qw( parent _inline_generator )) {
         $attrs->{$name}{init_arg} = undef;

@@ -6,7 +6,7 @@ use namespace::autoclean;
 
 use Eval::Closure qw( eval_closure );
 
-use Moose::Role;
+use Role::Tiny;
 
 requires '_build_description';
 

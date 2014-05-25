@@ -3,15 +3,10 @@ package Specio::Constraint::Simple;
 use strict;
 use warnings;
 
+use Role::Tiny::With;
 use Specio::OO qw( clone new _accessorize );
 
-use Moose;
-
 with 'Specio::Constraint::Role::Interface';
-
-sub _attrs {
-    Specio::Constraint::Role::Interface::_attrs();
-}
 
 __PACKAGE__->_accessorize();
 

@@ -3,11 +3,11 @@ package Specio::Constraint::Parameterized;
 use strict;
 use warnings;
 
+use Role::Tiny::With;
 use Specio::OO qw( new _accessorize );
 use Storable qw( dclone );
 
-use Moose;
-
+use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
 sub _attrs {

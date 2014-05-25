@@ -3,13 +3,14 @@ package Specio::Constraint::ObjectCan;
 use strict;
 use warnings;
 
-use B ();
-use Scalar::Util;
+use B               ();
+use List::MoreUtils ();
+use Role::Tiny::With;
+use Scalar::Util ();
 use Specio::Library::Builtins;
 use Specio::OO qw( new _accessorize );
 
-use Moose;
-
+use Specio::Constraint::Role::CanType;
 with 'Specio::Constraint::Role::CanType';
 
 {

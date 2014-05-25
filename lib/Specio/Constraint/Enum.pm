@@ -4,12 +4,12 @@ use strict;
 use warnings;
 
 use B ();
+use Role::Tiny::With;
 use Specio::Library::Builtins;
 use Specio::OO qw( new _accessorize );
 use Storable qw( dclone );
 
-use Moose;
-
+use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
 sub _attrs {

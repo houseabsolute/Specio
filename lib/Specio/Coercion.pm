@@ -5,8 +5,9 @@ use warnings;
 
 use Specio::OO qw( new clone _accessorize );
 
-use Moose;
+use Role::Tiny::With;
 
+use Specio::Role::Inlinable;
 with 'Specio::Role::Inlinable';
 
 sub _attrs {

@@ -3,17 +3,18 @@ package Specio::Constraint::Role::Interface;
 use strict;
 use warnings;
 
+use Carp qw( confess );
 use Devel::PartialDump;
 use List::AllUtils qw( all any );
-use Sub::Name qw( subname );
-use Try::Tiny;
 use Specio::Exception;
 use Specio::OO qw( is_CodeRef );
+use Sub::Name qw( subname );
+use Try::Tiny;
 
-use Moose::Role;
-use MooseX::SemiAffordanceAccessor;
+use Role::Tiny;
 
-with 'Specio::Role::Inlinable' => { -excludes => ['_attrs'] };
+use Specio::Role::Inlinable;
+with 'Specio::Role::Inlinable';
 
 my %attrs = (
     name => {

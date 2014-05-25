@@ -3,21 +3,16 @@ package Specio::Constraint::Parameterizable;
 use strict;
 use warnings;
 
-use MooseX::Params::Validate qw( validated_list );
+use Role::Tiny::With;
 use Specio::Constraint::Parameterized;
 use Specio::DeclaredAt;
 use Specio::OO qw( new _accessorize );
 
-use Moose;
-
+use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
 sub _attrs {
     my $role_attrs = Specio::Constraint::Role::Interface::_attrs();
-
-    my %self_attrs = map { $_->name() => Specio::OO::_attr_to_hashref($_) }
-        map { __PACKAGE__->meta()->get_attribute($_) }
-        __PACKAGE__->meta()->get_attribute_list();
 
     return {
         %{$role_attrs},
@@ -54,14 +49,18 @@ sub BUILD {
 
 sub parameterize {
     my $self = shift;
-    my ( $parameter, $declared_at ) = validated_list(
-        \@_,
-        of          => { does => 'Specio::Constraint::Role::Interface' },
-        declared_at => {
-            isa      => 'Specio::DeclaredAt',
-            optional => 1,
-        },
-    );
+    my %args = @_;
+
+    my ( $parameter, $declared_at ) = @args{qw( of declared_at)};
+
+    # my ( $parameter, $declared_at ) = validated_list(
+    #     \@_,
+    #     of          => { does => 'Specio::Constraint::Role::Interface' },
+    #     declared_at => {
+    #         isa      => 'Specio::DeclaredAt',
+    #         optional => 1,
+    #     },
+    # );
 
     # This isn't a default so as to avoid generating it even when the
     # parameter is already set.
