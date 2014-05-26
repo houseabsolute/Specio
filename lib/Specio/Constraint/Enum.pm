@@ -6,7 +6,7 @@ use warnings;
 use B ();
 use Role::Tiny::With;
 use Specio::Library::Builtins;
-use Specio::OO qw( new _accessorize );
+use Specio::OO;
 use Storable qw( dclone );
 
 use Specio::Constraint::Role::Interface;
@@ -60,7 +60,7 @@ sub _build_inline_environment {
     return { '%_Specio_Constraint_Enum_enum_values' => \%values };
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 

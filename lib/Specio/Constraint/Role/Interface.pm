@@ -80,10 +80,6 @@ my $NullConstraint = sub { 1 };
     }
 }
 
-sub clone {
-    $_[0]->Specio::OO::clone();
-}
-
 sub BUILD { }
 
 around BUILD => sub {

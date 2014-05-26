@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Role::Tiny::With;
-use Specio::OO qw( new _accessorize );
+use Specio::OO;
 use Storable qw( dclone );
 
 use Specio::Constraint::Role::Interface;
@@ -40,7 +40,7 @@ sub type_parameter {
     shift->parameter();
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 

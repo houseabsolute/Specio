@@ -7,7 +7,7 @@ use B ();
 use Role::Tiny::With;
 use Scalar::Util ();
 use Specio::Library::Builtins;
-use Specio::OO qw( new _accessorize );
+use Specio::OO;
 
 use Specio::Constraint::Role::IsaType;
 with 'Specio::Constraint::Role::IsaType';
@@ -33,7 +33,7 @@ with 'Specio::Constraint::Role::IsaType';
     sub _build_inline_generator { $_inline_generator }
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 

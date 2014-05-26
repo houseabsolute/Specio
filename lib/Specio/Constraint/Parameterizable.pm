@@ -6,7 +6,7 @@ use warnings;
 use Role::Tiny::With;
 use Specio::Constraint::Parameterized;
 use Specio::DeclaredAt;
-use Specio::OO qw( new _accessorize );
+use Specio::OO;
 
 use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
@@ -88,7 +88,7 @@ sub parameterize {
     return Specio::Constraint::Parameterized->new(%p);
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 

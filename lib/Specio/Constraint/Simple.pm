@@ -4,11 +4,11 @@ use strict;
 use warnings;
 
 use Role::Tiny::With;
-use Specio::OO qw( clone new _accessorize );
+use Specio::OO;
 
 with 'Specio::Constraint::Role::Interface';
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 

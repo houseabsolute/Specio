@@ -3,7 +3,7 @@ package Specio::Coercion;
 use strict;
 use warnings;
 
-use Specio::OO qw( new clone _accessorize );
+use Specio::OO;
 
 use Role::Tiny::With;
 
@@ -99,7 +99,7 @@ sub _build_description {
     return $desc;
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 

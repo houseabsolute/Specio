@@ -9,7 +9,7 @@ use overload
 
 use Devel::StackTrace;
 use Scalar::Util qw( blessed );
-use Specio::OO qw( new _accessorize );
+use Specio::OO;
 
 {
     my $attrs = {
@@ -59,7 +59,7 @@ sub throw {
     die $self->new(@_);
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 

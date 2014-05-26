@@ -3,7 +3,7 @@ package Specio::DeclaredAt;
 use strict;
 use warnings;
 
-use Specio::OO qw( new clone _accessorize );
+use Specio::OO;
 
 {
     my $attrs = {
@@ -62,7 +62,7 @@ sub description {
     return $desc;
 }
 
-__PACKAGE__->_accessorize();
+__PACKAGE__->_ooify();
 
 1;
 
