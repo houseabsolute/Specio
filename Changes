@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.10     2014-05-26
+
 - Added Class::Method::Modifiers to prereqs.
 
 - Made Specio classes faster by inlining all accessors and constructors.
