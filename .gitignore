@@ -1,11 +1,9 @@
+.build/
 Build
 MYMETA.json
 MYMETA.yml
-Specio.bs
-.build/
+README
+Specio-*
 _build/
 blib/
-lib/Specio/Library/Builtins.c
-lib/Specio/Library/Builtins.o
 pm_to_blib
-Specio-*
