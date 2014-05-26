@@ -366,7 +366,7 @@ and C<any_isa_type>.
 
 =item * Overloading support is baked in
 
-Perl's overloading is quite brokenq but ignoring it makes Moose's type system
+Perl's overloading is quite broken but ignoring it makes Moose's type system
 frustrating to use in many cases.
 
 =item * Types can either have a constraint or inline generator, not both
