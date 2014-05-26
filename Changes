@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.09     2014-05-25
+
 - Reimplemented entirely without Moose. This module now implements its own
   half-assed (really, more like eighth-assed) OO system.
 
