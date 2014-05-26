@@ -18,8 +18,9 @@ use Specio::Role::Inlinable;
 with 'Specio::Role::Inlinable';
 
 use overload(
-    '&{}'    => '_subify',
-    'bool'   => sub { 1 },
+    q{""}  => sub { $_[0] },
+    '&{}'  => '_subify',
+    'bool' => sub { 1 },
 );
 
 {
