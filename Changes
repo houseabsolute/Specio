@@ -1,5 +1,14 @@
 {{$NEXT}}
 
+- Reimplemented entirely without Moose. This module now implements its own
+  half-assed (really, more like eighth-assed) OO system.
+
+* TODO: Integrate cleanly with Moo and Moose.
+
+* TODO: Improve the internal OO system to do some eighth-assed inlining so
+  creating type objects is faster.
+
+
 0.08     2013-06-08
 
 - Removed the use of the encoding pragma from the tests. This pragma is
