@@ -373,7 +373,25 @@ sub _inline_throw_exception {
 # This exists for the benefit of Moo
 sub coercion_sub {
     my $self = shift;
-    return sub { $self->coerce_value(shift) };
+
+    if ( all { $_->can_be_inlined() } $self->coercions() ) {
+        my $inline = q{};
+        my %env;
+
+        for my $coercion ( $self->coercions() ) {
+            $inline
+                .= '$_[0] = '
+                . $coercion->inline_coercion( '$_[0]' ) . ' if '
+                . $coercion->from()->inline_check(' $_[0]' ) . ';';
+
+            %env = ( %env, %{ $coercion->_inline_environment() } );
+        }
+
+        return quote_sub( $inline, \%env );
+    }
+    else {
+        return sub { $self->coerce_value(shift) };
+    }
 }
 
 sub _build_ancestors {
