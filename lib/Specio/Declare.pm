@@ -52,8 +52,8 @@ sub import {
         && $0 =~ m{t[\\/]type_constraints[\\/]specio\.t$} ) {
 
         require Test::More;
-        Test::More::plan skip_all =>
-            'These tests will not pass with this version of Specio';
+        Test::More::plan( skip_all =>
+                'These tests will not pass with this version of Specio' );
         exit 0;
     }
 
