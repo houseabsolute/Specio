@@ -102,9 +102,9 @@ __END__
 
 =head1 SYNOPSIS
 
-  my $arrayref = t('ArrayRef');
+    my $arrayref = t('ArrayRef');
 
-  my $arrayref_of_int = $arrayref->parameterize( of => t('Int') );
+    my $arrayref_of_int = $arrayref->parameterize( of => t('Int') );
 
 =head1 DESCRIPTION
 

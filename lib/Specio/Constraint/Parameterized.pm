@@ -54,12 +54,12 @@ __END__
 
 =head1 SYNOPSIS
 
-  my $arrayref = t('ArrayRef');
+    my $arrayref = t('ArrayRef');
 
-  my $arrayref_of_int = $arrayref->parameterize( of => t('Int') );
+    my $arrayref_of_int = $arrayref->parameterize( of => t('Int') );
 
-  my $parent = $arrayref_of_int->parent(); # returns ArrayRef
-  my $parameter = $arrayref_of_int->parameter(); # returns Int
+    my $parent = $arrayref_of_int->parent(); # returns ArrayRef
+    my $parameter = $arrayref_of_int->parameter(); # returns Int
 
 =head1 DESCRIPTION
 

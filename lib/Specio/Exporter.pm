@@ -33,19 +33,19 @@ __END__
 
 =head1 SYNOPSIS
 
-  package MyApp::Type::Library;
+    package MyApp::Type::Library;
 
-  use parent 'Specio::Exporter';
+    use parent 'Specio::Exporter';
 
-  use Specio::Declare;
+    use Specio::Declare;
 
-  declare( ... );
+    declare( ... );
 
-  # more types here
+    # more types here
 
-  package MyApp::Foo;
+    package MyApp::Foo;
 
-  use MyApp::Type::Library
+    use MyApp::Type::Library
 
 =head1 DESCRIPTION
 

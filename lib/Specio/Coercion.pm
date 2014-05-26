@@ -113,13 +113,13 @@ __END__
 
 =head1 SYNOPSIS
 
-  my $coercion = $type->coercion_from_type('Int');
+    my $coercion = $type->coercion_from_type('Int');
 
-  my $new_value = $coercion->coerce_value(42);
+    my $new_value = $coercion->coerce_value(42);
 
-  if ( $coercion->can_be_inlined() ) {
-      my $code = $coercion->inline_coercion('$_[0]');
-  }
+    if ( $coercion->can_be_inlined() ) {
+        my $code = $coercion->inline_coercion('$_[0]');
+    }
 
 =head1 DESCRIPTION
 

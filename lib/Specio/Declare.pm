@@ -225,66 +225,66 @@ __END__
 
 =head1 SYNOPSIS
 
-  package MyApp::Type::Library;
+    package MyApp::Type::Library;
 
-  use parent 'Specio::Exporter';
+    use parent 'Specio::Exporter';
 
-  use Specio::Declare;
-  use Specio::Library::Builtins;
+    use Specio::Declare;
+    use Specio::Library::Builtins;
 
-  declare(
-      'Foo',
-      parent => t('Str'),
-      where  => sub { $_[0] =~ /foo/i },
-  );
+    declare(
+        'Foo',
+        parent => t('Str'),
+        where  => sub { $_[0] =~ /foo/i },
+    );
 
-  declare(
-      'ArrayRefOfInt',
-      parent => t( 'ArrayRef', of => t('Int') ),
-  );
+    declare(
+        'ArrayRefOfInt',
+        parent => t( 'ArrayRef', of => t('Int') ),
+    );
 
-  my $even = anon(
-      parent => t('Int'),
-      inline => sub {
-          my $type      = shift;
-          my $value_var = shift;
+    my $even = anon(
+        parent => t('Int'),
+        inline => sub {
+            my $type      = shift;
+            my $value_var = shift;
 
-          return $value_var . ' % 2 == 0';
-      },
-  );
+            return $value_var . ' % 2 == 0';
+        },
+    );
 
-  coerce(
-      t('ArrayRef'),
-      from  => t('Foo'),
-      using => sub { [ $_[0] ] },
-  );
+    coerce(
+        t('ArrayRef'),
+        from  => t('Foo'),
+        using => sub { [ $_[0] ] },
+    );
 
-  coerce(
-      $even,
-      from  => t('Int'),
-      using => sub { $_[0] % 2 ? $_[0] + 1 : $_[0] },
-  );
+    coerce(
+        $even,
+        from  => t('Int'),
+        using => sub { $_[0] % 2 ? $_[0] + 1 : $_[0] },
+    );
 
-  # Specio name is DateTime
-  any_isa_type('DateTime');
+    # Specio name is DateTime
+    any_isa_type('DateTime');
 
-  # Specio name is DateTimeObject
-  object_isa_type( 'DateTimeObject', 'DateTime' );
+    # Specio name is DateTimeObject
+    object_isa_type( 'DateTimeObject', 'DateTime' );
 
-  any_can_type(
-      'Duck',
-      methods => [ 'duck_walk', 'quack' ],
-  );
+    any_can_type(
+        'Duck',
+        methods => [ 'duck_walk', 'quack' ],
+    );
 
-  object_can_type(
-      'DuckObject',
-      methods => [ 'duck_walk', 'quack' ],
-  );
+    object_can_type(
+        'DuckObject',
+        methods => [ 'duck_walk', 'quack' ],
+    );
 
-  enum(
-      'Colors',
-      [qw( blue green red )],
-  );
+    enum(
+        'Colors',
+        [qw( blue green red )],
+    );
 
 =head1 DESCRIPTION
 

@@ -72,9 +72,9 @@ __END__
 
 =head1 SYNOPSIS
 
-  my $declared = Specio::DeclaredAt->new_from_caller(1);
+    my $declared = Specio::DeclaredAt->new_from_caller(1);
 
-  print $declared->description();
+    print $declared->description();
 
 =head1 DESCRIPTION
 

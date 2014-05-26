@@ -46,8 +46,8 @@ __END__
 
 =head1 SYNOPSIS
 
-  my $type = Specio::Constraint::ObjectCan->new(...);
-  print $_, "\n" for @{ $type->methods() };
+    my $type = Specio::Constraint::ObjectCan->new(...);
+    print $_, "\n" for @{ $type->methods() };
 
 =head1 DESCRIPTION
 

@@ -45,8 +45,8 @@ __END__
 
 =head1 SYNOPSIS
 
-  my $type = Specio::Constraint::ObjectDoes->new(...);
-  print $type->role();
+    my $type = Specio::Constraint::ObjectDoes->new(...);
+    print $type->role();
 
 =head1 DESCRIPTION
 

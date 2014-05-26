@@ -70,8 +70,8 @@ __END__
 
 =head1 SYNOPSIS
 
-  my $type = Specio::Constraint::Enum->new(...);
-  print $_, "\n" for @{ $type->values() };
+    my $type = Specio::Constraint::Enum->new(...);
+    print $_, "\n" for @{ $type->values() };
 
 =head1 DESCRIPTION
 

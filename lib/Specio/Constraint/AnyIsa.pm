@@ -45,8 +45,8 @@ __END__
 
 =head1 SYNOPSIS
 
-  my $type = Specio::Constraint::AnyIsa->new(...);
-  print $type->class();
+    my $type = Specio::Constraint::AnyIsa->new(...);
+    print $type->class();
 
 =head1 DESCRIPTION
 

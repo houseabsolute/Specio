@@ -20,17 +20,17 @@ __END__
 
 =head1 SYNOPSIS
 
-  my $str = t('Str');
+    my $str = t('Str');
 
-  print $str->name(); # Str
+    print $str->name(); # Str
 
-  my $parent = $str->parent();
+    my $parent = $str->parent();
 
-  if ( $str->value_is_valid($value) ) { ... }
+    if ( $str->value_is_valid($value) ) { ... }
 
-  $str->validate_or_die($value);
+    $str->validate_or_die($value);
 
-  my $code = $str->inline_coercion_and_check('$_[0]');
+    my $code = $str->inline_coercion_and_check('$_[0]');
 
 =head1 DESCRIPTION
 
