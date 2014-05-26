@@ -18,15 +18,19 @@ use Specio::Declare;
 {
     package Role::MooseStyle;
 
-    use Moose::Role;
+    use Role::Tiny;
 }
 
 {
     package Class::MooseStyle;
 
-    use Moose;
+    use Role::Tiny::With;
 
     with 'Role::MooseStyle';
+
+    sub new {
+        bless {}, __PACKAGE__
+    }
 }
 
 {

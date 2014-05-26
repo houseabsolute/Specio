@@ -2,7 +2,6 @@ package Specio::Role::Inlinable;
 
 use strict;
 use warnings;
-use namespace::autoclean;
 
 use Eval::Closure qw( eval_closure );
 

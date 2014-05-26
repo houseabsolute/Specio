@@ -5,10 +5,9 @@ use warnings;
 
 use Carp qw( confess );
 use Devel::PartialDump;
-use List::AllUtils qw( all any );
+use List::MoreUtils qw( all any );
 use Specio::Exception;
 use Specio::TypeChecks qw( is_CodeRef );
-use Sub::Name qw( subname );
 use Try::Tiny;
 
 use Role::Tiny;
@@ -229,11 +228,9 @@ sub _constraint_with_parents {
 
     return $NullConstraint unless @constraints;
 
-    return subname(
-        'optimized constraint for ' . $self->_description() => sub {
-            all { $_->( $_[0] ) } @constraints;
-        }
-    );
+    return sub {
+        all { $_->( $_[0] ) } @constraints;
+    };
 }
 
 # This is only used for identifying from types as part of coercions, but I
