@@ -3,10 +3,12 @@ package Specio::Constraint::Parameterizable;
 use strict;
 use warnings;
 
+use Carp qw( confess );
 use Role::Tiny::With;
 use Specio::Constraint::Parameterized;
 use Specio::DeclaredAt;
 use Specio::OO;
+use Specio::TypeChecks qw( does_role isa_class );
 
 use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
@@ -56,18 +58,16 @@ sub parameterize {
     my %args = @_;
 
     my ( $parameter, $declared_at ) = @args{qw( of declared_at)};
+    does_role( $parameter, 'Specio::Constraint::Role::Interface' )
+        or confess
+        'The "of" parameter passed to ->parameterize() must be an object which does the Specio::Constraint::Role::Interface role';
 
-    # my ( $parameter, $declared_at ) = validated_list(
-    #     \@_,
-    #     of          => { does => 'Specio::Constraint::Role::Interface' },
-    #     declared_at => {
-    #         isa      => 'Specio::DeclaredAt',
-    #         optional => 1,
-    #     },
-    # );
+    if ($declared_at) {
+        isa_class( $declared_at, 'Specio::DeclaredAt' )
+            or confess
+            'The "declared_at" parameter passed to ->parameterize() must be a Specio::DeclaredAt object';
+    }
 
-    # This isn't a default so as to avoid generating it even when the
-    # parameter is already set.
     $declared_at //= Specio::DeclaredAt->new_from_caller(1);
 
     my %p = (
