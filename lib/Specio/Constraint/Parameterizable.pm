@@ -96,6 +96,10 @@ __PACKAGE__->_accessorize();
 
 __END__
 
+=pod
+
+=for Pod::Coverage BUILD
+
 =head1 SYNOPSIS
 
   my $arrayref = t('ArrayRef');
@@ -157,3 +161,4 @@ new L<Specio::DeclaredAt> object is creating using a call stack depth of 1.
 
 This method returns a new L<Specio::Constraint::Parameterized> object.
 
+=cut

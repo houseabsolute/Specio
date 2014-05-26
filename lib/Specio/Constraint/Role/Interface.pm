@@ -432,6 +432,10 @@ sub coerce {
 
 __END__
 
+=pod
+
+=for Pod::Coverage .*
+
 =head1 DESCRIPTION
 
 This role defines the interface that all type constraints must provide, and
@@ -447,4 +451,6 @@ or expanded upon.
 
 =head1 ROLES
 
-This role does the L<Specio::Role::Inlinable> and L<MooseX::Clone> roles.
+This role does the L<Specio::Role::Inlinable> role.
+
+=cut

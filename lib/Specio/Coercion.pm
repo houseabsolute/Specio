@@ -107,6 +107,10 @@ __PACKAGE__->_accessorize();
 
 __END__
 
+=pod
+
+=for Pod::Coverage BUILD
+
 =head1 SYNOPSIS
 
   my $coercion = $type->coercion_from_type('Int');
@@ -231,6 +235,12 @@ This returns true if the coercion has an inline generator I<and> the
 constraint it is from can be inlined. This exists primarily for the benefit of
 the C<inline_coercion_and_check()> method for type constraint object.
 
+=head2 $coercion->clone()
+
+Returns a clone of this object.
+
 =head1 ROLES
 
-This class does the L<Specio::Role::Inlinable> and L<MooseX::Clone> roles.
+This class does the L<Specio::Role::Inlinable> role.
+
+=cut

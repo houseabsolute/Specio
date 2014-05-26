@@ -48,6 +48,10 @@ __PACKAGE__->_accessorize();
 
 __END__
 
+=pod
+
+=for Pod::Coverage can_be_inlined type_parameter
+
 =head1 SYNOPSIS
 
   my $arrayref = t('ArrayRef');
@@ -92,3 +96,4 @@ This parameter is required.
 
 Returns the type that was passed to the constructor.
 
+=cut

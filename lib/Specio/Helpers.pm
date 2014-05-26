@@ -76,6 +76,12 @@ sub _INSTANCEDOES ($$) {
 
 __END__
 
+=pod
+
+=for Pod::Coverage .*
+
 =head1 DESCRIPTION
 
 There's nothing public here.
+
+=cut

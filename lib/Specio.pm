@@ -71,7 +71,8 @@ Instead, you can explicitly check a value against a type, and optionally
 coerce values to that type.
 
 My long-term goal is to replace Moose's built-in types and L<MooseX::Types>
-with this module.
+with this module. I will also make sure that Specio types can be used with Moo
+in a sane fashion.
 
 =head1 WHAT IS A TYPE?
 

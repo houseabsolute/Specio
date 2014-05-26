@@ -16,6 +16,8 @@ __PACKAGE__->_accessorize();
 
 __END__
 
+=pod
+
 =head1 SYNOPSIS
 
   my $str = t('Str');
@@ -247,3 +249,5 @@ semicolon.
 
 This role does the L<Specio::Constraint::Role::Interface>,
 L<Specio::Role::Inlinable> and L<MooseX::Clone> roles.
+
+=cut

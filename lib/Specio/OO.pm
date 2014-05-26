@@ -201,3 +201,17 @@ sub clone {
 
 1;
 
+# ABSTRACT: A painfully poor reimplementation of Moo(se)
+
+__END__
+
+=pod
+
+=for Pod::Coverage .*
+
+=head1 DESCRIPTION
+
+Specio can't depend on Moo or Moose, so this module provides a terrible
+reimplementation of a small slice of their features.
+
+=cut

@@ -54,3 +54,17 @@ sub does_role {
 }
 
 1;
+
+# ABSTRACT: Type checks used internally for Specio classes (it's not self-bootstrapping (yet?))
+
+__END__
+
+=pod
+
+=for Pod::Coverage .*
+
+=head1 DESCRIPTION
+
+There's nothing public here.
+
+=cut

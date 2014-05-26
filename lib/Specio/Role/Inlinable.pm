@@ -79,8 +79,13 @@ sub _build_inline_environment {
 
 __END__
 
+=pod
+
+=for Pod::Coverage .*
+
 =head1 DESCRIPTION
 
 This role implements a common API for inlinable things, type constraints and
 coercions. It is fully documented in the relevant classes.
 
+=cut

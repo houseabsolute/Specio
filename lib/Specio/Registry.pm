@@ -55,6 +55,12 @@ sub internal_types_for_package {
 
 __END__
 
+=pod
+
+=for Pod::Coverage .*
+
 =head1 DESCRIPTION
 
 There's nothing public here.
+
+=cut
