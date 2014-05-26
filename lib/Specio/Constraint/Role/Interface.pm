@@ -16,8 +16,6 @@ use Role::Tiny;
 use Specio::Role::Inlinable;
 with 'Specio::Role::Inlinable';
 
-my $NullConstraint = sub { 1 };
-
 {
     my $role_attrs = Specio::Role::Inlinable::_attrs();
 
@@ -79,6 +77,8 @@ my $NullConstraint = sub { 1 };
         return $attrs;
     }
 }
+
+my $NullConstraint = sub { 1 };
 
 sub BUILD { }
 
