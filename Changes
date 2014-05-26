@@ -7,7 +7,8 @@
 - Added support for Moo. Specio constraints now overloading sub-ification so
   you can pass them as "isa" values for Moo attributes. Also added a new
   $type->coercion_sub() method which returns a sub ref suitable for the
-  "coerce" value.
+  "coerce" value. These all use Sub::Quote so that the returned sub refs can
+  be inlined.
 
 
 0.09     2014-05-25
