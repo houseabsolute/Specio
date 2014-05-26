@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Carp qw( confess );
+use Class::Method::Modifiers;
 use Devel::PartialDump;
 use List::MoreUtils qw( all any );
 use Specio::Exception;
