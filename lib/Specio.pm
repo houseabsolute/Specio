@@ -13,47 +13,49 @@ __END__
 
 =head1 SYNOPSIS
 
-  package MyApp::Type::Library;
+    package MyApp::Type::Library;
 
-  use Specio::Declare;
-  use Specio::Library::Builtins;
+    use Specio::Declare;
+    use Specio::Library::Builtins;
 
-  declare(
-      'PositiveInt',
-      parent => t('Int'),
-      inline => sub {
-          $_[0]->parent()->inline_check( $_[1] ) . ' && ( ' . $_[1] . ' > 0';
-      },
-  );
+    declare(
+        'PositiveInt',
+        parent => t('Int'),
+        inline => sub {
+            $_[0]->parent()->inline_check( $_[1] )
+                . ' && ( '
+                . $_[1] . ' > 0';
+        },
+    );
 
-  # or ...
+    # or ...
 
-  declare(
-      'PositiveInt',
-      parent => t('Int'),
-      where  => sub { $_[0] > 0 },
-  );
+    declare(
+        'PositiveInt',
+        parent => t('Int'),
+        where  => sub { $_[0] > 0 },
+    );
 
-  declare(
-      'ArrayRefOfPositiveInt',
-      parent => t(
-          'ArrayRef',
-          of => t('PositiveInt'),
-      ),
-  );
+    declare(
+        'ArrayRefOfPositiveInt',
+        parent => t(
+            'ArrayRef',
+            of => t('PositiveInt'),
+        ),
+    );
 
-  coerce(
-      'ArrayRefOfPositiveInt',
-      from  => t('PositiveInt'),
-      using => sub { [ $_[0] ] },
-  );
+    coerce(
+        'ArrayRefOfPositiveInt',
+        from  => t('PositiveInt'),
+        using => sub { [ $_[0] ] },
+    );
 
-  any_can_type(
-      'Duck',
-      methods => [ 'duck_walk', 'quack' ],
-  );
+    any_can_type(
+        'Duck',
+        methods => [ 'duck_walk', 'quack' ],
+    );
 
-  object_isa_type('MyApp::Person');
+    object_isa_type('MyApp::Person');
 
 =head1 DESCRIPTION
 
