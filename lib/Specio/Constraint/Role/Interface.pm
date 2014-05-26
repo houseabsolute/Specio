@@ -328,11 +328,6 @@ sub can_inline_coercion_and_check {
     }
 }
 
-sub _ancestors {
-    return $_[0]->{_ancestors}
-        ||= $_[0]->_build_ancestors();
-}
-
 sub _build_ancestors {
     my $self = shift;
 
