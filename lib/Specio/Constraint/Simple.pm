@@ -245,6 +245,20 @@ C<eval_closure> subroutine.
 The returned code is a single C<do { }> block without a terminating
 semicolon.
 
+=head2 $type->coercion_sub()
+
+This method returns a sub ref that takes a single argument and applied all
+relevant coercions to it. This sub ref will use L<Sub::Quote> if all the
+type's coercions are inlinable.
+
+This method exists primarily for the benefit of L<Moo>.
+
+=head1 OVERLOADING
+
+All constraints overloading subroutine de-referencing for the benefit of
+L<Moo>. The returned subroutine uses L<Sub::Quote> if the type constraint is
+inlinable.
+
 =head1 ROLES
 
 This role does the L<Specio::Constraint::Role::Interface>,
