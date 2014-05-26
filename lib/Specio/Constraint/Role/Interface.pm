@@ -9,12 +9,18 @@ use Devel::PartialDump;
 use List::MoreUtils qw( all any );
 use Specio::Exception;
 use Specio::TypeChecks qw( is_CodeRef );
+use Sub::Quote qw( quote_sub );
 use Try::Tiny;
 
 use Role::Tiny;
 
 use Specio::Role::Inlinable;
 with 'Specio::Role::Inlinable';
+
+use overload(
+    '&{}'    => '_subify',
+    'bool'   => sub { 1 },
+);
 
 {
     my $role_attrs = Specio::Role::Inlinable::_attrs();
@@ -308,20 +314,66 @@ sub can_inline_coercion_and_check {
             %env = ( %env, %{ $coercion->_inline_environment() } );
         }
 
-        #<<<
-        $source
-            .= $self->inline_check('$value')
-                . ' or Specio::Exception->throw( '
-                . ' message => ' . $message_generator_var_name . '->($value),'
-                . ' type    => ' . $type_var_name . ','
-                . ' value   => $value );';
-        #>>>
+        $source .= $self->inline_check('$value');
+        $source .= ' or ';
+        $source .= $self->_inline_throw_exception(
+            '$value',
+            $message_generator_var_name,
+            $type_var_name
+        );
+        $source .= ';';
+
         $source .= '$value };';
 
         $counter++;
 
         return ( $source, \%env );
     }
+}
+
+sub _subify {
+    my $self = shift;
+
+    if ( $self->can_be_inlined() ) {
+        my $inline = $self->inline_check('$_[0]');
+        $inline .= ' or ';
+
+        my %env = (
+            '$message_generator' => \( $self->_message_generator() ),
+            '$type'              => \$self,
+        );
+
+        $inline .= $self->_inline_throw_exception(
+            '$_[0]',
+            '$message_generator',
+            '$type',
+        );
+
+        return quote_sub( $inline, \%env );
+    }
+    else {
+        return sub { $self->validate_or_die( $_[0] ) };
+    }
+}
+
+sub _inline_throw_exception {
+    my $self                       = shift;
+    my $value_var                  = shift;
+    my $message_generator_var_name = shift;
+    my $type_var_name              = shift;
+
+    #<<<
+    return 'Specio::Exception->throw( '
+        . ' message => ' . $message_generator_var_name . '->(' . $value_var . '),'
+        . ' type    => ' . $type_var_name . ','
+        . ' value   => ' . $value_var . ' )';
+    #>>>
+}
+
+# This exists for the benefit of Moo
+sub coercion_sub {
+    my $self = shift;
+    return sub { $self->coerce_value(shift) };
 }
 
 sub _build_ancestors {

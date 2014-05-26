@@ -268,6 +268,45 @@ Use the L<Specio::Declare> module to declare types. It exports a set of helpers
 for declaring types. See that module's documentation for more details on these
 helpers.
 
+=head1 USING SPECIO WITH Moo
+
+Using Specio with Moo is easy. You can pass Specio constraint objects as
+C<isa> parameters for attributes. For coercions, simply call C<<
+$type->coercion_sub() >>.
+
+    package Foo;
+
+    use Specio::Declare;
+    use Specio::Library::Builtins;
+    use Moo;
+
+    my $str_type = t('Str');
+    has string => (
+       is  => 'ro',
+       isa => $str_type,
+    );
+
+    my $ucstr = declare(
+        'UCStr',
+        parent => t('Str'),
+        where  => sub { $_[0] =~ /^[A-Z]+$/ },
+    );
+
+    coerce(
+        $ucstr,
+        from  => t('Str'),
+        using => sub { return uc $_[0] },
+    );
+
+    has ucstr => (
+        is     => 'ro',
+        isa    => $ucstr,
+        coerce => $ucstr->coercion_sub(),
+    );
+
+The subs returned by Specio use L<Sub::Quote> internally and are suitable for
+inlining.
+
 =head1 Moose, MooseX::Types, and Specio
 
 This module aims to supplant both L<Moose>'s built-in type system (see
