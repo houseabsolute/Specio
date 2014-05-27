@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.11     2014-05-27
+
 - Remove a Perl 5.14-ism.
 
 
