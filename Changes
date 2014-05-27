@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Remove a Perl 5.14-ism.
+
+
 0.10     2014-05-26
 
 - Added Class::Method::Modifiers to prereqs.
