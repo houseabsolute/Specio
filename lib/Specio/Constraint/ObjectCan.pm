@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use B               ();
-use List::MoreUtils ();
+use List::Util 1.33 ();
 use Role::Tiny::With;
 use Scalar::Util ();
 use Specio::Library::Builtins;
@@ -26,7 +26,7 @@ with 'Specio::Constraint::Role::CanType';
         return
               'Scalar::Util::blessed('
             . $val . ')'
-            . ' && List::MoreUtils::all { '
+            . ' && List::Util::all { '
             . $val
             . '->can($_) } ' . '( '
             . ( join ', ', map { B::perlstring($_) } @{ $self->methods() } )

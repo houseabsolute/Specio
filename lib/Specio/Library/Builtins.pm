@@ -6,7 +6,7 @@ use warnings;
 use parent 'Specio::Exporter';
 
 use Class::Load qw( is_class_loaded );
-use List::MoreUtils ();
+use List::Util 1.33 ();
 use overload        ();
 use re qw( is_regexp );
 use Scalar::Util ();
@@ -307,7 +307,7 @@ declare(
             . '( ref('
             . $val
             . ') eq "ARRAY" )'
-            . '&& List::MoreUtils::all {'
+            . '&& List::Util::all {'
             . $parameter->inline_check('$_') . ' } ' . '@{'
             . $val . '}' . ' )';
     },
@@ -345,7 +345,7 @@ declare(
             . '( ref('
             . $val
             . ') eq "HASH" )'
-            . '&& List::MoreUtils::all {'
+            . '&& List::Util::all {'
             . $parameter->inline_check('$_') . ' } '
             . 'values %{'
             . $val . '}' . ' )';
