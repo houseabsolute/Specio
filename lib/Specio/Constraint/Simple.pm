@@ -263,7 +263,7 @@ inlinable.
 
 =head1 ROLES
 
-This role does the L<Specio::Constraint::Role::Interface>,
-L<Specio::Role::Inlinable> and L<MooseX::Clone> roles.
+This role does the L<Specio::Constraint::Role::Interface> and
+L<Specio::Role::Inlinable> roles.
 
 =cut

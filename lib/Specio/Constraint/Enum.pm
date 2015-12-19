@@ -106,5 +106,5 @@ Returns an array reference of valid values for the type.
 
 =head1 ROLES
 
-This class does the L<Specio::Constraint::Role::Interface>,
-L<Specio::Role::Inlinable>, and L<MooseX::Clone> roles.
+This class does the L<Specio::Constraint::Role::Interface> and
+L<Specio::Role::Inlinable> roles.

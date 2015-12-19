@@ -274,7 +274,7 @@ helpers.
 
 =head1 USING SPECIO WITH L<Moose>
 
-This needs some changes in Moose core. Stay tuned.
+This should just work. Use a Specio type anywhere you'd specify a type.
 
 =head1 USING SPECIO WITH L<Moo>
 

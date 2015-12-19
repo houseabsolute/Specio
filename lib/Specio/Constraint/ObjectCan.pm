@@ -83,5 +83,4 @@ Returns an array reference containing the methods this constraint requires.
 =head1 ROLES
 
 This class does the L<Specio::Constraint::Role::CanType>,
-L<Specio::Constraint::Role::Interface>, L<Specio::Role::Inlinable>, and
-L<MooseX::Clone> roles.
+L<Specio::Constraint::Role::Interface>, and L<Specio::Role::Inlinable> roles.

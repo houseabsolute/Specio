@@ -80,5 +80,4 @@ Returns the class name passed to the constructor.
 =head1 ROLES
 
 This class does the L<Specio::Constraint::Role::IsaType>,
-L<Specio::Constraint::Role::Interface>, L<Specio::Role::Inlinable>, and
-L<MooseX::Clone> roles.
+L<Specio::Constraint::Role::Interface>, and L<Specio::Role::Inlinable> roles.
