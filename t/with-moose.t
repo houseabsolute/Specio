@@ -2,11 +2,12 @@
 use strict;
 use warnings;
 
+use Test::Requires {
+    Moose => '2.1207',
+};
+
 use Test::Fatal;
 use Test::More 0.88;
-
-plan skip_all =>
-    'These tests require a version of Moose that does not yet exist';
 
 {
     package Foo;
