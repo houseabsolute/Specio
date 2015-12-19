@@ -334,7 +334,7 @@ Here are some of the salient differences:
 
 Unlike Moose and MooseX::Types, type names are always local to the current
 package. There is no possibility of name collision between different modules,
-so you can safely use short types names.
+so you can safely use short type names.
 
 Unlike MooseX::Types, types are strings, so there is no possibility of
 colliding with existing class or subroutine names.
@@ -402,9 +402,7 @@ other distro.
 =head1 LONG-TERM PLANS
 
 Eventually I'd like to see this distro replace Moose's internal type system,
-which would also make MooseX::Types obsolete. This almost certainly means
-rewriting this distro to not use Moose itself (or any modules which use Moose,
-like Throwable).
+which would also make MooseX::Types obsolete.
 
 =head1 BUGS
 
