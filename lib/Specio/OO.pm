@@ -24,11 +24,14 @@ use Specio::TypeChecks qw(
 );
 use Storable qw( dclone );
 
+## no critic (Modules::ProhibitAutomaticExportation)
 our @EXPORT = qw(
     clone
     _ooify
 );
+## use critic
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _ooify {
     my $class = shift;
 
@@ -42,6 +45,7 @@ sub _ooify {
 
     _inline_constructor($class);
 }
+## use critic
 
 sub _inline_reader {
     my $class = shift;
@@ -57,6 +61,7 @@ sub _inline_reader {
     }
 
     {
+        ## no critic (TestingAndDebugging::ProhibitNoStrict)
         no strict 'refs';
         *{ $class . '::' . $name } = eval_closure(
             source      => $reader,
@@ -75,6 +80,7 @@ sub _inline_predicate {
     my $predicate = "sub { exists \$_[0]->{$name} }";
 
     {
+        ## no critic (TestingAndDebugging::ProhibitNoStrict)
         no strict 'refs';
         *{ $class . '::' . $attr->{predicate} } = eval_closure(
             source      => $predicate,
@@ -89,6 +95,7 @@ sub _inline_constructor {
     my @build_subs;
     for my $class ( @{ mro::get_linear_isa($class) } ) {
         {
+            ## no critic (TestingAndDebugging::ProhibitNoStrict)
             no strict 'refs';
             push @build_subs, $class . '::BUILD'
                 if defined &{ $class . '::BUILD' };
@@ -199,6 +206,7 @@ EOF
 EOF
 
     {
+        ## no critic (TestingAndDebugging::ProhibitNoStrict)
         no strict 'refs';
         *{ $class . '::new' } = eval_closure(
             source      => $constructor,
@@ -207,6 +215,7 @@ EOF
     }
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _constructor_confess {
     local $Carp::CarpLevel = $Carp::CarpLevel + 1;
     confess shift;
@@ -229,6 +238,7 @@ sub _bad_value_message {
         . ' You passed '
         . Devel::PartialDump->new()->dump($value);
 }
+## use critic
 
 sub clone {
     my $self = shift;

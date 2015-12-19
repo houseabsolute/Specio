@@ -37,7 +37,7 @@ sub install_t_sub {
 
         my %p = @_;
 
-        croak "Cannot parameterize a non-parameterizable type"
+        croak 'Cannot parameterize a non-parameterizable type'
             unless $found->can('parameterize');
 
         return $found->parameterize(
@@ -47,6 +47,7 @@ sub install_t_sub {
     };
 
     {
+        ## no critic (TestingAndDebugging::ProhibitNoStrict)
         no strict 'refs';
         no warnings 'redefine';
         *{ $caller . '::t' } = $t;
@@ -56,6 +57,7 @@ sub install_t_sub {
 }
 
 # XXX - this should be added to Params::Util
+## no critic (Subroutines::ProhibitSubroutinePrototypes, Subroutines::ProhibitExplicitReturnUndef)
 sub _STRINGLIKE ($) {
     return $_[0] if _STRING( $_[0] );
 
@@ -67,11 +69,13 @@ sub _STRINGLIKE ($) {
     return undef;
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _INSTANCEDOES ($$) {
     return $_[0]
         if blessed $_[0] && $_[0]->can('does') && $_[0]->does( $_[1] );
     return undef;
 }
+## use critic
 
 1;
 

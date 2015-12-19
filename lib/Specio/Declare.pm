@@ -15,6 +15,7 @@ use Specio::DeclaredAt;
 use Specio::Helpers qw( install_t_sub _INSTANCEDOES _STRINGLIKE );
 use Specio::Registry qw( internal_types_for_package register );
 
+## no critic (Modules::ProhibitAutomaticExportation)
 our @EXPORT = qw(
     anon
     any_can_type
@@ -27,6 +28,7 @@ our @EXPORT = qw(
     object_does_type
     object_isa_type
 );
+## use critic
 
 sub import {
     my $package = shift;

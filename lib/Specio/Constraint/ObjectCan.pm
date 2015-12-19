@@ -5,7 +5,7 @@ use warnings;
 
 our $VERSION = '0.12';
 
-use B               ();
+use B ();
 use List::Util 1.33 ();
 use Role::Tiny::With;
 use Scalar::Util ();

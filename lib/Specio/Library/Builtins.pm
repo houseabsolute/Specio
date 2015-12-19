@@ -7,7 +7,7 @@ use parent 'Specio::Exporter';
 
 use Class::Load qw( is_class_loaded );
 use List::Util 1.33 ();
-use overload        ();
+use overload ();
 use re qw( is_regexp );
 
 our $VERSION = '0.12';
