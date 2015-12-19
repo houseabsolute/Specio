@@ -7,7 +7,7 @@ requires "Devel::StackTrace" => "0";
 requires "Eval::Closure" => "0";
 requires "Exporter" => "0";
 requires "Lingua::EN::Inflect" => "0";
-requires "List::MoreUtils" => "0";
+requires "List::Util" => "1.33";
 requires "Module::Runtime" => "0";
 requires "Params::Util" => "0";
 requires "Role::Tiny" => "0";
@@ -64,8 +64,6 @@ on 'develop' => sub {
   requires "Test::Pod" => "1.41";
   requires "Test::Pod::Coverage" => "1.08";
   requires "Test::Pod::LinkCheck" => "0";
-  requires "Test::Pod::No404s" => "0";
   requires "Test::Spelling" => "0.12";
-  requires "Test::Synopsis" => "0";
   requires "Test::Version" => "1";
 };
