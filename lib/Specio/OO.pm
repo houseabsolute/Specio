@@ -10,7 +10,7 @@ use Exporter qw( import );
 use Scalar::Util qw( blessed weaken );
 use mro ();
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 use Specio::TypeChecks qw(
     does_role

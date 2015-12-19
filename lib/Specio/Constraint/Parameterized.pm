@@ -3,7 +3,7 @@ package Specio::Constraint::Parameterized;
 use strict;
 use warnings;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 use Role::Tiny::With;
 use Specio::OO;

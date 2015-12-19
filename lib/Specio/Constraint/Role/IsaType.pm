@@ -3,7 +3,7 @@ package Specio::Constraint::Role::IsaType;
 use strict;
 use warnings;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 use Storable qw( dclone );
 
