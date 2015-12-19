@@ -158,10 +158,10 @@ they make sense.
 
 For types where overloading makes sense, we explicitly check that the object
 provides the type overloading we expect. We I<do not> simply try to use the
-object as the type and question and hope it works. This means that these
-checks effectively ignore the C<fallback> setting for the overloaded
-object. In other words, an object that overloads stringification will not pass
-the C<Bool> type check unless it I<also> overloads boolification.
+object as the type in question and hope it works. This means that these checks
+effectively ignore the C<fallback> setting for the overloaded object. In other
+words, an object that overloads stringification will not pass the C<Bool> type
+check unless it I<also> overloads boolification.
 
 Most types do not check that the overloaded method actually returns something
 that matches the constraint. This may change in the future.
