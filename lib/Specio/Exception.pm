@@ -7,6 +7,8 @@ use overload
     q{""}    => 'as_string',
     fallback => 1;
 
+our $VERSION = '0.12';
+
 use Devel::StackTrace;
 use Scalar::Util qw( blessed );
 use Specio::OO;
@@ -29,6 +31,7 @@ use Specio::OO;
         },
     };
 
+    ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
     sub _attrs {
         return $attrs;
     }

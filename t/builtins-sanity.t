@@ -23,15 +23,23 @@ my $NUM_IN_STRING = 'has 42 in it';
 my $INT_WITH_NL1  = "1\n";
 my $INT_WITH_NL2  = "\n1";
 
-my $SCALAR_REF     = \( my $var );
+my $SCALAR_REF = do {
+    ## no critic (Variables::ProhibitUnusedVariables)
+    \( my $var );
+};
 my $SCALAR_REF_REF = \$SCALAR_REF;
 my $ARRAY_REF      = [];
 my $HASH_REF       = {};
 my $CODE_REF       = sub { };
 
-my $GLOB = do { no warnings 'once'; *GLOB_REF };
+my $GLOB = do {
+    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
+    no warnings 'once';
+    *GLOB_REF;
+};
 my $GLOB_REF = \$GLOB;
 
+## no critic (InputOutput::RequireBriefOpen)
 open my $FH, '<', $0 or die "Could not open $0 for the test";
 
 my $FH_OBJECT = IO::File->new( $0, 'r' )
@@ -45,6 +53,7 @@ my $OBJECT = bless {}, 'Foo';
 
 my $UNDEF = undef;
 
+## no critic (Modules::ProhibitMultiplePackages)
 {
     package Thing;
 
@@ -149,11 +158,15 @@ my $REGEX_OVERLOAD = RegexOverload->new(qr/foo/);
     }
 }
 
+## no critic (Variables::RequireInitializationForLocalVars)
 local *FOO;
 my $GLOB_OVERLOAD = GlobOverload->new( \*FOO );
 
 local *BAR;
-open BAR, '<', $0 or die "Could not open $0 for the test";
+{
+    ## no critic (InputOutput::ProhibitBarewordFileHandles)
+    open BAR, '<', $0 or die "Could not open $0 for the test";
+}
 my $GLOB_OVERLOAD_FH = GlobOverload->new( \*BAR );
 
 {

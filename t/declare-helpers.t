@@ -9,6 +9,7 @@ use Specio::Declare;
 
 my $dpd = Devel::PartialDump->new();
 
+## no critic (Modules::ProhibitMultiplePackages)
 {
 
     package Foo;
@@ -17,16 +18,17 @@ my $dpd = Devel::PartialDump->new();
         return bless {}, shift;
     }
 
-    sub foo { 42 }
+    sub foo {42}
 }
 
 {
 
     package Bar;
 
+    ## no critic (ClassHierarchies::ProhibitExplicitISA)
     our @ISA = 'Foo';
 
-    sub bar { 84 }
+    sub bar {84}
 }
 
 {
@@ -48,7 +50,9 @@ my $dpd = Devel::PartialDump->new();
         'Bar object is valid for named ObjectCan type'
     );
 
+    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
     eval { $tc->validate_or_die( Foo->new() ) };
+    ## use critic
     my $e = $@;
     like(
         $e->message(),
@@ -75,7 +79,9 @@ my $dpd = Devel::PartialDump->new();
     }
 
     for my $thing ( 'Foo', Foo->new() ) {
+        ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
         eval { $tc->validate_or_die($thing) };
+        ## use critic
         my $e = $@;
         like(
             $e->message(),
@@ -166,7 +172,9 @@ my $dpd = Devel::PartialDump->new();
         'Foo object is not valid for object isa type (requires NonExistent)'
     );
 
+    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
     eval { $tc->validate_or_die( Foo->new() ) };
+    ## use critic
     my $e = $@;
     like(
         $e->message(),
@@ -188,7 +196,9 @@ my $dpd = Devel::PartialDump->new();
             "$desc is not valid for any isa type (requires Quux)"
         );
 
+        ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
         eval { $tc->validate_or_die($thing) };
+        ## use critic
         my $e = $@;
         like(
             $e->message(),

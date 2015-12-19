@@ -7,6 +7,7 @@ use Test::More 0.88;
 use Class::Load qw( try_load_class );
 use Specio::Declare;
 
+## no critic (Modules::ProhibitMultiplePackages)
 {
     package Class::DoesNoRoles;
 
@@ -29,7 +30,7 @@ use Specio::Declare;
     with 'Role::MooseStyle';
 
     sub new {
-        bless {}, __PACKAGE__
+        bless {}, __PACKAGE__;
     }
 }
 
@@ -60,6 +61,7 @@ SKIP:
     skip 'These tests require Mouse', 8
         unless try_load_class('Mouse');
 
+    ## no critic (BuiltinFunctions::ProhibitStringyEval, ErrorHandling::RequireCheckingReturnValueOfEval)
     eval <<'EOF';
 {
     package Role::MouseStyle;
@@ -75,6 +77,8 @@ SKIP:
     with 'Role::MouseStyle';
 }
 EOF
+
+    die $@ if $@;
 
     my $any_does_moose = any_does_type(
         'AnyDoesMouse',
@@ -102,6 +106,7 @@ SKIP:
     skip 'These tests require Moo', 8
         unless try_load_class('Moo');
 
+    ## no critic (BuiltinFunctions::ProhibitStringyEval, ErrorHandling::RequireCheckingReturnValueOfEval)
     eval <<'EOF';
 {
     package Role::MooStyle;
@@ -117,6 +122,9 @@ SKIP:
     with 'Role::MooStyle';
 }
 EOF
+    ## use critic
+
+    die $@ if $@;
 
     my $any_does_moose = any_does_type(
         'AnyDoesMoo',

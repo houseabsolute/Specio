@@ -3,6 +3,8 @@ package Specio::Constraint::Role::Interface;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use Carp qw( confess );
 use Class::Method::Modifiers ();
 use Devel::PartialDump;
@@ -20,11 +22,13 @@ with 'Specio::Role::Inlinable';
 use overload(
     q{""}  => sub { $_[0] },
     '&{}'  => '_subify',
-    'bool' => sub { 1 },
+    'bool' => sub {1},
 );
 
 {
+    ## no critic (Subroutines::ProtectPrivateSubs)
     my $role_attrs = Specio::Role::Inlinable::_attrs();
+    ## use critic
 
     my $attrs = {
         %{$role_attrs},
@@ -80,12 +84,13 @@ use overload(
         },
     };
 
+    ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
     sub _attrs {
         return $attrs;
     }
 }
 
-my $NullConstraint = sub { 1 };
+my $NullConstraint = sub {1};
 
 sub BUILD { }
 
@@ -382,8 +387,8 @@ sub coercion_sub {
         for my $coercion ( $self->coercions() ) {
             $inline
                 .= '$_[0] = '
-                . $coercion->inline_coercion( '$_[0]' ) . ' if '
-                . $coercion->from()->inline_check(' $_[0]' ) . ';';
+                . $coercion->inline_coercion('$_[0]') . ' if '
+                . $coercion->from()->inline_check(' $_[0]') . ';';
 
             %env = ( %env, %{ $coercion->_inline_environment() } );
         }
@@ -431,7 +436,7 @@ sub _build_signature {
     # threads?
     return join "\n",
         ( $self->_has_parent() ? $self->parent()->_signature() : () ),
-        . ( $self->_constraint() // $self->_inline_generator() );
+        ( $self->_constraint() // $self->_inline_generator() );
 }
 
 # Moose compatibility methods - these exist as a temporary hack to make Specio
@@ -441,6 +446,7 @@ sub has_coercion {
     shift->has_coercions();
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _inline_check {
     shift->inline_check(@_);
 }
@@ -448,12 +454,14 @@ sub _inline_check {
 sub _compiled_type_constraint {
     shift->_optimized_constraint();
 }
+## use critic;
 
 # This class implements the methods that Moose expects from coercions as well.
 sub coercion {
     return shift;
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _compiled_type_coercion {
     my $self = shift;
 
@@ -461,6 +469,7 @@ sub _compiled_type_coercion {
         return $self->coerce_value(shift);
     };
 }
+## use critic
 
 sub inline_environment {
     shift->_inline_environment();

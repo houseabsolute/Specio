@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Exporter';
 
+our $VERSION = '0.12';
+
 use Carp qw( confess croak );
 
 our @EXPORT_OK

@@ -3,6 +3,8 @@ package Specio::Constraint::Parameterizable;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use Carp qw( confess );
 use Role::Tiny::With;
 use Specio::Constraint::Parameterized;
@@ -14,7 +16,9 @@ use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
 {
+    ## no critic (Subroutines::ProtectPrivateSubs)
     my $role_attrs = Specio::Constraint::Role::Interface::_attrs();
+    ## use critic
 
     my $attrs = {
         %{$role_attrs},
@@ -30,6 +34,7 @@ with 'Specio::Constraint::Role::Interface';
         },
     };
 
+    ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
     sub _attrs {
         return $attrs;
     }

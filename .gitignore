@@ -1,4 +1,5 @@
 .build/
+/.tidyall.d
 Build
 MYMETA.json
 MYMETA.yml

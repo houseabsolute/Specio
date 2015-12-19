@@ -3,6 +3,8 @@ package Specio::Constraint::Enum;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use B ();
 use Role::Tiny::With;
 use Specio::Library::Builtins;
@@ -13,7 +15,9 @@ use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
 {
+    ## no critic (Subroutines::ProtectPrivateSubs)
     my $attrs = dclone( Specio::Constraint::Role::Interface::_attrs() );
+    ## use critic
 
     for my $name (qw( parent _inline_generator )) {
         $attrs->{$name}{init_arg} = undef;
@@ -26,6 +30,7 @@ with 'Specio::Constraint::Role::Interface';
         required => 1,
     };
 
+    ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
     sub _attrs {
         return $attrs;
     }
@@ -33,7 +38,7 @@ with 'Specio::Constraint::Role::Interface';
 
 {
     my $Str = t('Str');
-    sub _build_parent { $Str }
+    sub _build_parent {$Str}
 }
 
 {
@@ -50,7 +55,7 @@ with 'Specio::Constraint::Role::Interface';
             . $val . '}';
     };
 
-    sub _build_inline_generator { $_inline_generator }
+    sub _build_inline_generator {$_inline_generator}
 }
 
 sub _build_inline_environment {

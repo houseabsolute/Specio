@@ -3,6 +3,8 @@ package Specio::Role::Inlinable;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use Eval::Closure qw( eval_closure );
 
 use Role::Tiny;
@@ -45,6 +47,7 @@ requires '_build_description';
         },
     };
 
+    ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
     sub _attrs {
         return $attrs;
     }

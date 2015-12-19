@@ -3,6 +3,8 @@ package Specio::TypeChecks;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use Exporter qw( import );
 use Module::Runtime qw( is_module_name );
 use Scalar::Util qw( blessed );

@@ -12,7 +12,7 @@ use Specio::Library::Builtins;
     my $t = Specio::Constraint::Simple->new(
         name               => 'Foo',
         parent             => t('Str'),
-        inline_generator   => sub { '1' },
+        inline_generator   => sub {'1'},
         inline_environment => { '$scalar' => 42 },
         declared_at        => Specio::DeclaredAt->new_from_caller(0),
     );
@@ -20,7 +20,7 @@ use Specio::Library::Builtins;
     my $from_int = Specio::Coercion->new(
         from               => t('Int'),
         to                 => $t,
-        inline_generator   => sub { '1' },
+        inline_generator   => sub {'1'},
         inline_environment => {
             '%hash' => { y => 84 },
         },
@@ -30,7 +30,7 @@ use Specio::Library::Builtins;
     my $from_num = Specio::Coercion->new(
         from               => t('Num'),
         to                 => $t,
-        inline_generator   => sub { '1' },
+        inline_generator   => sub {'1'},
         inline_environment => {
             '@array' => [ 1, 2, 3 ],
         },

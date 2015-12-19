@@ -3,6 +3,8 @@ package Specio::Constraint::ObjectCan;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use B               ();
 use List::Util 1.33 ();
 use Role::Tiny::With;
@@ -15,7 +17,7 @@ with 'Specio::Constraint::Role::CanType';
 
 {
     my $Object = t('Object');
-    sub _build_parent { $Object }
+    sub _build_parent {$Object}
 }
 
 {
@@ -33,7 +35,7 @@ with 'Specio::Constraint::Role::CanType';
             . ')';
     };
 
-    sub _build_inline_generator { $_inline_generator }
+    sub _build_inline_generator {$_inline_generator}
 }
 
 __PACKAGE__->_ooify();

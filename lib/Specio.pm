@@ -5,6 +5,8 @@ use warnings;
 
 use v5.10;
 
+our $VERSION = '0.12';
+
 1;
 
 # ABSTRACT: Type constraints and coercions for Perl

@@ -9,18 +9,21 @@ use Class::Load qw( is_class_loaded );
 use List::Util 1.33 ();
 use overload        ();
 use re qw( is_regexp );
+
+our $VERSION = '0.12';
+
 use Scalar::Util ();
 use Specio::Constraint::Parameterizable;
 use Specio::Declare;
 
 declare(
     'Any',
-    inline => sub { '1' }
+    inline => sub {'1'}
 );
 
 declare(
     'Item',
-    inline => sub { '1' }
+    inline => sub {'1'}
 );
 
 declare(
@@ -356,7 +359,7 @@ declare(
     'Maybe',
     type_class                     => 'Specio::Constraint::Parameterizable',
     parent                         => t('Item'),
-    inline                         => sub { '1' },
+    inline                         => sub {'1'},
     parameterized_inline_generator => sub {
         my $self      = shift;
         my $parameter = shift;

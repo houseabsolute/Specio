@@ -27,19 +27,19 @@ use Test::More 0.88;
     );
 
     has numbers => (
-        is  => 'ro',
+        is => 'ro',
         isa => t( 'ArrayRef', of => t('Int') ),
     );
 
     my $ucstr = declare(
         'UCStr',
         parent => t('Str'),
-        where  => sub { $_[0] =~ /^[A-Z]+$/ },
+        where => sub { $_[0] =~ /^[A-Z]+$/ },
     );
 
     coerce(
         $ucstr,
-        from  => t('Str'),
+        from => t('Str'),
         using => sub { return uc $_[0] },
     );
 
@@ -62,7 +62,7 @@ use Test::More 0.88;
 
     coerce(
         $ucstr2,
-        from  => t('Str'),
+        from => t('Str'),
         using => sub { return uc $_[0] },
     );
 
@@ -75,7 +75,7 @@ use Test::More 0.88;
     my $ucstr3 = declare(
         'Ucstr3',
         parent => t('Str'),
-        where  => sub { $_[0] =~ /^[A-Z]+$/ },
+        where => sub { $_[0] =~ /^[A-Z]+$/ },
     );
 
     coerce(

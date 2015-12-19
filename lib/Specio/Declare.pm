@@ -5,6 +5,8 @@ use warnings;
 
 use parent 'Exporter';
 
+our $VERSION = '0.12';
+
 use Carp qw( croak );
 use Params::Util qw( _CODELIKE );
 use Specio::Coercion;
@@ -231,7 +233,7 @@ sub _make_tc {
 
 sub coerce {
     my $to = shift;
-    my %p = @_;
+    my %p  = @_;
 
     $p{coercion}         = delete $p{using}  if exists $p{using};
     $p{inline_generator} = delete $p{inline} if exists $p{inline};

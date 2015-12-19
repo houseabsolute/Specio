@@ -6,6 +6,9 @@ use warnings;
 use Carp qw( croak );
 use Exporter 'import';
 use overload ();
+
+our $VERSION = '0.12';
+
 use Params::Util qw( _STRING );
 use Scalar::Util qw( blessed );
 use Specio::DeclaredAt;

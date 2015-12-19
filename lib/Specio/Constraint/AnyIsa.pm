@@ -3,6 +3,8 @@ package Specio::Constraint::AnyIsa;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use B ();
 use Role::Tiny::With;
 use Scalar::Util ();
@@ -14,7 +16,7 @@ with 'Specio::Constraint::Role::IsaType';
 
 {
     my $Defined = t('Defined');
-    sub _build_parent { $Defined }
+    sub _build_parent {$Defined}
 }
 
 {
@@ -32,7 +34,7 @@ with 'Specio::Constraint::Role::IsaType';
             . B::perlstring( $self->class ) . ')';
     };
 
-    sub _build_inline_generator { $_inline_generator }
+    sub _build_inline_generator {$_inline_generator}
 }
 
 __PACKAGE__->_ooify();

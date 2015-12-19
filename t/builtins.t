@@ -27,7 +27,9 @@ my $dpd = Devel::PartialDump->new();
         );
     }
 
+    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
     no warnings 'once';
+    ## use critic
     my $foo = 'foo';
     for my $value ( undef, \42, \$foo, [], {}, sub { }, *glob, \*globref ) {
         ok(

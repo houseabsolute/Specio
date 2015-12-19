@@ -3,6 +3,8 @@ package Specio::DeclaredAt;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use Specio::OO;
 
 {
@@ -29,6 +31,7 @@ use Specio::OO;
         },
     };
 
+    ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
     sub _attrs {
         return $attrs;
     }

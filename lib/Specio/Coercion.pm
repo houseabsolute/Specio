@@ -3,6 +3,8 @@ package Specio::Coercion;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use Specio::OO;
 
 use Role::Tiny::With;
@@ -11,9 +13,11 @@ use Specio::Role::Inlinable;
 with 'Specio::Role::Inlinable';
 
 {
+    ## no critic (Subroutines::ProtectPrivateSubs)
     my $role_attrs = Specio::Role::Inlinable::_attrs();
+    ## use critic
 
-    my $attrs      = {
+    my $attrs = {
         %{$role_attrs},
         from => {
             does     => 'Specio::Constraint::Role::Interface',
@@ -37,6 +41,7 @@ with 'Specio::Role::Inlinable';
         },
     };
 
+    ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
     sub _attrs {
         return $attrs;
     }

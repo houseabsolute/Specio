@@ -23,7 +23,7 @@ use Specio::Library::Builtins;
 
     coerce(
         $arrayref,
-        from  => t('Int'),
+        from => t('Int'),
         using => sub { [ $_[0] ] },
     );
 
@@ -95,6 +95,7 @@ use Specio::Library::Builtins;
         = $hashref->inline_coercion_and_check('$_[0]');
 
     my $coerce_and_check;
+    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
     eval {
         $coerce_and_check = eval_closure(
             source      => 'sub { ' . $source . ' }',
@@ -102,6 +103,7 @@ use Specio::Library::Builtins;
             description => 'inlined coerce and check sub',
         );
     };
+    ## use critic
 
     is(
         $@,

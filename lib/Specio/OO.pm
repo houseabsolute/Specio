@@ -9,6 +9,9 @@ use Eval::Closure qw( eval_closure );
 use Exporter qw( import );
 use Scalar::Util qw( blessed weaken );
 use mro ();
+
+our $VERSION = '0.12';
+
 use Specio::TypeChecks qw(
     does_role
     is_ArrayRef
@@ -141,11 +144,15 @@ EOF
         if ( $attr->{isa} ) {
             my $validator;
             if ( Specio::TypeChecks->can( 'is_' . $attr->{isa} ) ) {
-                $validator = 'Specio::TypeChecks::is_' . $attr->{isa} . "( \$p{$key_name} )";
+                $validator
+                    = 'Specio::TypeChecks::is_'
+                    . $attr->{isa}
+                    . "( \$p{$key_name} )";
             }
             else {
-                my $quoted_class = perlstring( $attr->{isa});
-                $validator = "Specio::TypeChecks::isa_class( \$p{$key_name}, $quoted_class )";
+                my $quoted_class = perlstring( $attr->{isa} );
+                $validator
+                    = "Specio::TypeChecks::isa_class( \$p{$key_name}, $quoted_class )";
             }
 
             $constructor .= <<"EOF";
@@ -161,7 +168,7 @@ EOF
         }
 
         if ( $attr->{does} ) {
-            my $quoted_role = perlstring($attr->{does});
+            my $quoted_role = perlstring( $attr->{does} );
             $constructor .= <<"EOF";
     if ( exists \$p{$key_name} && !Specio::TypeChecks::does_role( \$p{$key_name}, $quoted_role ) ) {
         Carp::confess(
@@ -178,7 +185,8 @@ EOF
             $constructor .= "    Scalar::Util::weaken( \$p{$key_name} );\n";
         }
 
-        $constructor .= "    \$self->{$name} = \$p{$key_name} if exists \$p{$key_name};\n";
+        $constructor
+            .= "    \$self->{$name} = \$p{$key_name} if exists \$p{$key_name};\n";
 
         $constructor .= "\n";
     }

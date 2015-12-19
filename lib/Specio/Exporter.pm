@@ -3,6 +3,8 @@ package Specio::Exporter;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use Specio::Helpers qw( install_t_sub );
 use Specio::Registry
     qw( exportable_types_for_package internal_types_for_package register );

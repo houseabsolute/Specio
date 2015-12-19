@@ -3,6 +3,8 @@ package Specio::Constraint::Role::DoesType;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use Role::Tiny;
 use Storable qw( dclone );
 
@@ -10,7 +12,9 @@ use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
 {
+    ## no critic (Subroutines::ProtectPrivateSubs)
     my $attrs = dclone( Specio::Constraint::Role::Interface::_attrs() );
+    ## use critic
 
     for my $name (qw( parent _inline_generator )) {
         $attrs->{$name}{init_arg} = undef;
@@ -23,11 +27,13 @@ with 'Specio::Constraint::Role::Interface';
         required => 1,
     };
 
+    ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
     sub _attrs {
         return $attrs;
     }
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _wrap_message_generator {
     my $self      = shift;
     my $generator = shift;
@@ -49,6 +55,7 @@ sub _wrap_message_generator {
 
     return sub { $generator->( $d, @_ ) };
 }
+## use critic
 
 1;
 
