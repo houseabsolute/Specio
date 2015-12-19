@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.12     2015-12-19
+
 - Fixed tests that failed if Moose wasn't installed. Reported by Karen
   Etheridge. RT #109247.
 
