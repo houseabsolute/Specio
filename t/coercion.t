@@ -23,7 +23,7 @@ use Specio::Library::Builtins;
 
     coerce(
         $arrayref,
-        from => t('Int'),
+        from  => t('Int'),
         using => sub { [ $_[0] ] },
     );
 

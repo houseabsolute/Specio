@@ -9,7 +9,7 @@ use Specio::Library::Builtins;
 {
     my $anon = anon(
         parent => t('Str'),
-        where => sub { length $_[0] },
+        where  => sub { length $_[0] },
     );
 
     isa_ok( $anon, 'Specio::Constraint::Simple', 'return value from anon()' );

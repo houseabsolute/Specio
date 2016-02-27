@@ -63,10 +63,10 @@ use Specio::Library::Builtins;
     );
 
     for my $pair (
-        [ $from_method, '->parameterize()' ],
-        [ $from_t,      't(...)' ],
+        [ $from_method,       '->parameterize()' ],
+        [ $from_t,            't(...)' ],
         [ t('ArrayRefOfInt'), 'named type' ],
-        [ $anon, 'anon type' ],
+        [ $anon,              'anon type' ],
         ) {
 
         my ( $arrayref_of_int, $desc ) = @{$pair};
