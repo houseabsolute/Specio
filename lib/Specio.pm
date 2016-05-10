@@ -75,8 +75,7 @@ Instead, you can explicitly check a value against a type, and optionally
 coerce values to that type.
 
 My long-term goal is to replace Moose's built-in types and L<MooseX::Types>
-with this module. I will also make sure that Specio types can be used with Moo
-in a sane fashion.
+with this module.
 
 =head1 WHAT IS A TYPE?
 
@@ -344,11 +343,6 @@ colliding with existing class or subroutine names.
 Types are always retrieved using the C<t()> subroutine. If you pass an unknown
 name to this subroutine it dies. This is different from Moose and
 MooseX::Types, which assume that unknown names are class names.
-
-=item * Exceptions are objects
-
-The C<< $type->validate_or_die() >> method throws a L<Specio::Exception> object
-on failure, not a string.
 
 =item * Anon types are explicit
 
