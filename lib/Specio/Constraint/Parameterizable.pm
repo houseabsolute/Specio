@@ -86,6 +86,10 @@ sub parameterize {
             = $self->_parameterized_constraint_generator()->($parameter);
     }
     else {
+        confess
+            'The "of" parameter passed to ->parameterize() must be an inlinable constraint if the parameterizable type has an inline_generator'
+            unless $parameter->can_be_inlined;
+
         my $ig = $self->_parameterized_inline_generator();
         $p{inline_generator} = sub { $ig->( shift, $parameter, @_ ) };
     }

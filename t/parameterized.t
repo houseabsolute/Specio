@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 
+use Test::Fatal;
 use Test::More 0.88;
 
 use Specio::Declare;
@@ -91,6 +92,23 @@ use Specio::Library::Builtins;
             "ArrayRef of Int [$desc] rejects hashref"
         );
     }
+}
+
+{
+    like(
+        exception {
+            declare(
+                'MyInt',
+                where => sub { $_[0] =~ /\A-?[0-9]+\z/ },
+            );
+            declare(
+                'ArrayRefOfMyInt',
+                parent => t( 'ArrayRef', of => t('MyInt') ),
+            );
+        },
+        qr/\QThe "of" parameter passed to ->parameterize() must be an inlinable constraint if the parameterizable type has an inline_generator/,
+        'A parameterizable type with an inline generator cannot be parameterized with a type that cannot be inlined',
+    );
 }
 
 done_testing();
