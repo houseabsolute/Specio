@@ -10,7 +10,7 @@ use List::Util 1.33 ();
 use overload ();
 use re qw( is_regexp );
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 use Scalar::Util ();
 use Specio::Constraint::Parameterizable;

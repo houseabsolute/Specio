@@ -3,7 +3,7 @@ package Specio::Constraint::Role::CanType;
 use strict;
 use warnings;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 use Lingua::EN::Inflect qw( PL_N WORDLIST );
 use Scalar::Util qw( blessed );
