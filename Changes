@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.13     2016-05-15
+
 - Parameterizing a type which generated inline parameterized constraints (like
   the ArrayRef and HashRef builtins) now dies if given a parameter which
   cannot itself be inlined. Mixing inlinable and non-inlinable constraints
