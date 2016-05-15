@@ -1,7 +1,7 @@
 {{$NEXT}}
 
-- When parameterizing a type which generated inline parameterized constraints
-  (like the ArrayRef and HashRef builtins) now dies if given a parameter which
+- Parameterizing a type which generated inline parameterized constraints (like
+  the ArrayRef and HashRef builtins) now dies if given a parameter which
   cannot itself be inlined. Mixing inlinable and non-inlinable constraints
   previously caused very confusing errors.
 
