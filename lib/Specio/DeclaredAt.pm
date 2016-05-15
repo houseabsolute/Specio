@@ -10,22 +10,18 @@ use Specio::OO;
 {
     my $attrs = {
         package => {
-            is       => 'bare',
             isa      => 'Str',
             required => 1,
         },
         filename => {
-            is       => 'bare',
             isa      => 'Str',
             required => 1,
         },
         line => {
-            is       => 'bare',
             isa      => 'Int',
             required => 1,
         },
         subroutine => {
-            is        => 'bare',
             isa       => 'Str',
             predicate => 'has_subroutine',
         },
