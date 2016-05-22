@@ -3,15 +3,14 @@ package Specio::Library::Builtins;
 use strict;
 use warnings;
 
-use parent 'Specio::Exporter';
-
-use Class::Load qw( is_class_loaded );
-use List::Util 1.33 ();
-use overload ();
-use re qw( is_regexp );
-
 our $VERSION = '0.14';
 
+use parent 'Specio::Exporter';
+
+use Class::Load ();
+use List::Util 1.33 ();
+use overload     ();
+use re           ();
 use Scalar::Util ();
 use Specio::Constraint::Parameterizable;
 use Specio::Declare;
@@ -46,21 +45,25 @@ declare(
     'Bool',
     parent => t('Item'),
     inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . ' overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "bool")' . ' : ('
-            . '!defined('
-            . $_[1] . ') ' . '|| '
-            . $_[1]
-            . ' eq "" ' . '|| ('
-            . $_[1]
-            . '."") eq "1" ' . '|| ('
-            . $_[1]
-            . '."") eq "0"' . ')';
+        return sprintf( <<'EOF', ( $_[1] ) x 8 );
+(
+    (
+        !ref( %s )
+        && (
+               !defined( %s )
+               || %s eq q{}
+               || %s eq '1'
+               || %s eq '0'
+           )
+    )
+    ||
+    (
+        Scalar::Util::blessed( %s )
+        && overload::Overloaded( %s )
+        && defined overload::Method( %s, 'bool' )
+    )
+)
+EOF
     }
 );
 
@@ -68,7 +71,7 @@ declare(
     'Value',
     parent => t('Defined'),
     inline => sub {
-        $_[0]->parent()->inline_check( $_[1] ) . ' && !ref(' . $_[1] . ')';
+        $_[0]->parent->inline_check( $_[1] ) . ' && !ref(' . $_[1] . ')';
     }
 );
 
@@ -84,21 +87,24 @@ declare(
     'Str',
     parent => t('Value'),
     inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ')'
-            . ' && overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', q{""})'
-            . ' ? 1 : '
-            . $_[0]->parent()->inline_check( $_[1] ) . ' && '
-            . '( ref(\\'
-            . $_[1]
-            . ') eq "SCALAR"'
-            . ' || ref(\\(my $val = '
-            . $_[1]
-            . ')) eq "SCALAR"' . ')';
+        return sprintf( <<'EOF', ( $_[1] ) x 7 );
+(
+    (
+        defined( %s )
+        && !ref( %s )
+        && (
+               ( ref( \%s ) eq 'SCALAR' )
+               || ( ref( \( my $val = %s ) ) eq 'SCALAR' )
+           )
+    )
+    ||
+    (
+        Scalar::Util::blessed( %s )
+        && overload::Overloaded( %s )
+        && defined overload::Method( %s, q{""} )
+    )
+)
+EOF
     }
 );
 
@@ -107,17 +113,23 @@ declare(
     'Num',
     parent => t('Str'),
     inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . ' overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "0+")' . ' : ( '
-            . $value_type->inline_check( $_[1] )
-            . ' && ( my $val = '
-            . $_[1]
-            . ' ) =~ /\\A-?[0-9]+(?:\\.[0-9]+)?\\z/ )';
+        return sprintf( <<'EOF', ( $_[1] ) x 6 );
+(
+    (
+        defined( %s )
+        && !ref( %s )
+        && (
+               ( my $val = %s ) =~ /\A-?[0-9]+(?:\.[0-9]+)?\z/
+           )
+    )
+    ||
+    (
+        Scalar::Util::blessed( %s )
+        && overload::Overloaded( %s )
+        && defined overload::Method( %s, '0+' )
+    )
+)
+EOF
     }
 );
 
@@ -125,21 +137,24 @@ declare(
     'Int',
     parent => t('Num'),
     inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . ' overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "0+") && '
-            . ' ( ( my $val1 = '
-            . $_[1]
-            . ' + 0 ) =~ /\A-?[0-9]+\z/ )'
-            . ' : ( ( '
-            . $value_type->inline_check( $_[1] )
-            . ') && ( my $val2 = '
-            . $_[1]
-            . ' ) =~ /\A-?[0-9]+\z/ )';
+        return sprintf( <<'EOF', ( $_[1] ) x 7 )
+(
+    (
+        defined( %s )
+        && !ref( %s )
+        && (
+               ( my $val1 = %s ) =~ /\A-?[0-9]+\z/
+           )
+    )
+    ||
+    (
+        Scalar::Util::blessed( %s )
+        && overload::Overloaded( %s )
+        && defined overload::Method( %s, '0+' )
+        && ( my $val2 = %s + 0 ) =~ /\A-?[0-9]+\z/
+    )
+)
+EOF
     }
 );
 
@@ -147,32 +162,35 @@ declare(
     'CodeRef',
     parent => t('Ref'),
     inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . ' overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "&{}") '
-            . ' : ref('
-            . $_[1]
-            . ') eq "CODE"';
-    },
+        return sprintf( <<'EOF', ( $_[1] ) x 4 );
+(
+    ref( %s ) eq 'CODE'
+    ||
+    (
+        Scalar::Util::blessed( %s )
+        && overload::Overloaded( %s )
+        && defined overload::Method( %s, '&{}' )
+    )
+)
+EOF
+    }
 );
 
 declare(
     'RegexpRef',
     parent => t('Ref'),
     inline => sub {
-        '( Scalar::Util::blessed('
-            . $_[1] . ') && '
-            . ' overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "qr") ) || '
-            . 're::is_regexp('
-            . $_[1] . ')';
+        return sprintf( <<'EOF', ( $_[1] ) x 4 );
+(
+    re::is_regexp( %s )
+    ||
+    (
+        Scalar::Util::blessed( %s )
+        && overload::Overloaded( %s )
+        && defined overload::Method( %s, 'qr' )
+    )
+)
+EOF
     },
 );
 
@@ -180,17 +198,18 @@ declare(
     'GlobRef',
     parent => t('Ref'),
     inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . 'overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "*{}") '
-            . ' : ( ref('
-            . $_[1]
-            . ') eq "GLOB" )';
-    },
+        return sprintf( <<'EOF', ( $_[1] ) x 4 );
+(
+    ref( %s ) eq 'GLOB'
+    ||
+    (
+        Scalar::Util::blessed( %s )
+        && overload::Overloaded( %s )
+        && defined overload::Method( %s, '*{}' )
+    )
+)
+EOF
+    }
 );
 
 # NOTE: scalar filehandles are GLOB refs, but a GLOB ref is not always a
@@ -199,23 +218,29 @@ declare(
     'FileHandle',
     parent => t('Ref'),
     inline => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . $_[1]
-            . '->isa("IO::Handle") || '
-            . '( overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "*{}") '
-            . '&& Scalar::Util::openhandle( *{'
-            . $_[1] . '} ) )'
-            . ' : ref('
-            . $_[1]
-            . ') eq "GLOB" '
-            . '&& Scalar::Util::openhandle('
-            . $_[1] . ')';
-    },
+        return sprintf( <<'EOF', ( $_[1] ) x 7 );
+(
+    (
+        ref( %s ) eq 'GLOB'
+        && Scalar::Util::openhandle( %s )
+    )
+    ||
+    (
+        Scalar::Util::blessed( %s )
+        &&
+        (
+            %s->isa('IO::Handle')
+            ||
+            (
+                overload::Overloaded( %s )
+                && defined overload::Method( %s, '*{}' )
+                && Scalar::Util::openhandle( *{ %s } )
+            )
+        )
+    )
+)
+EOF
+    }
 );
 
 declare(
@@ -228,132 +253,121 @@ declare(
     'ClassName',
     parent => t('Str'),
     inline => sub {
-        '('
-            . $_[0]->parent()->inline_check( $_[1] ) . ')'
-            . ' && ( defined( '
-            . $_[1]
-            . ') && Class::Load::is_class_loaded("'
-            . $_[1] . '") )';
+        return sprintf( <<'EOF', $_[0]->parent->inline_check( $_[1] ), $_[1] )
+(
+    ( %s )
+    && Class::Load::is_class_loaded( "%s" )
+)
+EOF
     },
 );
 
-declare(
-    'ScalarRef',
-    type_class => 'Specio::Constraint::Parameterizable',
-    parent     => t('Ref'),
-    inline     => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . 'overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "\\${}") '
-            . ' : ref( '
-            . $_[1]
-            . q{ ) eq 'SCALAR' || ref( }
-            . $_[1]
-            . q{ ) eq 'REF' };
-    },
-    parameterized_inline_generator => sub {
-        my $self      = shift;
-        my $parameter = shift;
-        my $val       = shift;
+{
+    my $base_scalarref_check = sub {
+        return sprintf( <<'EOF', ( $_[0] ) x 5 );
+(
+    (
+        ref( %s ) eq 'SCALAR'
+        || ref( %s ) eq 'REF'
+    )
+    ||
+    (
+        Scalar::Util::blessed( %s )
+        && overload::Overloaded( %s )
+        && defined overload::Method( %s, '${}' )
+    )
+)
+EOF
+    };
 
-        return
-              'Scalar::Util::blessed('
-            . $val . ') ? '
-            . 'overload::Overloaded('
-            . $val
-            . ') && defined overload::Method('
-            . $val
-            . ', "\\${}") ' . ' && '
-            . $parameter->inline_check( '${ ( ' . $val . ' ) }' )
-            . ' : ( ref( '
-            . $val
-            . q{ ) eq 'SCALAR' || ref( }
-            . $val
-            . q{ ) eq 'REF' ) } . ' && '
-            . $parameter->inline_check( '${ ( ' . $val . ' ) }' );
-    },
-);
+    declare(
+        'ScalarRef',
+        type_class => 'Specio::Constraint::Parameterizable',
+        parent     => t('Ref'),
+        inline     => sub { $base_scalarref_check->( $_[1] ) },
+        parameterized_inline_generator => sub {
+            my $self      = shift;
+            my $parameter = shift;
+            my $val       = shift;
 
-declare(
-    'ArrayRef',
-    type_class => 'Specio::Constraint::Parameterizable',
-    parent     => t('Ref'),
-    inline     => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . 'overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "\\@{}") '
-            . ' : ref('
-            . $_[1]
-            . q{) eq 'ARRAY'};
-    },
-    parameterized_inline_generator => sub {
-        my $self      = shift;
-        my $parameter = shift;
-        my $val       = shift;
+            return sprintf(
+                '( ( %s ) && ( %s ) )',
+                $base_scalarref_check->($val),
+                $parameter->inline_check( '${' . $val . '}' ),
+            );
+        }
+    );
+}
 
-        return
-              '( ( Scalar::Util::blessed('
-            . $val . ') && '
-            . 'overload::Overloaded('
-            . $val
-            . ') && defined overload::Method('
-            . $val
-            . ', "\\@{}") ) || '
-            . '( ref('
-            . $val
-            . ') eq "ARRAY" )'
-            . '&& List::Util::all {'
-            . $parameter->inline_check('$_') . ' } ' . '@{'
-            . $val . '}' . ' )';
-    },
-);
+{
+    my $base_arrayref_check = sub {
+        return sprintf( <<'EOF', ( $_[0] ) x 4 );
+(
+    ref( %s ) eq 'ARRAY'
+    ||
+    (
+        Scalar::Util::blessed( %s )
+        && overload::Overloaded( %s )
+        && defined overload::Method( %s, '@{}' )
+    )
+)
+EOF
+    };
 
-declare(
-    'HashRef',
-    type_class => 'Specio::Constraint::Parameterizable',
-    parent     => t('Ref'),
-    inline     => sub {
-        'Scalar::Util::blessed('
-            . $_[1] . ') ? '
-            . 'overload::Overloaded('
-            . $_[1]
-            . ') && defined overload::Method('
-            . $_[1]
-            . ', "%{}") '
-            . ' : ref('
-            . $_[1]
-            . q{) eq 'HASH'};
-    },
-    parameterized_inline_generator => sub {
-        my $self      = shift;
-        my $parameter = shift;
-        my $val       = shift;
+    declare(
+        'ArrayRef',
+        type_class => 'Specio::Constraint::Parameterizable',
+        parent     => t('Ref'),
+        inline     => sub { $base_arrayref_check->( $_[1] ) },
+        parameterized_inline_generator => sub {
+            my $self      = shift;
+            my $parameter = shift;
+            my $val       = shift;
 
-        return
-              '( ( Scalar::Util::blessed('
-            . $val . ') && '
-            . 'overload::Overloaded('
-            . $val
-            . ') && defined overload::Method('
-            . $val
-            . ', "%{}") ) || '
-            . '( ref('
-            . $val
-            . ') eq "HASH" )'
-            . '&& List::Util::all {'
-            . $parameter->inline_check('$_') . ' } '
-            . 'values %{'
-            . $val . '}' . ' )';
-    },
-);
+            return sprintf(
+                '( ( %s ) && ( List::Util::all { %s } @{ %s } ) )',
+                $base_arrayref_check->($val),
+                $parameter->inline_check('$_'),
+                $val,
+            );
+        }
+    );
+}
+
+{
+    my $base_hashref_check = sub {
+        return sprintf( <<'EOF', ( $_[0] ) x 4 );
+(
+    ref( %s ) eq 'HASH'
+    ||
+    (
+        Scalar::Util::blessed( %s )
+        && overload::Overloaded( %s )
+        && defined overload::Method( %s, '%%{}' )
+    )
+)
+EOF
+    };
+
+    declare(
+        'HashRef',
+        type_class => 'Specio::Constraint::Parameterizable',
+        parent     => t('Ref'),
+        inline     => sub { $base_hashref_check->( $_[1] ) },
+        parameterized_inline_generator => sub {
+            my $self      = shift;
+            my $parameter = shift;
+            my $val       = shift;
+
+            return sprintf(
+                '( ( %s ) && ( List::Util::all { %s } values %%{ %s } ) )',
+                $base_hashref_check->($val),
+                $parameter->inline_check('$_'),
+                $val,
+            );
+        }
+    );
+}
 
 declare(
     'Maybe',
@@ -365,10 +379,9 @@ declare(
         my $parameter = shift;
         my $val       = shift;
 
-        return
-              '!defined('
-            . $val . ') ' . '|| ('
-            . $parameter->inline_check($val) . ')';
+        return sprintf( <<'EOF', $val, $parameter->inline_check($val) )
+( !defined( %s ) || ( %s ) )
+EOF
     },
 );
 

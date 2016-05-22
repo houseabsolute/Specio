@@ -24,14 +24,15 @@ with 'Specio::Constraint::Role::DoesType';
         my $self = shift;
         my $val  = shift;
 
-        return
-              'Scalar::Util::blessed('
-            . $val . ')' . ' && '
-            . $val
-            . q{->can('does')} . '&&'
-            . $val
-            . '->does('
-            . B::perlstring( $self->role ) . ')';
+        return sprintf( <<'EOF', ($val) x 3, B::perlstring( $self->role ) );
+(
+    Scalar::Util::blessed( %s )
+    &&
+    %s->can('does')
+    &&
+    %s->does(%s)
+)
+EOF
     };
 
     sub _build_inline_generator {$_inline_generator}

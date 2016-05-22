@@ -7,6 +7,7 @@ our $VERSION = '0.14';
 
 use B ();
 use Role::Tiny::With;
+use Scalar::Util qw( refaddr );
 use Specio::Library::Builtins;
 use Specio::OO;
 use Storable qw( dclone );
@@ -46,13 +47,9 @@ with 'Specio::Constraint::Role::Interface';
         my $self = shift;
         my $val  = shift;
 
-        return
-              'defined('
-            . $val . ') '
-            . '&& !ref('
-            . $val . ') '
-            . '&& $_Specio_Constraint_Enum_enum_values{'
-            . $val . '}';
+        return sprintf( <<'EOF', $val, $self->_env_var_name, $val );
+( !ref( %s ) && $%s{ %s } )
+EOF
     };
 
     sub _build_inline_generator {$_inline_generator}
@@ -63,7 +60,13 @@ sub _build_inline_environment {
 
     my %values = map { $_ => 1 } @{ $self->values() };
 
-    return { '%_Specio_Constraint_Enum_enum_values' => \%values };
+    return { '%' . $self->_env_var_name => \%values };
+}
+
+sub _env_var_name {
+    my $self = shift;
+
+    return '_Specio_Constraint_Enum_' . refaddr($self);
 }
 
 __PACKAGE__->_ooify();

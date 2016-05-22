@@ -5,6 +5,7 @@ use Test::Fatal;
 use Test::More 0.88;
 
 use Eval::Closure qw( eval_closure );
+use Specio::Declare;
 use Specio::Library::Builtins;
 
 {
@@ -57,7 +58,60 @@ use Specio::Library::Builtins;
         qr/Validation failed for type named Int/,
         'got exception passing arrayref for Int value'
     );
+}
 
+{
+    my $enum1 = enum( Enum1 => values => [qw( foo bar baz )] );
+    my $enum2 = enum( Enum2 => values => [qw( a b c )] );
+
+    my ( $enum1_source, $enum1_env )
+        = $enum1->inline_coercion_and_check('$value1');
+    my ( $enum2_source, $enum2_env )
+        = $enum2->inline_coercion_and_check('$value2');
+
+    my $sub
+        = 'sub { '
+        . 'my $value1 = shift;'
+        . 'my $value2 = shift;'
+        . 'my $enum1_val = '
+        . $enum1_source . ';'
+        . 'my $enum2_val = '
+        . $enum2_source . ';'
+        . 'return ($enum1_val, $enum2_val)' . ' }';
+
+    my $coerce_and_check;
+    is(
+        exception {
+            $coerce_and_check = eval_closure(
+                source      => $sub,
+                environment => {
+                    %{$enum1_env},
+                    %{$enum2_env},
+                },
+                description => 'inlined coerce and check sub for two enums',
+            );
+        },
+        undef,
+        'no exception evaling a closure for inlining two enums in one sub',
+    );
+
+    is_deeply(
+        [ $coerce_and_check->( 'foo', 'a' ) ],
+        [ 'foo', 'a' ],
+        'both types pass check and are returned'
+    );
+
+    like(
+        exception { $coerce_and_check->( [], 'c' ) },
+        qr/Validation failed for type named Enum1/,
+        'got exception passing arrayref for Enum1 value'
+    );
+
+    like(
+        exception { $coerce_and_check->( 'bar', [] ) },
+        qr/Validation failed for type named Enum2/,
+        'got exception passing arrayref for Enum2 value'
+    );
 }
 
 done_testing();

@@ -6,6 +6,12 @@
 - Parameterized constraint objects now have a default name based on the parent
   type and contained type.
 
+- Rewrote the code used for inlined types so that the generated inline code is
+  optimized to check the most common cases first.
+
+- Fixed a bug where two enum types could not be inlined together in the same
+  sub.
+
 
 0.13     2016-05-15
 

@@ -24,12 +24,9 @@ with 'Specio::Constraint::Role::IsaType';
         my $self = shift;
         my $val  = shift;
 
-        return
-              'Scalar::Util::blessed('
-            . $val . ')' . ' && '
-            . $val
-            . '->isa('
-            . B::perlstring( $self->class ) . ')';
+        return sprintf( <<'EOF', $val, $val, B::perlstring( $self->class ) );
+( Scalar::Util::blessed( %s ) && %s->isa(%s) )
+EOF
     };
 
     sub _build_inline_generator {$_inline_generator}
