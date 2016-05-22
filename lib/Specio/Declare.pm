@@ -5,7 +5,7 @@ use warnings;
 
 use parent 'Exporter';
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 use Carp qw( croak );
 use Params::Util qw( _CODELIKE );
