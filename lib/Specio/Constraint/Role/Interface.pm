@@ -190,14 +190,6 @@ sub has_real_constraint {
         || $self->_has_inline_generator();
 }
 
-sub inline_check {
-    my $self = shift;
-
-    die 'Cannot inline' unless $self->_has_inline_generator();
-
-    return $self->_inline_generator()->( $self, @_ );
-}
-
 sub _build_optimized_constraint {
     my $self = shift;
 
@@ -283,50 +275,74 @@ sub can_inline_coercion_and_check {
     return all { $_->can_be_inlined() } $self, $self->coercions();
 }
 
+sub inline_coercion_and_check {
+    my $self = shift;
+
+    die 'Cannot inline coercion and check'
+        unless $self->can_inline_coercion_and_check();
+
+    my %env;
+
+    my $arg_name = $_[0];
+    my $source   = 'do {';
+    if ( $self->has_coercions ) {
+        $source .= 'my $value = ' . $arg_name . ';';
+        $arg_name = '$value';
+        for my $coercion ( $self->coercions() ) {
+            $source
+                .= '$value = '
+                . $coercion->inline_coercion($arg_name) . ' if '
+                . $coercion->from()->inline_check($arg_name) . ';';
+
+            %env = ( %env, %{ $coercion->_inline_environment() } );
+        }
+    }
+
+    my ( $assert, $assert_env ) = $self->inline_assert($arg_name);
+    $source .= $assert;
+    %env = ( %env, %{$assert_env} );
+
+    $source .= $arg_name . '};';
+
+    return ( $source, \%env );
+}
+
 {
     my $counter = 1;
 
-    sub inline_coercion_and_check {
+    sub inline_assert {
         my $self = shift;
-
-        die 'Cannot inline coercion and check'
-            unless $self->can_inline_coercion_and_check();
 
         my $type_var_name = '$_Specio_Constraint_Interface_type' . $counter;
         my $message_generator_var_name
             = '$_Specio_Constraint_Interface_message_generator' . $counter;
-
         my %env = (
             $type_var_name              => \$self,
             $message_generator_var_name => \( $self->_message_generator() ),
             %{ $self->_inline_environment() },
         );
 
-        my $source = 'do {' . 'my $value = ' . $_[0] . ';';
-        for my $coercion ( $self->coercions() ) {
-            $source
-                .= '$value = '
-                . $coercion->inline_coercion( $_[0] ) . ' if '
-                . $coercion->from()->inline_check( $_[0] ) . ';';
-
-            %env = ( %env, %{ $coercion->_inline_environment() } );
-        }
-
-        $source .= $self->inline_check('$value');
+        my $source = $self->inline_check( $_[0] );
         $source .= ' or ';
         $source .= $self->_inline_throw_exception(
-            '$value',
+            $_[0],
             $message_generator_var_name,
             $type_var_name
         );
         $source .= ';';
 
-        $source .= '$value };';
-
         $counter++;
 
         return ( $source, \%env );
     }
+}
+
+sub inline_check {
+    my $self = shift;
+
+    die 'Cannot inline' unless $self->_has_inline_generator();
+
+    return $self->_inline_generator()->( $self, @_ );
 }
 
 sub _subify {

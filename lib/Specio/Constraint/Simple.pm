@@ -200,11 +200,6 @@ This returns true if the type was created with a C<constraint> or
 C<inline_generator> parameter. This is used internally to skip type checks for
 types that don't actually implement a constraint.
 
-=head2 $type->inline_check($var)
-
-Given a variable name, this returns a string of code that implements the
-constraint. If the type is not inlinable, this method throws an error.
-
 =head2 $type->id()
 
 This is a unique id for the type as a string. This is useful if you need to
@@ -246,6 +241,21 @@ C<eval_closure> subroutine.
 
 The returned code is a single C<do { }> block without a terminating
 semicolon.
+
+=head2 $type->inline_assert($var)
+
+Given a variable name, this generates code that implements the constraint and
+throws an exception if the variable does not pass the constraint.
+
+The return value is a two-element list. The first element is the code. The
+second is a hash reference containing variables which need to be in scope for
+the code to work. This is intended to be passed to L<Eval::Closure>'s
+C<eval_closure> subroutine.
+
+=head2 $type->inline_check($var)
+
+Given a variable name, this returns a string of code that implements the
+constraint. If the type is not inlinable, this method throws an error.
 
 =head2 $type->coercion_sub()
 

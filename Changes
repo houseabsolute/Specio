@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Added an inline_assert method for constraint objects. This makes certain
+  types of inlining tasks easier.
+
+
 0.13     2016-05-15
 
 - Parameterizing a type which generated inline parameterized constraints (like
