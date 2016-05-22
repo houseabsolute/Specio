@@ -1154,7 +1154,232 @@ my %tests = (
 );
 
 for my $name ( sort keys %tests ) {
-    test_constraint( $name, $tests{$name} );
+    test_constraint( $name, $tests{$name}, \&describe );
+}
+
+my %ptype_tests = (
+    Maybe => {
+        accept => [
+            $ZERO,
+            $ONE,
+            $INT,
+            $NEG_INT,
+            $NUM,
+            $NEG_NUM,
+            $EMPTY_STRING,
+            $STRING,
+            $NUM_IN_STRING,
+            $INT_WITH_NL1,
+            $INT_WITH_NL2,
+            $GLOB,
+            $UNDEF,
+        ],
+        reject => [
+            $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
+            $SCALAR_REF,
+            $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
+            $ARRAY_REF,
+            $ARRAY_OVERLOAD,
+            $HASH_REF,
+            $HASH_OVERLOAD,
+            $CODE_REF,
+            $CODE_OVERLOAD,
+            $GLOB_REF,
+            $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
+            $FH,
+            $FH_OBJECT,
+            $REGEX,
+            $REGEX_OBJ,
+            $REGEX_OVERLOAD,
+            $FAKE_REGEX,
+            $OBJECT,
+        ],
+    },
+    ScalarRef => {
+        accept => [
+            \$ZERO,
+            \$ONE,
+            \$INT,
+            \$NEG_INT,
+            \$NUM,
+            \$NEG_NUM,
+            \$EMPTY_STRING,
+            \$STRING,
+            \$NUM_IN_STRING,
+            \$INT_WITH_NL1,
+            \$INT_WITH_NL2,
+        ],
+        reject => [
+            \$BOOL_OVERLOAD_TRUE,
+            \$BOOL_OVERLOAD_FALSE,
+            \$STR_OVERLOAD_EMPTY,
+            \$STR_OVERLOAD_FULL,
+            \$NUM_OVERLOAD_ZERO,
+            \$NUM_OVERLOAD_ONE,
+            \$NUM_OVERLOAD_NEG,
+            \$NUM_OVERLOAD_NEG_DECIMAL,
+            \$NUM_OVERLOAD_DECIMAL,
+            \$SCALAR_REF,
+            \$SCALAR_REF_REF,
+            \$SCALAR_OVERLOAD,
+            \$ARRAY_REF,
+            \$ARRAY_OVERLOAD,
+            \$HASH_REF,
+            \$HASH_OVERLOAD,
+            \$CODE_REF,
+            \$CODE_OVERLOAD,
+            \$GLOB,
+            \$GLOB_REF,
+            \$GLOB_OVERLOAD,
+            \$GLOB_OVERLOAD_FH,
+            \$FH,
+            \$FH_OBJECT,
+            \$REGEX,
+            \$REGEX_OBJ,
+            \$REGEX_OVERLOAD,
+            \$FAKE_REGEX,
+            \$OBJECT,
+            \$UNDEF,
+        ],
+    },
+    ArrayRef => {
+        accept => [
+            [],
+            (
+                map { [$_] } $ZERO,
+                $ONE,
+                $INT,
+                $NEG_INT,
+                $NUM,
+                $NEG_NUM,
+                $EMPTY_STRING,
+                $STRING,
+                $NUM_IN_STRING,
+                $INT_WITH_NL1,
+                $INT_WITH_NL2,
+                $GLOB,
+            ),
+        ],
+        reject => [
+            map { [$_] } $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
+            $SCALAR_REF,
+            $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
+            $ARRAY_REF,
+            $ARRAY_OVERLOAD,
+            $HASH_REF,
+            $HASH_OVERLOAD,
+            $CODE_REF,
+            $CODE_OVERLOAD,
+            $GLOB_REF,
+            $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
+            $FH,
+            $FH_OBJECT,
+            $REGEX,
+            $REGEX_OBJ,
+            $REGEX_OVERLOAD,
+            $FAKE_REGEX,
+            $OBJECT,
+            $UNDEF,
+        ],
+    },
+    HashRef => {
+        accept => [
+            {},
+            (
+                map { { foo => $_ } } $ZERO,
+                $ONE,
+                $INT,
+                $NEG_INT,
+                $NUM,
+                $NEG_NUM,
+                $EMPTY_STRING,
+                $STRING,
+                $NUM_IN_STRING,
+                $INT_WITH_NL1,
+                $INT_WITH_NL2,
+                $GLOB,
+            )
+        ],
+        reject => [
+            map { { foo => $_ } } $BOOL_OVERLOAD_TRUE,
+            $BOOL_OVERLOAD_FALSE,
+            $STR_OVERLOAD_EMPTY,
+            $STR_OVERLOAD_FULL,
+            $NUM_OVERLOAD_ZERO,
+            $NUM_OVERLOAD_ONE,
+            $NUM_OVERLOAD_NEG,
+            $NUM_OVERLOAD_NEG_DECIMAL,
+            $NUM_OVERLOAD_DECIMAL,
+            $SCALAR_REF,
+            $SCALAR_REF_REF,
+            $SCALAR_OVERLOAD,
+            $ARRAY_REF,
+            $ARRAY_OVERLOAD,
+            $HASH_REF,
+            $HASH_OVERLOAD,
+            $CODE_REF,
+            $CODE_OVERLOAD,
+            $GLOB_REF,
+            $GLOB_OVERLOAD,
+            $GLOB_OVERLOAD_FH,
+            $FH,
+            $FH_OBJECT,
+            $REGEX,
+            $REGEX_OBJ,
+            $REGEX_OVERLOAD,
+            $FAKE_REGEX,
+            $OBJECT,
+            $UNDEF,
+        ],
+    },
+);
+
+# We want to test all parameterized types using a type parameter that actually
+# checks the value (so not Any or Item).
+for my $pair (
+    [ 'Maybe'   => \&describe ],
+    [ ScalarRef => sub { 'scalar ref to ' . describe( ${ $_[0] } ) } ],
+    [ ArrayRef  => sub { 'array ref to ' . describe( $_[0]->[0] ) } ],
+    [ HashRef   => sub { 'hash ref to ' . describe( $_[0]->{foo} ) } ],
+    ) {
+    my ( $ptype, $describe ) = @{$pair};
+    my $constraint = t( $ptype, of => t('Value') );
+
+    test_constraint(
+        $constraint,
+        $ptype_tests{$ptype},
+        $describe,
+    );
+
+    next unless $tests{$ptype}{reject};
+
+    # A parameterized type should reject all of the things that the
+    # unparameterized version rejects.
+    test_constraint(
+        $constraint,
+        { reject => $tests{$ptype}{reject} },
+        \&describe,
+    );
 }
 
 my %substr_test_str = (
@@ -1221,67 +1446,64 @@ $FH_OBJECT->close
 done_testing();
 
 sub test_constraint {
-    my $type  = shift;
-    my $tests = shift;
+    my $type      = shift;
+    my $tests     = shift;
+    my $describer = shift;
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     $type = t($type) unless blessed $type;
 
-    my $name = $type->name();
+    subtest(
+        $type->name,
+        sub {
 
-    my $not_inlined = $type->_constraint_with_parents();
+            my $not_inlined = $type->_constraint_with_parents();
 
-    my $inlined;
-    if ( $type->can_be_inlined() ) {
-        $inlined = $type->_generated_inline_sub();
-    }
+            my $inlined;
+            if ( $type->can_be_inlined() ) {
+                $inlined = $type->_generated_inline_sub();
+            }
 
-    for my $accept ( @{ $tests->{accept} || [] } ) {
-        my $described = describe($accept);
-        ok(
-            $type->value_is_valid($accept),
-            "$name accepts $described using ->value_is_valid"
-        );
-        is(
-            exception { $type->($accept) },
-            undef,
-            "$name accepts $described using subref overloading"
-        );
-        ok(
-            $not_inlined->($accept),
-            "$name accepts $described using non-inlined constraint"
-        );
-        if ($inlined) {
-            ok(
-                $inlined->($accept),
-                "$name accepts $described using inlined constraint"
-            );
+            for my $accept ( @{ $tests->{accept} || [] } ) {
+                my $described = $describer->($accept);
+
+                ok(
+                    $type->value_is_valid($accept),
+                    "accepts $described using ->value_is_valid"
+                );
+                is(
+                    exception { $type->($accept) },
+                    undef,
+                    "accepts $described using subref overloading"
+                );
+                ok(
+                    $not_inlined->($accept),
+                    "accepts $described using non-inlined constraint"
+                );
+                if ($inlined) {
+                    ok(
+                        $inlined->($accept),
+                        "accepts $described using inlined constraint"
+                    );
+                }
+            }
+
+            for my $reject ( @{ $tests->{reject} || [] } ) {
+                my $described = $describer->($reject);
+                ok(
+                    !$type->value_is_valid($reject),
+                    "rejects $described using ->value_is_valid"
+                );
+                if ($inlined) {
+                    ok(
+                        !$inlined->($reject),
+                        "rejects $described using inlined constraint"
+                    );
+                }
+            }
         }
-    }
-
-    for my $reject ( @{ $tests->{reject} || [] } ) {
-        my $described = describe($reject);
-        ok(
-            !$type->value_is_valid($reject),
-            "$name rejects $described using ->value_is_valid"
-        );
-        if ($inlined) {
-            ok(
-                !$inlined->($reject),
-                "$name rejects $described using inlined constraint"
-            );
-        }
-    }
-
-    if ( $type->isa('Specio::Constraint::Parameterizable') ) {
-        my $parameterized = Specio::Constraint::Simple->new(
-            name        => $type->name() . 'OfItem',
-            parent      => $type->parameterize( of => t('Item') ),
-            declared_at => Specio::DeclaredAt->new_from_caller(0),
-        );
-        test_constraint( $parameterized, $tests );
-    }
+    );
 }
 
 sub describe {
