@@ -1164,7 +1164,7 @@ my %substr_test_str = (
 # We need to test that the Str constraint (and types that derive from it)
 # accept the return val of substr() - which means passing that return val
 # directly to the checking code
-foreach my $type_name (qw( Str Num Int ClassName )) {
+for my $type_name (qw( Str Num Int ClassName )) {
     my $str = $substr_test_str{$type_name} || '123456789';
 
     my $type = t($type_name);
