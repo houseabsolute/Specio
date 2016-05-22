@@ -20,6 +20,10 @@ with 'Specio::Constraint::Role::Interface';
     $attrs->{parent}{isa}      = 'Specio::Constraint::Parameterizable';
     $attrs->{parent}{required} = 1;
 
+    delete $attrs->{name}{predicate};
+    $attrs->{name}{lazy}    = 1;
+    $attrs->{name}{builder} = '_build_name';
+
     $attrs->{parameter} = {
         does     => 'Specio::Constraint::Role::Interface',
         required => 1,
@@ -29,6 +33,19 @@ with 'Specio::Constraint::Role::Interface';
     sub _attrs {
         return $attrs;
     }
+}
+
+sub _has_name {
+    my $self = shift;
+    return defined $self->name;
+}
+
+sub _build_name {
+    my $self = shift;
+
+    ## no critic (Subroutines::ProtectPrivateSubs)
+    return unless $self->parent->_has_name && $self->parameter->_has_name;
+    return $self->parent->name . '[' . $self->parameter->name . ']';
 }
 
 sub can_be_inlined {
