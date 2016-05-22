@@ -48,6 +48,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "Code::TidyAll::Plugin::Test::Vars" => "0.02";
   requires "File::Spec" => "0";
   requires "IO::Handle" => "0";
   requires "IPC::Open3" => "0";
@@ -68,6 +69,7 @@ on 'develop' => sub {
   requires "Test::Pod::Coverage" => "1.08";
   requires "Test::Pod::LinkCheck" => "0";
   requires "Test::Spelling" => "0.12";
+  requires "Test::Vars" => "0.009";
   requires "Test::Version" => "1";
   requires "blib" => "1.01";
 };
