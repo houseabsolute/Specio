@@ -44,8 +44,8 @@ sub _wrap_message_generator {
     my @methods = @{ $self->methods() };
 
     $generator //= sub {
-        my $description = shift;
-        my $value       = shift;
+        shift;
+        my $value = shift;
 
         my $class = blessed $value;
         $class ||= $value;
