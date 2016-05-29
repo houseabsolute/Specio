@@ -6,6 +6,7 @@ use warnings;
 use IO::File;
 use Scalar::Util qw( blessed looks_like_number openhandle );
 use Specio::Library::Builtins;
+use Specio::Library::String;
 use Test::Fatal;
 use Test::More 0.96;
 
@@ -280,9 +281,8 @@ sub describe {
     if ( !ref $val ) {
         return q{''} if $val eq q{};
 
-        $val =~ s/\n/\\n/g;
-
-        return looks_like_number($val) ? $val : B::perlstring($val);
+        return looks_like_number($val)
+            && $val !~ /\n/ ? $val : B::perlstring($val);
     }
 
     return 'open filehandle'
