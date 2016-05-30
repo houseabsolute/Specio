@@ -9,8 +9,6 @@ use Test::Types;
 use B ();
 use Specio::Library::Builtins;
 
-use Devel::Dwarn;
-
 # The glob vars only work when they're use in the same package as where
 # they're declared. Globs are weird.
 my $GLOB = do {
