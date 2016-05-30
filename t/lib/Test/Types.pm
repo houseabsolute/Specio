@@ -7,6 +7,7 @@ use B ();
 use IO::File;
 use Scalar::Util qw( blessed looks_like_number openhandle );
 use Specio::Library::Builtins;
+use Specio::Library::Numeric;
 use Specio::Library::Perl;
 use Specio::Library::String;
 use Test::Fatal;
