@@ -22,11 +22,8 @@ use Specio::Library::Builtins;
         'exception contains expected error'
     );
 
-    try {
+    $e = exception {
         $str->validate_or_die( [] );
-    }
-    catch {
-        $e = $_;
     };
 
     like(
