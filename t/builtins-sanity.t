@@ -411,6 +411,26 @@ my %tests = (
             $NUM_OVERLOAD_NEG,
             $NUM_OVERLOAD_NEG_DECIMAL,
             $NUM_OVERLOAD_DECIMAL,
+            qw(
+                1e10
+                1e-10
+                1.23456e10
+                1.23456e-10
+                1e10
+                1e-10
+                1.23456e10
+                1.23456e-10
+                -1e10
+                -1e-10
+                -1.23456e10
+                -1.23456e-10
+                -1e10
+                -1e-10
+                -1.23456e10
+                -1.23456e-10
+                -1e+10
+                1E10
+                ),
         ],
         reject => [
             $BOOL_OVERLOAD_TRUE,
@@ -454,6 +474,13 @@ my %tests = (
             $NUM_OVERLOAD_ZERO,
             $NUM_OVERLOAD_ONE,
             $NUM_OVERLOAD_NEG,
+            qw(
+                1e20
+                1e100
+                -1e10
+                -1e+10
+                1E20
+                ),
         ],
         reject => [
             $BOOL_OVERLOAD_TRUE,
@@ -490,6 +517,15 @@ my %tests = (
             $FAKE_REGEX,
             $OBJECT,
             $UNDEF,
+            qw(
+                1e-10
+                -1e-10
+                1.23456e10
+                1.23456e-10
+                -1.23456e10
+                -1.23456e-10
+                -1.23456e+10
+                ),
         ],
     },
     Str => {
