@@ -79,7 +79,11 @@ sub _STRING ($) {
 
 # Borrowed from Types::Standard
 sub is_class_loaded {
-    my $stash = do { no strict 'refs'; \%{ $_[0] . '::' } };
+    my $stash = do {
+        ## no critic (TestingAndDebugging::ProhibitNoStrict)
+        no strict 'refs';
+        \%{ $_[0] . '::' };
+    };
 
     return 1 if exists $stash->{ISA};
     return 1 if exists $stash->{VERSION};
