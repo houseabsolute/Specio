@@ -69,9 +69,9 @@ sub _word_list {
     return $items[0] if @items == 1;
     return join ' and ', @items if @items == 2;
 
-    my $last = pop @items;
+    my $final = pop @items;
     my $list = join ', ', @items;
-    $list .= ', and ' . $last;
+    $list .= ', and ' . $final;
 
     return $list;
 }
