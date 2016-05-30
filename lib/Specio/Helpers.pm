@@ -9,11 +9,10 @@ use overload ();
 
 our $VERSION = '0.15';
 
-use Params::Util qw( _STRING );
 use Scalar::Util qw( blessed );
 use Specio::DeclaredAt;
 
-our @EXPORT_OK = qw( install_t_sub _INSTANCEDOES _STRINGLIKE );
+our @EXPORT_OK = qw( install_t_sub _STRINGLIKE );
 
 sub install_t_sub {
     my $caller = shift;
@@ -56,7 +55,6 @@ sub install_t_sub {
     return;
 }
 
-# XXX - this should be added to Params::Util
 ## no critic (Subroutines::ProhibitSubroutinePrototypes, Subroutines::ProhibitExplicitReturnUndef)
 sub _STRINGLIKE ($) {
     return $_[0] if _STRING( $_[0] );
@@ -69,13 +67,10 @@ sub _STRINGLIKE ($) {
     return undef;
 }
 
-## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
-sub _INSTANCEDOES ($$) {
-    return $_[0]
-        if blessed $_[0] && $_[0]->can('does') && $_[0]->does( $_[1] );
-    return undef;
+# Borrowed from Params::Util
+sub _STRING ($) {
+    return defined $_[0] && !ref $_[0] && length( $_[0] ) ? $_[0] : undef;
 }
-## use critic
 
 1;
 

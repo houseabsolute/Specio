@@ -8,11 +8,10 @@ use parent 'Exporter';
 our $VERSION = '0.15';
 
 use Carp qw( croak );
-use Params::Util qw( _CODELIKE );
 use Specio::Coercion;
 use Specio::Constraint::Simple;
 use Specio::DeclaredAt;
-use Specio::Helpers qw( install_t_sub _INSTANCEDOES _STRINGLIKE );
+use Specio::Helpers qw( install_t_sub _STRINGLIKE );
 use Specio::Registry qw( internal_types_for_package register );
 
 ## no critic (Modules::ProhibitAutomaticExportation)
