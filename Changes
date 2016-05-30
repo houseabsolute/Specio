@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Remove use of Class::Load.
+
+
 0.15     2016-05-30
 
 - The Num and Int type now accepts numbers in scientific notation such as 1e10

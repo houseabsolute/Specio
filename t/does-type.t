@@ -4,7 +4,6 @@ use warnings;
 use Test::Fatal;
 use Test::More 0.88;
 
-use Class::Load qw( try_load_class );
 use Specio::Declare;
 
 ## no critic (Modules::ProhibitMultiplePackages)
@@ -59,7 +58,7 @@ use Specio::Declare;
 SKIP:
 {
     skip 'These tests require Mouse', 8
-        unless try_load_class('Mouse');
+        unless eval { require Mouse; 1 };
 
     ## no critic (BuiltinFunctions::ProhibitStringyEval, ErrorHandling::RequireCheckingReturnValueOfEval)
     eval <<'EOF';
@@ -104,7 +103,7 @@ EOF
 SKIP:
 {
     skip 'These tests require Moo', 8
-        unless try_load_class('Moo');
+        unless eval { require Moo; 1 };
 
     ## no critic (BuiltinFunctions::ProhibitStringyEval, ErrorHandling::RequireCheckingReturnValueOfEval)
     eval <<'EOF';

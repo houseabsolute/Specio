@@ -10,11 +10,16 @@ use overload ();
 our $VERSION = '0.16';
 
 use Scalar::Util qw( blessed );
-use Specio::DeclaredAt;
 
-our @EXPORT_OK = qw( install_t_sub _STRINGLIKE );
+our @EXPORT_OK = qw( install_t_sub is_class_loaded _STRINGLIKE );
 
 sub install_t_sub {
+
+    # Specio::DeclaredAt use Specio::OO, which in turn uses
+    # Specio::Helpers. If we load this with "use" we get a cirular require and
+    # a big mess.
+    require Specio::DeclaredAt;
+
     my $caller = shift;
     my $types  = shift;
 
@@ -70,6 +75,20 @@ sub _STRINGLIKE ($) {
 # Borrowed from Params::Util
 sub _STRING ($) {
     return defined $_[0] && !ref $_[0] && length( $_[0] ) ? $_[0] : undef;
+}
+
+# Borrowed from Types::Standard
+sub is_class_loaded {
+    my $stash = do { no strict 'refs'; \%{ $_[0] . '::' } };
+
+    return 1 if exists $stash->{ISA};
+    return 1 if exists $stash->{VERSION};
+
+    foreach my $globref ( values %{$stash} ) {
+        return 1 if *{$globref}{CODE};
+    }
+
+    return 0;
 }
 
 1;
