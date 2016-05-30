@@ -65,3 +65,25 @@ EOF
 );
 
 1;
+
+# ABSTRACT: Implements type constraint objects some common string types
+
+__END__
+
+=head1 DESCRIPTION
+
+This library provides some additional string types for common cases.
+
+=head2 NonEmptyStr
+
+A string which has at least one character.
+
+=head2 SimpleStr
+
+A string that is 255 characters or less with no vertical whitespace
+characters.
+
+=head2 NonEmptySimpleStr
+
+A non-empty string that is 255 characters or less with no vertical whitespace
+characters.
