@@ -12,7 +12,6 @@ use List::Util 1.33 qw( all any );
 use Specio::Exception;
 use Specio::TypeChecks qw( is_CodeRef );
 use Sub::Quote qw( quote_sub );
-use Try::Tiny;
 
 use Role::Tiny;
 
