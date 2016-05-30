@@ -3,6 +3,7 @@ package Test::Types;
 use strict;
 use warnings;
 
+use B ();
 use IO::File;
 use Scalar::Util qw( blessed looks_like_number openhandle );
 use Specio::Library::Builtins;

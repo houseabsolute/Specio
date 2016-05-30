@@ -6,7 +6,6 @@ use lib 't/lib';
 use Test::More 0.96;
 use Test::Types;
 
-use B ();
 use Specio::Library::String;
 
 # The glob vars only work when they're use in the same package as where
