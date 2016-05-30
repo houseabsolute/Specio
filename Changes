@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.16     2016-05-30
+
 - Remove use of Class::Load.
 
 
