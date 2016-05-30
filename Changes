@@ -5,6 +5,9 @@
 
 - Removed various prereqs that weren't really needed.
 
+- Added two new libraries, Specio::Library::String and ::Numeric. These
+  provide additional commonly used string and numeric types.
+
 
 0.14     2016-05-22
 
