@@ -90,13 +90,13 @@ around BUILD => sub {
     my $self = shift;
     my $p    = shift;
 
-    unless ( $self->_has_constraint() || $self->_has_inline_generator() ) {
+    unless ( $self->_has_constraint || $self->_has_inline_generator ) {
         $self->_set_constraint($NullConstraint);
     }
 
     die
         'A type constraint should have either a constraint or inline_generator parameter, not both'
-        if $self->_has_constraint() && $self->_has_inline_generator();
+        if $self->_has_constraint && $self->_has_inline_generator;
 
     $self->{_message_generator}
         = $self->_wrap_message_generator( $p->{message_generator} );
@@ -106,8 +106,8 @@ around BUILD => sub {
 
 sub _set_constraint {
     is_CodeRef( $_[1] )
-        or confess '_set_constraint() must be given a coderef, not a '
-        . Devel::PartialDump->new()->dump( $_[1] );
+        or confess '_set_constraint must be given a coderef, not a '
+        . Devel::PartialDump->new->dump( $_[1] );
     $_[0]->{_constraint} = $_[1];
 }
 
@@ -120,10 +120,10 @@ sub _wrap_message_generator {
         my $value       = shift;
 
         return "Validation failed for $description with value "
-            . Devel::PartialDump->new()->dump($value);
+            . Devel::PartialDump->new->dump($value);
     };
 
-    my $d = $self->_description();
+    my $d = $self->_description;
 
     return sub { $generator->( $d, @_ ) };
 }
@@ -141,7 +141,7 @@ sub validate_or_die {
     return if $self->value_is_valid($value);
 
     Specio::Exception->throw(
-        message => $self->_message_generator()->($value),
+        message => $self->_message_generator->($value),
         type    => $self,
         value   => $value,
     );
@@ -151,52 +151,51 @@ sub value_is_valid {
     my $self  = shift;
     my $value = shift;
 
-    return $self->_optimized_constraint()->($value);
+    return $self->_optimized_constraint->($value);
 }
 
 sub _ancestors_and_self {
     my $self = shift;
 
-    return ( ( reverse @{ $self->_ancestors() } ), $self );
+    return ( ( reverse @{ $self->_ancestors } ), $self );
 }
 
 sub is_a_type_of {
     my $self = shift;
     my $type = shift;
 
-    return any { $_->_signature() eq $type->_signature() }
-    $self->_ancestors_and_self();
+    return any { $_->_signature eq $type->_signature }
+    $self->_ancestors_and_self;
 }
 
 sub is_same_type_as {
     my $self = shift;
     my $type = shift;
 
-    return $self->_signature() eq $type->_signature();
+    return $self->_signature eq $type->_signature;
 }
 
 sub is_anon {
     my $self = shift;
 
-    return !$self->_has_name();
+    return !$self->_has_name;
 }
 
 sub has_real_constraint {
     my $self = shift;
 
-    return (   $self->_has_constraint
-            && $self->_constraint() ne $NullConstraint )
-        || $self->_has_inline_generator();
+    return ( $self->_has_constraint && $self->_constraint ne $NullConstraint )
+        || $self->_has_inline_generator;
 }
 
 sub _build_optimized_constraint {
     my $self = shift;
 
-    if ( $self->can_be_inlined() ) {
-        return $self->_generated_inline_sub();
+    if ( $self->can_be_inlined ) {
+        return $self->_generated_inline_sub;
     }
     else {
-        return $self->_constraint_with_parents();
+        return $self->_constraint_with_parents;
     }
 }
 
@@ -204,17 +203,17 @@ sub _constraint_with_parents {
     my $self = shift;
 
     my @constraints;
-    for my $type ( $self->_ancestors_and_self() ) {
-        next unless $type->has_real_constraint();
+    for my $type ( $self->_ancestors_and_self ) {
+        next unless $type->has_real_constraint;
 
         # If a type can be inlined, we can use that and discard all of the
         # ancestors we've seen so far, since we can assume that the inlined
         # constraint does all of the ancestor checks in addition to its own.
-        if ( $type->can_be_inlined() ) {
-            @constraints = $type->_generated_inline_sub();
+        if ( $type->can_be_inlined ) {
+            @constraints = $type->_generated_inline_sub;
         }
         else {
-            push @constraints, $type->_constraint();
+            push @constraints, $type->_constraint;
         }
     }
 
@@ -231,14 +230,14 @@ sub _constraint_with_parents {
 sub id {
     my $self = shift;
 
-    return $self->_description();
+    return $self->_description;
 }
 
 sub add_coercion {
     my $self     = shift;
     my $coercion = shift;
 
-    my $from_id = $coercion->from()->id();
+    my $from_id = $coercion->from->id;
 
     confess "Cannot add two coercions fom the same type: $from_id"
         if $self->_has_coercion_from_type($from_id);
@@ -252,15 +251,15 @@ sub has_coercion_from_type {
     my $self = shift;
     my $type = shift;
 
-    return $self->_has_coercion_from_type( $type->id() );
+    return $self->_has_coercion_from_type( $type->id );
 }
 
 sub coerce_value {
     my $self  = shift;
     my $value = shift;
 
-    for my $coercion ( $self->coercions() ) {
-        next unless $coercion->from()->value_is_valid($value);
+    for my $coercion ( $self->coercions ) {
+        next unless $coercion->from->value_is_valid($value);
 
         return $coercion->coerce($value);
     }
@@ -271,14 +270,14 @@ sub coerce_value {
 sub can_inline_coercion_and_check {
     my $self = shift;
 
-    return all { $_->can_be_inlined() } $self, $self->coercions();
+    return all { $_->can_be_inlined } $self, $self->coercions;
 }
 
 sub inline_coercion_and_check {
     my $self = shift;
 
     die 'Cannot inline coercion and check'
-        unless $self->can_inline_coercion_and_check();
+        unless $self->can_inline_coercion_and_check;
 
     my %env;
 
@@ -287,13 +286,13 @@ sub inline_coercion_and_check {
     if ( $self->has_coercions ) {
         $source .= 'my $value = ' . $arg_name . ';';
         $arg_name = '$value';
-        for my $coercion ( $self->coercions() ) {
+        for my $coercion ( $self->coercions ) {
             $source
                 .= '$value = '
                 . $coercion->inline_coercion($arg_name) . ' if '
-                . $coercion->from()->inline_check($arg_name) . ';';
+                . $coercion->from->inline_check($arg_name) . ';';
 
-            %env = ( %env, %{ $coercion->_inline_environment() } );
+            %env = ( %env, %{ $coercion->_inline_environment } );
         }
     }
 
@@ -317,8 +316,8 @@ sub inline_coercion_and_check {
             = '$_Specio_Constraint_Interface_message_generator' . $counter;
         my %env = (
             $type_var_name              => \$self,
-            $message_generator_var_name => \( $self->_message_generator() ),
-            %{ $self->_inline_environment() },
+            $message_generator_var_name => \( $self->_message_generator ),
+            %{ $self->_inline_environment },
         );
 
         my $source = $self->inline_check( $_[0] );
@@ -339,20 +338,20 @@ sub inline_coercion_and_check {
 sub inline_check {
     my $self = shift;
 
-    die 'Cannot inline' unless $self->_has_inline_generator();
+    die 'Cannot inline' unless $self->_has_inline_generator;
 
-    return $self->_inline_generator()->( $self, @_ );
+    return $self->_inline_generator->( $self, @_ );
 }
 
 sub _subify {
     my $self = shift;
 
-    if ( $self->can_be_inlined() ) {
+    if ( $self->can_be_inlined ) {
         my $inline = $self->inline_check('$_[0]');
         $inline .= ' or ';
 
         my %env = (
-            '$message_generator' => \( $self->_message_generator() ),
+            '$message_generator' => \( $self->_message_generator ),
             '$type'              => \$self,
         );
 
@@ -387,17 +386,17 @@ sub _inline_throw_exception {
 sub coercion_sub {
     my $self = shift;
 
-    if ( all { $_->can_be_inlined() } $self->coercions() ) {
+    if ( all { $_->can_be_inlined } $self->coercions ) {
         my $inline = q{};
         my %env;
 
-        for my $coercion ( $self->coercions() ) {
+        for my $coercion ( $self->coercions ) {
             $inline
                 .= '$_[0] = '
                 . $coercion->inline_coercion('$_[0]') . ' if '
-                . $coercion->from()->inline_check(' $_[0]') . ';';
+                . $coercion->from->inline_check(' $_[0]') . ';';
 
-            %env = ( %env, %{ $coercion->_inline_environment() } );
+            %env = ( %env, %{ $coercion->_inline_environment } );
         }
 
         return quote_sub( $inline, \%env );
@@ -413,7 +412,7 @@ sub _build_ancestors {
     my @parents;
 
     my $type = $self;
-    while ( $type = $type->parent() ) {
+    while ( $type = $type->parent ) {
         push @parents, $type;
     }
 
@@ -425,9 +424,9 @@ sub _build_description {
     my $self = shift;
 
     my $desc
-        = $self->is_anon() ? 'anonymous type' : 'type named ' . $self->name();
+        = $self->is_anon ? 'anonymous type' : 'type named ' . $self->name;
 
-    $desc .= q{ } . $self->declared_at()->description();
+    $desc .= q{ } . $self->declared_at->description;
 
     return $desc;
 }
@@ -442,15 +441,15 @@ sub _build_signature {
     # address and stringifies to the same value. XXX - will this break under
     # threads?
     return join "\n",
-        ( $self->_has_parent() ? $self->parent()->_signature() : () ),
-        ( $self->_constraint() // $self->_inline_generator() );
+        ( $self->_has_parent ? $self->parent->_signature : () ),
+        ( $self->_constraint // $self->_inline_generator );
 }
 
 # Moose compatibility methods - these exist as a temporary hack to make Specio
 # work with Moose.
 
 sub has_coercion {
-    shift->has_coercions();
+    shift->has_coercions;
 }
 
 ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
@@ -459,7 +458,7 @@ sub _inline_check {
 }
 
 sub _compiled_type_constraint {
-    shift->_optimized_constraint();
+    shift->_optimized_constraint;
 }
 ## use critic;
 
@@ -479,7 +478,7 @@ sub _compiled_type_coercion {
 ## use critic
 
 sub inline_environment {
-    shift->_inline_environment();
+    shift->_inline_environment;
 }
 
 sub has_message {
@@ -487,14 +486,14 @@ sub has_message {
 }
 
 sub message {
-    shift->_message_generator();
+    shift->_message_generator;
 }
 
 sub get_message {
     my $self  = shift;
     my $value = shift;
 
-    return $self->_message_generator()->( $self, $value );
+    return $self->_message_generator->( $self, $value );
 }
 
 sub check {

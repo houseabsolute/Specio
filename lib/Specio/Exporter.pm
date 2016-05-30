@@ -18,7 +18,7 @@ sub import {
     my $exported = exportable_types_for_package($package);
 
     while ( my ( $name, $type ) = each %{$exported} ) {
-        register( $caller, $name, $type->clone(), $reexport );
+        register( $caller, $name, $type->clone, $reexport );
     }
 
     install_t_sub(
@@ -56,7 +56,7 @@ types defined in a package are never visible outside of the package. When you
 inherit from this package, all the types you define internally become
 available via exports.
 
-The exported types are available through the importing package's C<t()>
+The exported types are available through the importing package's C<t>
 subroutine.
 
 By default, types your package imports are not re-exported:

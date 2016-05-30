@@ -7,7 +7,7 @@ use Test::More 0.88;
 use Devel::PartialDump;
 use Specio::Declare;
 
-my $dpd = Devel::PartialDump->new();
+my $dpd = Devel::PartialDump->new;
 
 ## no critic (Modules::ProhibitMultiplePackages)
 {
@@ -44,18 +44,18 @@ my $dpd = Devel::PartialDump->new();
         methods => [qw( foo bar )],
     );
 
-    is( $tc->name(), 'Need2O', 'constraint has the expected name' );
+    is( $tc->name, 'Need2O', 'constraint has the expected name' );
     ok(
-        $tc->value_is_valid( Bar->new() ),
+        $tc->value_is_valid( Bar->new ),
         'Bar object is valid for named ObjectCan type'
     );
 
     ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
-    eval { $tc->validate_or_die( Foo->new() ) };
+    eval { $tc->validate_or_die( Foo->new ) };
     ## use critic
     my $e = $@;
     like(
-        $e->message(),
+        $e->message,
         qr/\QFoo is missing the 'bar' method/,
         'got expected error message for failure with ObjectCan type'
     );
@@ -67,9 +67,9 @@ my $dpd = Devel::PartialDump->new();
         methods => [qw( foo bar )],
     );
 
-    is( $tc->name(), 'Need2A', 'constraint has the expected name' );
+    is( $tc->name, 'Need2A', 'constraint has the expected name' );
 
-    for my $thing ( 'Bar', Bar->new() ) {
+    for my $thing ( 'Bar', Bar->new ) {
         my $desc = ref $thing ? 'Bar class name' : 'Bar object';
 
         ok(
@@ -78,13 +78,13 @@ my $dpd = Devel::PartialDump->new();
         );
     }
 
-    for my $thing ( 'Foo', Foo->new() ) {
+    for my $thing ( 'Foo', Foo->new ) {
         ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
         eval { $tc->validate_or_die($thing) };
         ## use critic
         my $e = $@;
         like(
-            $e->message(),
+            $e->message,
             qr/\QFoo is missing the 'bar' method/,
             'got expected error message for failure with AnyCan type'
         );
@@ -98,7 +98,7 @@ my $dpd = Devel::PartialDump->new();
     );
 
     ok(
-        !$tc->value_is_valid( Bar->new() ),
+        !$tc->value_is_valid( Bar->new ),
         'Bar object is not valid for named ObjectCan type'
     );
 }
@@ -109,7 +109,7 @@ my $dpd = Devel::PartialDump->new();
     );
 
     ok(
-        $tc->value_is_valid( Bar->new() ),
+        $tc->value_is_valid( Bar->new ),
         'Bar object is valid for anon ObjectCan type'
     );
 }
@@ -120,7 +120,7 @@ my $dpd = Devel::PartialDump->new();
     );
 
     ok(
-        !$tc->value_is_valid( Bar->new() ),
+        !$tc->value_is_valid( Bar->new ),
         'Bar object is not valid for anon ObjectCan type'
     );
 }
@@ -128,15 +128,15 @@ my $dpd = Devel::PartialDump->new();
 {
     my $tc = object_isa_type('Foo');
 
-    is( $tc->name(), 'Foo', 'name defaults to class name' );
+    is( $tc->name, 'Foo', 'name defaults to class name' );
 
     ok(
-        $tc->value_is_valid( Foo->new() ),
+        $tc->value_is_valid( Foo->new ),
         'Foo object is valid for object isa type (requires Foo)'
     );
 
     ok(
-        $tc->value_is_valid( Bar->new() ),
+        $tc->value_is_valid( Bar->new ),
         'Bar object is valid for object isa type (requires Foo)'
     );
 }
@@ -147,17 +147,17 @@ my $dpd = Devel::PartialDump->new();
         class => 'Foo',
     );
 
-    is( $tc->name(), 'FooAny', 'can provide an explicit name' );
+    is( $tc->name, 'FooAny', 'can provide an explicit name' );
 
     for my $class (qw( Foo Bar )) {
-        for my $thing ( $class, $class->new() ) {
+        for my $thing ( $class, $class->new ) {
             my $desc
                 = ref $thing
                 ? ( ref $thing ) . ' object'
                 : "$thing class name";
 
             ok(
-                $tc->value_is_valid( Foo->new() ),
+                $tc->value_is_valid( Foo->new ),
                 "$desc is valid for any isa type (requires Foo)"
             );
         }
@@ -168,16 +168,16 @@ my $dpd = Devel::PartialDump->new();
     my $tc = object_isa_type('Quux');
 
     ok(
-        !$tc->value_is_valid( Foo->new() ),
+        !$tc->value_is_valid( Foo->new ),
         'Foo object is not valid for object isa type (requires NonExistent)'
     );
 
     ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
-    eval { $tc->validate_or_die( Foo->new() ) };
+    eval { $tc->validate_or_die( Foo->new ) };
     ## use critic
     my $e = $@;
     like(
-        $e->message(),
+        $e->message,
         qr/\Q/,
         'got expected error message for failure with ObjectCan type'
     );
@@ -189,7 +189,7 @@ my $dpd = Devel::PartialDump->new();
         class => 'Quux',
     );
 
-    for my $thing ( 'Foo', Foo->new() ) {
+    for my $thing ( 'Foo', Foo->new ) {
         my $desc = ref $thing ? 'Foo class name' : 'Foo object';
         ok(
             !$tc->value_is_valid($thing),
@@ -201,7 +201,7 @@ my $dpd = Devel::PartialDump->new();
         ## use critic
         my $e = $@;
         like(
-            $e->message(),
+            $e->message,
             qr/\Q/,
             'got expected error message for failure with AnyCan type'
         );

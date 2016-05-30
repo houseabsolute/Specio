@@ -38,7 +38,7 @@ sub _wrap_message_generator {
     my $self      = shift;
     my $generator = shift;
 
-    my $role = $self->role();
+    my $role = $self->role;
 
     $generator //= sub {
         my $description = shift;
@@ -46,12 +46,12 @@ sub _wrap_message_generator {
 
         return
               "Validation failed for $description with value "
-            . Devel::PartialDump->new()->dump($value)
+            . Devel::PartialDump->new->dump($value)
             . '(does not do '
             . $role . ')';
     };
 
-    my $d = $self->_description();
+    my $d = $self->_description;
 
     return sub { $generator->( $d, @_ ) };
 }

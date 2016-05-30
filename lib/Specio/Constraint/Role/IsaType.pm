@@ -39,7 +39,7 @@ sub _wrap_message_generator {
     my $self      = shift;
     my $generator = shift;
 
-    my $class = $self->class();
+    my $class = $self->class;
 
     $generator //= sub {
         my $description = shift;
@@ -47,12 +47,12 @@ sub _wrap_message_generator {
 
         return
               "Validation failed for $description with value "
-            . Devel::PartialDump->new()->dump($value)
+            . Devel::PartialDump->new->dump($value)
             . '(not isa '
             . $class . ')';
     };
 
-    my $d = $self->_description();
+    my $d = $self->_description;
 
     return sub { $generator->( $d, @_ ) };
 }

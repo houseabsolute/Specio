@@ -10,7 +10,7 @@ use Specio::OO;
 
 with 'Specio::Constraint::Role::Interface';
 
-__PACKAGE__->_ooify();
+__PACKAGE__->_ooify;
 
 1;
 
@@ -24,9 +24,9 @@ __END__
 
     my $str = t('Str');
 
-    print $str->name(); # Str
+    print $str->name; # Str
 
-    my $parent = $str->parent();
+    my $parent = $str->parent;
 
     if ( $str->value_is_valid($value) ) { ... }
 
@@ -98,7 +98,7 @@ subroutine something like this:
       my $self = shift;
       my $var  = shift;
 
-      return $_[0]->parent()->inline_check( $_[1] )
+      return $_[0]->parent->inline_check( $_[1] )
           . ' and more checking code goes here';
   }
 
@@ -157,11 +157,11 @@ This parameter is required.
 
 It is possible to create a type without a constraint of its own.
 
-=head2 $type->name(), $type->parent()
+=head2 $type->name, $type->parent
 
 Returns the value of these parameters as they were passed to the constructor.
 
-=head2 $type->is_anon()
+=head2 $type->is_anon
 
 Returns false for named types, true otherwise.
 
@@ -175,7 +175,7 @@ a descendant of that type or is that type.
 Given a type object, this returns true if the type this method is called on is
 the same as that type.
 
-=head2 $type->coercions()
+=head2 $type->coercions
 
 Returns a list of L<Specio::Coercion> objects which belong to this constraint.
 
@@ -194,13 +194,13 @@ L<Specio::Exception>.
 Returns true or false depending on whether the C<$value> passes the type
 constraint.
 
-=head2 $type->has_real_constraint()
+=head2 $type->has_real_constraint
 
 This returns true if the type was created with a C<constraint> or
 C<inline_generator> parameter. This is used internally to skip type checks for
 types that don't actually implement a constraint.
 
-=head2 $type->id()
+=head2 $type->id
 
 This is a unique id for the type as a string. This is useful if you need to
 make a hash key based on a type, for example.
@@ -257,7 +257,7 @@ C<eval_closure> subroutine.
 Given a variable name, this returns a string of code that implements the
 constraint. If the type is not inlinable, this method throws an error.
 
-=head2 $type->coercion_sub()
+=head2 $type->coercion_sub
 
 This method returns a sub ref that takes a single argument and applied all
 relevant coercions to it. This sub ref will use L<Sub::Quote> if all the

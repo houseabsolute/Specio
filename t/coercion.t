@@ -12,12 +12,12 @@ use Specio::Library::Builtins;
     my $arrayref = t('ArrayRef');
 
     ok(
-        !$arrayref->has_coercions(),
+        !$arrayref->has_coercions,
         'ArrayRef type object does not have coercions'
     );
 
     ok(
-        !Specio::Library::Builtins::t('ArrayRef')->has_coercions(),
+        !Specio::Library::Builtins::t('ArrayRef')->has_coercions,
         'ArrayRef type in Specio::Library::Builtins package does not have coercions'
     );
 
@@ -27,10 +27,10 @@ use Specio::Library::Builtins;
         using => sub { [ $_[0] ] },
     );
 
-    ok( $arrayref->has_coercions(), 'ArrayRef type object has coercions' );
+    ok( $arrayref->has_coercions, 'ArrayRef type object has coercions' );
 
     ok(
-        !Specio::Library::Builtins::t('ArrayRef')->has_coercions(),
+        !Specio::Library::Builtins::t('ArrayRef')->has_coercions,
         'ArrayRef type in Specio::Library::Builtins package does not have coercions (coercions only apply to local copy of type)'
     );
 
@@ -57,7 +57,7 @@ use Specio::Library::Builtins;
     );
 
     ok(
-        !$arrayref->can_inline_coercion_and_check(),
+        !$arrayref->can_inline_coercion_and_check,
         'cannot inline coercion and check for arrayref'
     );
 }
@@ -74,7 +74,7 @@ use Specio::Library::Builtins;
     );
 
     ok(
-        $hashref->can_inline_coercion_and_check(),
+        $hashref->can_inline_coercion_and_check,
         'can inline coercion and check for hashref'
     );
 
@@ -87,7 +87,7 @@ use Specio::Library::Builtins;
     );
 
     ok(
-        $hashref->can_inline_coercion_and_check(),
+        $hashref->can_inline_coercion_and_check,
         'can inline coercion and check for hashref with two coercions'
     );
 

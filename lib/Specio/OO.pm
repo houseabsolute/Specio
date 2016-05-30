@@ -35,7 +35,7 @@ our @EXPORT = qw(
 sub _ooify {
     my $class = shift;
 
-    my $attrs = $class->_attrs();
+    my $attrs = $class->_attrs;
     for my $name ( sort keys %{$attrs} ) {
         my $attr = $attrs->{$name};
 
@@ -54,7 +54,7 @@ sub _inline_reader {
 
     my $reader;
     if ( $attr->{lazy} && ( my $builder = $attr->{builder} ) ) {
-        $reader = "sub { \$_[0]->{$name} ||= \$_[0]->$builder(); }";
+        $reader = "sub { \$_[0]->{$name} ||= \$_[0]->$builder; }";
     }
     else {
         $reader = "sub { \$_[0]->{$name} }";
@@ -128,7 +128,7 @@ sub {
 
 EOF
 
-    my $attrs = $class->_attrs();
+    my $attrs = $class->_attrs;
     for my $name ( sort keys %{$attrs} ) {
         my $attr = $attrs->{$name};
         my $key_name = $attr->{init_arg} // $name;
@@ -136,7 +136,7 @@ EOF
         if ( $attr->{required} ) {
             $constructor .= <<"EOF";
     Specio::OO::_constructor_confess(
-        "$class->new() requires a $key_name argument.")
+        "$class->new requires a $key_name argument.")
         unless exists \$p{$key_name};
 EOF
         }
@@ -144,7 +144,7 @@ EOF
         if ( $attr->{builder} && !$attr->{lazy} ) {
             my $builder = $attr->{builder};
             $constructor .= <<"EOF";
-    \$p{$key_name} = $class->$builder() unless exists \$p{$key_name};
+    \$p{$key_name} = $class->$builder unless exists \$p{$key_name};
 EOF
         }
 
@@ -166,7 +166,7 @@ EOF
     if ( exists \$p{$key_name} && !$validator ) {
         Carp::confess(
             Specio::OO::_bad_value_message(
-                "The value you provided to $class->new() for $key_name is not a valid $attr->{isa}.",
+                "The value you provided to $class->new for $key_name is not a valid $attr->{isa}.",
                 \$p{$key_name},
             )
         );
@@ -180,7 +180,7 @@ EOF
     if ( exists \$p{$key_name} && !Specio::TypeChecks::does_role( \$p{$key_name}, $quoted_role ) ) {
         Carp::confess(
             Specio::OO::_bad_value_message(
-                "The value you provided to $class->new() for $key_name does not do the $attr->{does} role.",
+                "The value you provided to $class->new for $key_name does not do the $attr->{does} role.",
                 \$p{$key_name},
             )
         );
@@ -225,18 +225,15 @@ sub _bad_args_message {
     my $class = shift;
 
     return
-        "$class->new() requires either a hashref or hash as arguments. You passed "
-        . Devel::PartialDump->new()->dump(@_);
+        "$class->new requires either a hashref or hash as arguments. You passed "
+        . Devel::PartialDump->new->dump(@_);
 }
 
 sub _bad_value_message {
     my $message = shift;
     my $value   = shift;
 
-    return
-          $message
-        . ' You passed '
-        . Devel::PartialDump->new()->dump($value);
+    return $message . ' You passed ' . Devel::PartialDump->new->dump($value);
 }
 ## use critic
 
@@ -248,7 +245,7 @@ sub clone {
         my $value = $self->{$key};
 
         $new{$key}
-            = blessed $value           ? $value->clone()
+            = blessed $value           ? $value->clone
             : ( ref $value eq 'CODE' ) ? $value
             : ref $value               ? dclone($value)
             :                            $value;

@@ -26,7 +26,7 @@ use Specio::Library::Builtins;
 
         my ( $key, $expect ) = @{$pair};
         is(
-            $from_method->declared_at()->$key(),
+            $from_method->declared_at->$key,
             $expect,
             "declared_at $key is the expected value for parameterized type made from ->parameterize"
         );
@@ -43,9 +43,9 @@ use Specio::Library::Builtins;
 
         my ( $key, $expect ) = @{$pair};
         is(
-            $from_t->declared_at()->$key(),
+            $from_t->declared_at->$key,
             $expect,
-            "declared_at $key is the expected value for parameterized type made from calling t()"
+            "declared_at $key is the expected value for parameterized type made from calling t"
         );
     }
 
@@ -64,7 +64,7 @@ use Specio::Library::Builtins;
     );
 
     for my $pair (
-        [ $from_method,       '->parameterize()' ],
+        [ $from_method,       '->parameterize' ],
         [ $from_t,            't(...)' ],
         [ t('ArrayRefOfInt'), 'named type' ],
         [ $anon,              'anon type' ],
@@ -106,7 +106,7 @@ use Specio::Library::Builtins;
                 parent => t( 'ArrayRef', of => t('MyInt') ),
             );
         },
-        qr/\QThe "of" parameter passed to ->parameterize() must be an inlinable constraint if the parameterizable type has an inline_generator/,
+        qr/\QThe "of" parameter passed to ->parameterize must be an inlinable constraint if the parameterizable type has an inline_generator/,
         'A parameterizable type with an inline generator cannot be parameterized with a type that cannot be inlined',
     );
 }

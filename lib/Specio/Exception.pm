@@ -40,7 +40,7 @@ use Specio::OO;
 sub BUILD {
     my $self = shift;
 
-    $self->{stack_trace} = Devel::StackTrace->new();
+    $self->{stack_trace} = Devel::StackTrace->new;
 
     return;
 }
@@ -48,8 +48,8 @@ sub BUILD {
 sub as_string {
     my $self = shift;
 
-    my $str = $self->message();
-    $str .= "\n\n" . $self->stack_trace()->as_string();
+    my $str = $self->message;
+    $str .= "\n\n" . $self->stack_trace->as_string;
 
     return $str;
 }
@@ -62,7 +62,7 @@ sub throw {
     die $self->new(@_);
 }
 
-__PACKAGE__->_ooify();
+__PACKAGE__->_ooify;
 
 1;
 
@@ -83,9 +83,9 @@ __END__
   }
   catch {
       if ( $_->isa('Specio::Exception') ) {
-          print $_->message(), "\n";
-          print $_->type()->name(), "\n";
-          print $_->value(), "\n";
+          print $_->message, "\n";
+          print $_->type->name, "\n";
+          print $_->value, "\n";
       }
   };
 
@@ -99,28 +99,28 @@ dependency on L<Moo>.
 
 This class provides the following methods:
 
-=head2 $exception->message()
+=head2 $exception->message
 
 The error message associated with the exception.
 
-=head2 $exception->stack_trace()
+=head2 $exception->stack_trace
 
 A L<Devel::StackTrace> object for the exception.
 
-=head2 $exception->type()
+=head2 $exception->type
 
 The type constraint object against which the value failed.
 
-=head2 $exception->value()
+=head2 $exception->value
 
 The value that failed the type check.
 
-=head2 $exception->as_string()
+=head2 $exception->as_string
 
 The exception as a string. This includes the method and the stack trace.
 
 =head1 OVERLOADING
 
-This class overloads stringification to call the C<as_string()> method.
+This class overloads stringification to call the C<as_string> method.
 
 =cut

@@ -12,7 +12,7 @@ use Specio::Library::Builtins;
         where  => sub { length $_[0] },
     );
 
-    isa_ok( $anon, 'Specio::Constraint::Simple', 'return value from anon()' );
+    isa_ok( $anon, 'Specio::Constraint::Simple', 'return value from anon' );
 
     ok( $anon->value_is_valid('x'),  q{anon type allows "x"} );
     ok( !$anon->value_is_valid(q{}), 'anon type reject empty string' );
@@ -22,11 +22,11 @@ use Specio::Library::Builtins;
     my $anon = anon(
         parent => t('Str'),
         inline => sub {
-            $_[0]->parent()->inline_check( $_[1] ) . " && length $_[1]";
+            $_[0]->parent->inline_check( $_[1] ) . " && length $_[1]";
         },
     );
 
-    isa_ok( $anon, 'Specio::Constraint::Simple', 'return value from anon()' );
+    isa_ok( $anon, 'Specio::Constraint::Simple', 'return value from anon' );
 
     ok( $anon->value_is_valid('x'), q{inlinable anon type allows "x"} );
     ok(

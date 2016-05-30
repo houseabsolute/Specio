@@ -43,16 +43,16 @@ with 'Specio::Constraint::Role::Interface';
 sub BUILD {
     my $self = shift;
 
-    if ( $self->_has_constraint() ) {
+    if ( $self->_has_constraint ) {
         die
             'A parameterizable constraint with a constraint parameter must also have a parameterized_constraint_generator'
-            unless $self->_has_parameterized_constraint_generator();
+            unless $self->_has_parameterized_constraint_generator;
     }
 
-    if ( $self->_has_inline_generator() ) {
+    if ( $self->_has_inline_generator ) {
         die
             'A parameterizable constraint with an inline_generator parameter must also have a parameterized_inline_generator'
-            unless $self->_has_parameterized_inline_generator();
+            unless $self->_has_parameterized_inline_generator;
     }
 
     return;
@@ -65,12 +65,12 @@ sub parameterize {
     my ( $parameter, $declared_at ) = @args{qw( of declared_at)};
     does_role( $parameter, 'Specio::Constraint::Role::Interface' )
         or confess
-        'The "of" parameter passed to ->parameterize() must be an object which does the Specio::Constraint::Role::Interface role';
+        'The "of" parameter passed to ->parameterize must be an object which does the Specio::Constraint::Role::Interface role';
 
     if ($declared_at) {
         isa_class( $declared_at, 'Specio::DeclaredAt' )
             or confess
-            'The "declared_at" parameter passed to ->parameterize() must be a Specio::DeclaredAt object';
+            'The "declared_at" parameter passed to ->parameterize must be a Specio::DeclaredAt object';
     }
 
     $declared_at //= Specio::DeclaredAt->new_from_caller(1);
@@ -81,23 +81,23 @@ sub parameterize {
         declared_at => $declared_at,
     );
 
-    if ( $self->_has_parameterized_constraint_generator() ) {
+    if ( $self->_has_parameterized_constraint_generator ) {
         $p{constraint}
-            = $self->_parameterized_constraint_generator()->($parameter);
+            = $self->_parameterized_constraint_generator->($parameter);
     }
     else {
         confess
-            'The "of" parameter passed to ->parameterize() must be an inlinable constraint if the parameterizable type has an inline_generator'
+            'The "of" parameter passed to ->parameterize must be an inlinable constraint if the parameterizable type has an inline_generator'
             unless $parameter->can_be_inlined;
 
-        my $ig = $self->_parameterized_inline_generator();
+        my $ig = $self->_parameterized_inline_generator;
         $p{inline_generator} = sub { $ig->( shift, $parameter, @_ ) };
     }
 
     return Specio::Constraint::Parameterized->new(%p);
 }
 
-__PACKAGE__->_ooify();
+__PACKAGE__->_ooify;
 
 1;
 

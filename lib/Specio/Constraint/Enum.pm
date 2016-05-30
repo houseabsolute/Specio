@@ -58,7 +58,7 @@ EOF
 sub _build_inline_environment {
     my $self = shift;
 
-    my %values = map { $_ => 1 } @{ $self->values() };
+    my %values = map { $_ => 1 } @{ $self->values };
 
     return { '%' . $self->_env_var_name => \%values };
 }
@@ -69,7 +69,7 @@ sub _env_var_name {
     return '_Specio_Constraint_Enum_' . refaddr($self);
 }
 
-__PACKAGE__->_ooify();
+__PACKAGE__->_ooify;
 
 1;
 
@@ -80,7 +80,7 @@ __END__
 =head1 SYNOPSIS
 
     my $type = Specio::Constraint::Enum->new(...);
-    print $_, "\n" for @{ $type->values() };
+    print $_, "\n" for @{ $type->values };
 
 =head1 DESCRIPTION
 
@@ -103,7 +103,7 @@ class provides its own default inline generator subroutine reference.
 Finally, this class requires an additional parameter, C<values>. This must be a
 a list of valid strings for the type.
 
-=head2 $enum->values()
+=head2 $enum->values
 
 Returns an array reference of valid values for the type.
 

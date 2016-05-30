@@ -9,13 +9,13 @@ use Devel::PartialDump;
 use Specio::Declare;
 use Specio::Library::Builtins;
 
-my $dpd = Devel::PartialDump->new();
+my $dpd = Devel::PartialDump->new;
 
 {
     my $str = t('Str');
     isa_ok( $str, 'Specio::Constraint::Simple' );
     like(
-        $str->declared_at()->filename(),
+        $str->declared_at->filename,
         qr/Builtins\.pm/,
         'declared_at has the right filename'
     );
@@ -40,12 +40,12 @@ my $dpd = Devel::PartialDump->new();
 }
 
 is(
-    t('Str')->parent()->name(),
+    t('Str')->parent->name,
     'Value',
     'parent of Str is Value'
 );
 
-my $str_clone = t('Str')->clone();
+my $str_clone = t('Str')->clone;
 
 for my $name (qw( Str Value Defined Item )) {
     ok(
@@ -76,7 +76,7 @@ for my $name (qw( Maybe ArrayRef Object )) {
 for my $type ( t('Str'), $str_clone ) {
     ok(
         $type->is_same_type_as( t('Str') ),
-        $type->name() . ' is_same_type_as Str'
+        $type->name . ' is_same_type_as Str'
     );
 }
 

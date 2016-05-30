@@ -18,7 +18,7 @@ use Specio::Library::Builtins;
     isa_ok( $e, 'Specio::Exception' );
 
     like(
-        $e->message(),
+        $e->message,
         qr/Validation failed for type named Str .+ with value undef/,
         'exception contains expected error'
     );
@@ -31,7 +31,7 @@ use Specio::Library::Builtins;
     };
 
     like(
-        $e->message(),
+        $e->message,
         qr/Validation failed for type named Str .+ with value \[\s*\]/,
         'exception contains expected error'
     );

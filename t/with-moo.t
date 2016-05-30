@@ -46,7 +46,7 @@ use Test::More 0.88;
     has ucstr => (
         is     => 'ro',
         isa    => $ucstr,
-        coerce => $ucstr->coercion_sub(),
+        coerce => $ucstr->coercion_sub,
     );
 
     my $ucstr2 = declare(
@@ -69,7 +69,7 @@ use Test::More 0.88;
     has ucstr2 => (
         is     => 'ro',
         isa    => $ucstr2,
-        coerce => $ucstr2->coercion_sub(),
+        coerce => $ucstr2->coercion_sub,
     );
 
     my $ucstr3 = declare(
@@ -92,7 +92,7 @@ use Test::More 0.88;
     has ucstr3 => (
         is     => 'ro',
         isa    => $ucstr3,
-        coerce => $ucstr3->coercion_sub(),
+        coerce => $ucstr3->coercion_sub,
     );
 
     my $ucstr4 = declare(
@@ -120,7 +120,7 @@ use Test::More 0.88;
     has ucstr4 => (
         is     => 'ro',
         isa    => $ucstr4,
-        coerce => $ucstr4->coercion_sub(),
+        coerce => $ucstr4->coercion_sub,
     );
 }
 
@@ -157,7 +157,7 @@ is(
     );
 
     is(
-        $foo->ucstr(),
+        $foo->ucstr,
         'ABC',
         'ucstr attribute was coerced to upper case'
     );
@@ -172,7 +172,7 @@ is(
     );
 
     is(
-        $foo->ucstr2(),
+        $foo->ucstr2,
         'ABC',
         'ucstr2 attribute was coerced to upper case'
     );
@@ -187,7 +187,7 @@ is(
     );
 
     is(
-        $foo->ucstr3(),
+        $foo->ucstr3,
         'ABC',
         'ucstr3 attribute was coerced to upper case'
     );
@@ -202,7 +202,7 @@ is(
     );
 
     is(
-        $foo->ucstr4(),
+        $foo->ucstr4,
         'ABC',
         'ucstr4 attribute was coerced to upper case'
     );

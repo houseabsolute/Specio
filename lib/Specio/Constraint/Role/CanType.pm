@@ -40,7 +40,7 @@ sub _wrap_message_generator {
     my $self      = shift;
     my $generator = shift;
 
-    my @methods = @{ $self->methods() };
+    my @methods = @{ $self->methods };
 
     $generator //= sub {
         shift;
@@ -57,7 +57,7 @@ sub _wrap_message_generator {
         return "$class is missing the $list $noun";
     };
 
-    my $d = $self->_description();
+    my $d = $self->_description;
 
     return sub { $generator->( $d, @_ ) };
 }

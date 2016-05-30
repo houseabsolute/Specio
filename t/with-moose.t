@@ -158,7 +158,7 @@ is(
     );
 
     is(
-        $foo->ucstr(),
+        $foo->ucstr,
         'ABC',
         'ucstr attribute was coerced to upper case'
     );
@@ -173,7 +173,7 @@ is(
     );
 
     is(
-        $foo->ucstr2(),
+        $foo->ucstr2,
         'ABC',
         'ucstr2 attribute was coerced to upper case'
     );
@@ -188,7 +188,7 @@ is(
     );
 
     is(
-        $foo->ucstr3(),
+        $foo->ucstr3,
         'ABC',
         'ucstr3 attribute was coerced to upper case'
     );
@@ -203,7 +203,7 @@ is(
     );
 
     is(
-        $foo->ucstr4(),
+        $foo->ucstr4,
         'ABC',
         'ucstr4 attribute was coerced to upper case'
     );
@@ -274,7 +274,7 @@ is(
 }
 
 {
-    my $bar = Bar->new();
+    my $bar = Bar->new;
 
     is(
         exception { $bar->add_native(42) },
@@ -290,7 +290,7 @@ is(
 }
 
 {
-    my $bar = Bar->new();
+    my $bar = Bar->new;
     is(
         exception { $bar->add_coerced( { a => 1, b => 2 } ) },
         undef,
@@ -298,7 +298,7 @@ is(
     );
 
     is_deeply(
-        $bar->coerced(),
+        $bar->coerced,
         ['a-b'],
         'pushed value was coerced as expected',
     );

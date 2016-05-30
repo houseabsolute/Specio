@@ -56,19 +56,19 @@ requires '_build_description';
 sub can_be_inlined {
     my $self = shift;
 
-    return $self->_has_inline_generator();
+    return $self->_has_inline_generator;
 }
 
 sub _build_generated_inline_sub {
     my $self = shift;
 
     my $source
-        = 'sub { ' . $self->_inline_generator()->( $self, '$_[0]' ) . '}';
+        = 'sub { ' . $self->_inline_generator->( $self, '$_[0]' ) . '}';
 
     return eval_closure(
         source      => $source,
-        environment => $self->_inline_environment(),
-        description => 'inlined sub for ' . $self->_description(),
+        environment => $self->_inline_environment,
+        description => 'inlined sub for ' . $self->_description,
     );
 }
 

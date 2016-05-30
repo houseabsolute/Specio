@@ -153,7 +153,7 @@ sub _test_any_type {
     my $type       = shift;
     my $class_name = shift;
 
-    my $type_name = $type->name();
+    my $type_name = $type->name;
 
     ok(
         $type->value_is_valid($class_name),
@@ -161,7 +161,7 @@ sub _test_any_type {
     );
 
     ok(
-        $type->value_is_valid( $class_name->new() ),
+        $type->value_is_valid( $class_name->new ),
         "$class_name object is valid for $type_name"
     );
 
@@ -171,7 +171,7 @@ sub _test_any_type {
     );
 
     ok(
-        !$type->value_is_valid( Class::DoesNoRoles->new() ),
+        !$type->value_is_valid( Class::DoesNoRoles->new ),
         "Class::DoesNoRoles object is not valid for $type_name"
     );
 }
@@ -180,7 +180,7 @@ sub _test_object_type {
     my $type       = shift;
     my $class_name = shift;
 
-    my $type_name = $type->name();
+    my $type_name = $type->name;
 
     ok(
         !$type->value_is_valid($class_name),
@@ -188,7 +188,7 @@ sub _test_object_type {
     );
 
     ok(
-        $type->value_is_valid( $class_name->new() ),
+        $type->value_is_valid( $class_name->new ),
         "$class_name object is valid for $type_name"
     );
 
@@ -198,7 +198,7 @@ sub _test_object_type {
     );
 
     ok(
-        !$type->value_is_valid( Class::DoesNoRoles->new() ),
+        !$type->value_is_valid( Class::DoesNoRoles->new ),
         "Class::DoesNoRoles object is not valid for $type_name"
     );
 }

@@ -44,7 +44,7 @@ EOF
     sub _build_inline_generator {$_inline_generator}
 }
 
-__PACKAGE__->_ooify();
+__PACKAGE__->_ooify;
 
 1;
 
@@ -55,7 +55,7 @@ __END__
 =head1 SYNOPSIS
 
     my $type = Specio::Constraint::AnyDoes->new(...);
-    print $type->role();
+    print $type->role;
 
 =head1 DESCRIPTION
 
@@ -80,7 +80,7 @@ This class overrides the C<message_generator> default if none is provided.
 Finally, this class requires an additional parameter, C<role>. This must be a
 single role name.
 
-=head2 $any_isa->role()
+=head2 $any_isa->role
 
 Returns the role name passed to the constructor.
 

@@ -51,18 +51,18 @@ sub _build_name {
 sub can_be_inlined {
     my $self = shift;
 
-    return $self->_has_inline_generator()
-        && $self->parameter()->can_be_inlined();
+    return $self->_has_inline_generator
+        && $self->parameter->can_be_inlined;
 }
 
 # Moose compatibility methods - these exist as a temporary hack to make Specio
 # work with Moose.
 
 sub type_parameter {
-    shift->parameter();
+    shift->parameter;
 }
 
-__PACKAGE__->_ooify();
+__PACKAGE__->_ooify;
 
 1;
 
@@ -80,8 +80,8 @@ __END__
 
     my $arrayref_of_int = $arrayref->parameterize( of => t('Int') );
 
-    my $parent = $arrayref_of_int->parent(); # returns ArrayRef
-    my $parameter = $arrayref_of_int->parameter(); # returns Int
+    my $parent = $arrayref_of_int->parent; # returns ArrayRef
+    my $parameter = $arrayref_of_int->parameter; # returns Int
 
 =head1 DESCRIPTION
 
@@ -114,7 +114,7 @@ This parameter is required.
 
 =back
 
-=head2 $type->parameter()
+=head2 $type->parameter
 
 Returns the type that was passed to the constructor.
 

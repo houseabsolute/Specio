@@ -321,7 +321,7 @@ __END__
 =head1 DESCRIPTION
 
 This package exports a set of type declaration helpers. Importing this package
-also causes it to create a C<t()> subroutine the caller.
+also causes it to create a C<t> subroutine the caller.
 
 =head1 SUBROUTINES
 
@@ -380,7 +380,7 @@ subroutine something like this:
       my $self = shift;
       my $var  = shift;
 
-      return $_[0]->parent()->inline_check( $_[1] )
+      return $_[0]->parent->inline_check( $_[1] )
           . ' and more checking code goes here';
   }
 
@@ -409,7 +409,7 @@ coercions that might have been applied.
 
 =head2 anon(...)
 
-This subroutine declares an anonymous type. It is identical to C<declare()>
+This subroutine declares an anonymous type. It is identical to C<declare>
 except that it expects a list of key/value parameters without a type name as
 the first parameter.
 
@@ -459,10 +459,10 @@ term. This single term should evaluate to the new value.
 
 This module also exports some helper subs for declaring certain kinds of types:
 
-=head2 any_isa_type(), object_isa_type()
+=head2 any_isa_type, object_isa_type
 
-The C<any_isa_type()> helper creates a type which accepts a class name or
-object of the given class. The C<object_isa_type()> helper creates a type
+The C<any_isa_type> helper creates a type which accepts a class name or
+object of the given class. The C<object_isa_type> helper creates a type
 which only accepts an object of the given class.
 
 These subroutines take a type name as the first argument. The remaining
@@ -471,10 +471,10 @@ should be a class name. This is the class that the type requires.
 
 The type name argument can be omitted to create an anonymous type.
 
-=head2 any_does_type(), object_does_type()
+=head2 any_does_type, object_does_type
 
-The C<any_does_type()> helper creates a type which accepts a class name or
-object which does the given role. The C<object_does_type()> helper creates a
+The C<any_does_type> helper creates a type which accepts a class name or
+object which does the given role. The C<object_does_type> helper creates a
 type which only accepts an object which does the given role.
 
 These subroutines take a type name as the first argument. The remaining
@@ -486,10 +486,10 @@ L<Moo> (using L<Role::Tiny>).
 
 The type name argument can be omitted to create an anonymous type.
 
-=head2 any_can_type(), object_can_type()
+=head2 any_can_type, object_can_type
 
-The C<any_can_type()> helper creates a type which accepts a class name or
-object with the given methods. The C<object_can_type()> helper creates a type
+The C<any_can_type> helper creates a type which accepts a class name or
+object with the given methods. The C<object_can_type> helper creates a type
 which only accepts an object with the given methods.
 
 These subroutines take a type name as the first argument. The remaining
@@ -499,7 +499,7 @@ the required methods for the type.
 
 The type name argument can be omitted to create an anonymous type.
 
-=head2 enum()
+=head2 enum
 
 This creates a type which accepts a string matching a given list of acceptable
 values.
@@ -512,7 +512,7 @@ The type name argument can be omitted to create an anonymous type.
 
 =head1 PARAMETERIZED TYPES
 
-You can create a parameterized type by calling C<t()> with additional
+You can create a parameterized type by calling C<t> with additional
 parameters, like this:
 
   my $arrayref_of_int = t( 'ArrayRef', of => t('Int') );
@@ -525,11 +525,11 @@ parameters, like this:
       ),
   );
 
-The C<t()> subroutine assumes that if it receives more than one argument, it
+The C<t> subroutine assumes that if it receives more than one argument, it
 should look up the named type and call C<< $type->parameterize(...) >> with
 the additional arguments.
 
 If the named type cannot be parameterized, it throws an error.
 
-You can also call C<< $type->parameterize() >> directly if needed. See
+You can also call C<< $type->parameterize >> directly if needed. See
 L<Specio::Constraint::Parameterizable> for details.
