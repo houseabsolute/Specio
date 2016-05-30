@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Removed various prereqs that weren't really needed.
+
+
 0.14     2016-05-22
 
 - Added an inline_assert method for constraint objects. This makes certain
