@@ -7,9 +7,8 @@ our $VERSION = '0.15';
 
 use parent 'Specio::Exporter';
 
-use Specio::Library::Builtins;
-
 use Specio::Declare;
+use Specio::Library::Builtins;
 
 declare(
     'NonEmptySimpleStr',
