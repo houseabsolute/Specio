@@ -3,7 +3,7 @@ package Specio::Constraint::Role::Interface;
 use strict;
 use warnings;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 use Carp qw( confess );
 use Class::Method::Modifiers ();

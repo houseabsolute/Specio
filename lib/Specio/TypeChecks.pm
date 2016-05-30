@@ -3,7 +3,7 @@ package Specio::TypeChecks;
 use strict;
 use warnings;
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 use Exporter qw( import );
 use Module::Runtime qw( is_module_name );
