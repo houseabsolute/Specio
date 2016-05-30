@@ -2,7 +2,7 @@
 
 0.16     2016-05-30
 
-- Remove use of Class::Load.
+- Remove use of Class::Load and Module::Runtime.
 
 
 0.15     2016-05-30
