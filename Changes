@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Change "use v5.10" to "use 5.010". The former appears to cause warnings on
+  older Perls.
+
+
 0.16     2016-05-30
 
 - Remove use of Class::Load and Module::Runtime.

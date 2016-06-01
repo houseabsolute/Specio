@@ -3,7 +3,7 @@ package Specio;
 use strict;
 use warnings;
 
-use v5.10;
+use 5.010;
 
 our $VERSION = '0.17';
 
