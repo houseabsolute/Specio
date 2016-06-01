@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.17     2016-06-01
+
 - Change "use v5.10" to "use 5.010". The former appears to cause warnings on
   older Perls.
 
