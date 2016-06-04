@@ -3,7 +3,7 @@ use warnings;
 use utf8;
 use open ':encoding(UTF-8)', ':std';
 
-use Test::More 0.88;
+use Test::More 0.96;
 
 use Devel::PartialDump;
 use Specio::Declare;

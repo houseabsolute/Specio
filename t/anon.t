@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More 0.88;
+use Test::More 0.96;
 
 use Specio::Declare;
 use Specio::Library::Builtins;
