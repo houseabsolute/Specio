@@ -124,6 +124,8 @@ This library provides some additional string types for common cases.
 A valid package name. Unlike the C<ClassName> constraint from the
 L<Specio::Library::Builtins> library, this package does not need to be loaded.
 
+This type does allow Unicode characters.
+
 =head2 ModuleName
 
 Same as C<PackageName>.
@@ -134,6 +136,8 @@ A valid distribution name like C<DBD-Pg> Basically this is the same as a
 package name with the double-colons replaced by dashes. Note that there are
 some historical distribution names that don't fit this pattern, like
 C<CGI.pm>.
+
+This type does allow Unicode characters.
 
 =head2 Identifier
 
