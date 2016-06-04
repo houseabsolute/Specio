@@ -101,7 +101,7 @@ The C<inline_generator> and C<constraint> parameters are also ignored. This
 class provides its own default inline generator subroutine reference.
 
 Finally, this class requires an additional parameter, C<values>. This must be a
-a list of valid strings for the type.
+an arrayref of valid strings for the type.
 
 =head2 $enum->values
 
