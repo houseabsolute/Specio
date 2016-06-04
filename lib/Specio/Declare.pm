@@ -468,7 +468,8 @@ These subroutines take a type name as the first argument. The remaining
 arguments are key/value pairs. Currently this is just the C<class> key, which
 should be a class name. This is the class that the type requires.
 
-The type name argument can be omitted to create an anonymous type.
+You can also pass just a single argument, in which case that will be used as
+both the type's name and the class for the constraint to check.
 
 =head2 any_does_type, object_does_type
 
@@ -483,7 +484,8 @@ should be a role name. This is the class that the type requires.
 This should just work (I hope) with roles created by L<Moose>, L<Mouse>, and
 L<Moo> (using L<Role::Tiny>).
 
-The type name argument can be omitted to create an anonymous type.
+You can also pass just a single argument, in which case that will be used as
+both the type's name and the role for the constraint to check.
 
 =head2 any_can_type, object_can_type
 
