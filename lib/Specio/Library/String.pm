@@ -65,7 +65,7 @@ EOF
 
 1;
 
-# ABSTRACT: Implements type constraint objects some common string types
+# ABSTRACT: Implements type constraint objects for some common string types
 
 __END__
 

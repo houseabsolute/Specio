@@ -111,7 +111,7 @@ EOF
 
 1;
 
-# ABSTRACT: Implements type constraint objects some common Perl language things
+# ABSTRACT: Implements type constraint objects for some common Perl language things
 
 __END__
 

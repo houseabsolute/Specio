@@ -150,7 +150,7 @@ EOF
 
 1;
 
-# ABSTRACT: Implements type constraint objects some common numeric types
+# ABSTRACT: Implements type constraint objects for some common numeric types
 
 __END__
 
