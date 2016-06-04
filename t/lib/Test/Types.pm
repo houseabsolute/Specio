@@ -226,7 +226,7 @@ sub test_constraint {
     $type = t($type) unless blessed $type;
 
     subtest(
-        $type->name,
+        ( $type->name || '<anon>' ),
         sub {
             my $not_inlined = $type->_constraint_with_parents();
 
