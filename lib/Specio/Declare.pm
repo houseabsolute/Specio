@@ -26,6 +26,7 @@ our @EXPORT = qw(
     object_can_type
     object_does_type
     object_isa_type
+    union
 );
 ## use critic
 
@@ -217,6 +218,25 @@ sub any_isa_type {
     return $tc;
 }
 
+sub union {
+    my $name;
+    $name = shift if @_ % 2;
+    my %p = @_;
+
+    require Specio::Constraint::Union;
+
+    my $tc = _make_tc(
+        ( defined $name ? ( name => $name ) : () ),
+        %p,
+        type_class => 'Specio::Constraint::Union',
+    );
+
+    register( scalar caller(), $name, $tc, 'exportable' )
+        if defined $name;
+
+    return $tc;
+}
+
 sub _make_tc {
     my %p = @_;
 
@@ -315,6 +335,11 @@ __END__
     enum(
         'Colors',
         [qw( blue green red )],
+    );
+
+    union(
+        'IntOrArrayRef',
+        of => [ t('Int'), t('ArrayRef') ],
     );
 
 =head1 DESCRIPTION
@@ -508,6 +533,17 @@ values.
 The first argument is the type name. The remaining arguments are key/value
 pairs. Currently this is just the C<values> key. This should an array
 reference of acceptable string values.
+
+The type name argument can be omitted to create an anonymous type.
+
+=head2 union
+
+This creates a type which is the union of two or more other types. A union
+accepts any of its underlying types.
+
+The first argument is the type name. The remaining arguments are key/value
+pairs. Currently this is just the C<of> key. This should an array
+reference of types.
 
 The type name argument can be omitted to create an anonymous type.
 
