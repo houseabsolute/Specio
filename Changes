@@ -2,6 +2,10 @@
 
 - Added union types.
 
+- If a subtype's parent could be inlined and the subtype itself did not
+  specify any additional constraints (inlinable or not), then the subtype was
+  not being inlined, even though it could be.
+
 
 0.17     2016-06-01
 

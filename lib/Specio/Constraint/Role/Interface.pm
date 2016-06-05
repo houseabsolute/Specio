@@ -8,7 +8,8 @@ our $VERSION = '0.18';
 use Carp qw( confess );
 use Class::Method::Modifiers ();
 use Devel::PartialDump;
-use List::Util 1.33 qw( all any );
+use Eval::Closure qw( eval_closure );
+use List::Util 1.33 qw( all any first );
 use Specio::Exception;
 use Specio::TypeChecks qw( is_CodeRef );
 use Sub::Quote qw( quote_sub );
@@ -188,6 +189,47 @@ sub has_real_constraint {
         || $self->_has_inline_generator;
 }
 
+sub can_be_inlined {
+    my $self = shift;
+
+    return 1 if $self->_has_inline_generator;
+    return 0
+        if $self->_has_constraint && $self->_constraint ne $NullConstraint;
+
+    # If this type is an empty subtype of an inlinable parent, then we can
+    # inline this type as well.
+    return 1 if $self->_has_parent && $self->parent->can_be_inlined;
+    return 0;
+}
+
+sub _build_generated_inline_sub {
+    my $self = shift;
+
+    my $type = $self->_self_or_first_inlinable_ancestor;
+
+    my $source
+        = 'sub { ' . $type->_inline_generator->( $self, '$_[0]' ) . '}';
+
+    return eval_closure(
+        source      => $source,
+        environment => $type->_inline_environment,
+        description => 'inlined sub for ' . $self->_description,
+    );
+}
+
+sub _self_or_first_inlinable_ancestor {
+    my $self = shift;
+
+    my $type = first { $_->_has_inline_generator }
+    reverse $self->_ancestors_and_self;
+
+    # This should never happen because ->can_be_inlined should always be
+    # checked before this builder is called.
+    die 'Cannot generate an inline sub' unless $type;
+
+    return $type;
+}
+
 sub _build_optimized_constraint {
     my $self = shift;
 
@@ -338,9 +380,10 @@ sub inline_coercion_and_check {
 sub inline_check {
     my $self = shift;
 
-    die 'Cannot inline' unless $self->_has_inline_generator;
+    die 'Cannot inline' unless $self->can_be_inlined;
 
-    return $self->_inline_generator->( $self, @_ );
+    my $type = $self->_self_or_first_inlinable_ancestor;
+    return $type->_inline_generator->( $self, @_ );
 }
 
 sub _subify {

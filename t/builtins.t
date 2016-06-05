@@ -80,4 +80,12 @@ for my $type ( t('Str'), $str_clone ) {
     );
 }
 
+{
+    my $child = anon( parent => t('Str') );
+    ok(
+        $child->can_be_inlined,
+        'child of builtin with no additional constraint can be inlined'
+    );
+}
+
 done_testing();
