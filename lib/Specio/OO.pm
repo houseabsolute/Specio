@@ -7,6 +7,7 @@ use B qw( perlstring );
 use Carp qw( confess );
 use Eval::Closure qw( eval_closure );
 use Exporter qw( import );
+use List::Util qw( all );
 use Scalar::Util qw( blessed weaken );
 use mro ();
 
@@ -243,6 +244,15 @@ sub clone {
     my %new;
     for my $key ( keys %{$self} ) {
         my $value = $self->{$key};
+
+        # We need to special case arrays of Specio objects, as they may
+        # contain code refs which cannot be cloned with dclone.
+        if ( ( ref $value eq 'ARRAY' )
+            && all { ( blessed($_) || q{} ) =~ /Specio/ } @{$value} ) {
+
+            $new{$key} = [ map { $_->clone } @{$value} ];
+            next;
+        }
 
         $new{$key}
             = blessed $value           ? $value->clone
