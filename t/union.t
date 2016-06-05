@@ -127,6 +127,15 @@ subtest(
             !$unnamed_union->is_anon,
             'unnamed union is not anonymous because name is generated'
         );
+        is(
+            $unnamed_union->parent,
+            undef,
+            'parent method returns undef'
+        );
+        ok(
+            !$unnamed_union->_has_parent,
+            'union has no parent'
+        );
 
         test_constraint( $unnamed_union, \%tests, \&describe );
     }

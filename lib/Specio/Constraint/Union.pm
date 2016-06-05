@@ -45,6 +45,9 @@ with 'Specio::Constraint::Role::Interface';
 
 sub parent {undef}
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+sub _has_parent {0}
+
 sub _has_name {
     my $self = shift;
     return defined $self->name;

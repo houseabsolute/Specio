@@ -9,9 +9,9 @@ use Specio::Library::Union;
 
 {
     is(
-        exception { ok( t('Union'), "type named Union is available" ) },
+        exception { ok( t('Union'), 'type named Union is available' ) },
         undef,
-        "no exception retrieving Union type"
+        'no exception retrieving Union type'
     );
 }
 
