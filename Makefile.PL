@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use 5.010;
+use 5.008;
 
 use ExtUtils::MakeMaker;
 
@@ -14,24 +14,23 @@ my %WriteMakefileArgs = (
   },
   "DISTNAME" => "Specio",
   "LICENSE" => "artistic_2",
-  "MIN_PERL_VERSION" => "5.010",
+  "MIN_PERL_VERSION" => "5.008",
   "NAME" => "Specio",
   "PREREQ_PM" => {
     "B" => 0,
     "Carp" => 0,
-    "Class::Method::Modifiers" => 0,
     "Devel::PartialDump" => 0,
     "Devel::StackTrace" => 0,
     "Eval::Closure" => 0,
     "Exporter" => 0,
     "List::Util" => "1.33",
+    "MRO::Compat" => 0,
     "Role::Tiny" => 0,
     "Role::Tiny::With" => 0,
     "Scalar::Util" => 0,
     "Storable" => 0,
     "Sub::Quote" => 0,
     "Test::More" => "0.96",
-    "mro" => 0,
     "overload" => 0,
     "parent" => 0,
     "re" => 0,
@@ -61,7 +60,6 @@ my %WriteMakefileArgs = (
 my %FallbackPrereqs = (
   "B" => 0,
   "Carp" => 0,
-  "Class::Method::Modifiers" => 0,
   "Devel::PartialDump" => 0,
   "Devel::StackTrace" => 0,
   "Eval::Closure" => 0,
@@ -70,6 +68,7 @@ my %FallbackPrereqs = (
   "File::Spec" => 0,
   "IO::File" => 0,
   "List::Util" => "1.33",
+  "MRO::Compat" => 0,
   "Role::Tiny" => 0,
   "Role::Tiny::With" => 0,
   "Scalar::Util" => 0,
@@ -79,7 +78,6 @@ my %FallbackPrereqs = (
   "Test::More" => "0.96",
   "Test::Requires" => 0,
   "lib" => 0,
-  "mro" => 0,
   "namespace::autoclean" => 0,
   "open" => 0,
   "overload" => 0,

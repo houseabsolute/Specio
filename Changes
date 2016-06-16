@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.18     2016-06-15
+
 - Added union types.
 
 - If a subtype's parent could be inlined and the subtype itself did not

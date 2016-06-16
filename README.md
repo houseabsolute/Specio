@@ -4,7 +4,7 @@ Specio - Type constraints and coercions for Perl
 
 # VERSION
 
-version 0.17
+version 0.18
 
 # SYNOPSIS
 
@@ -78,8 +78,8 @@ a value and returns true or false. Most constraints are represented by
 constraint classes for specialized kinds of constraints.
 
 Types can be named or anonymous, and each type can have a parent type. A
-type's constraint is optional because it can be used to create a named subtype
-of some existing type without adding additional constraints.
+type's constraint is optional because sometimes you may want to create a named
+subtype of some existing type without adding additional constraints.
 
 Constraints can be expressed either in terms of a simple subroutine reference
 or in terms of an inline generator subroutine reference. The former is easier
