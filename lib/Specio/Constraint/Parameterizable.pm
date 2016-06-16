@@ -73,7 +73,8 @@ sub parameterize {
             'The "declared_at" parameter passed to ->parameterize must be a Specio::DeclaredAt object';
     }
 
-    $declared_at //= Specio::DeclaredAt->new_from_caller(1);
+    $declared_at = Specio::DeclaredAt->new_from_caller(1)
+        unless defined $declared_at;
 
     my %p = (
         parent      => $self,

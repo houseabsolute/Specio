@@ -42,20 +42,22 @@ sub _wrap_message_generator {
 
     my @methods = @{ $self->methods };
 
-    $generator //= sub {
-        shift;
-        my $value = shift;
+    unless ( defined $generator ) {
+        $generator = sub {
+            shift;
+            my $value = shift;
 
-        my $class = blessed $value;
-        $class ||= $value;
+            my $class = blessed $value;
+            $class ||= $value;
 
-        my @missing = grep { !$value->can($_) } @methods;
+            my @missing = grep { !$value->can($_) } @methods;
 
-        my $noun = @missing == 1 ? 'method' : 'methods';
-        my $list = _word_list( map {qq['$_']} @missing );
+            my $noun = @missing == 1 ? 'method' : 'methods';
+            my $list = _word_list( map {qq['$_']} @missing );
 
-        return "$class is missing the $list $noun";
-    };
+            return "$class is missing the $list $noun";
+        };
+    }
 
     my $d = $self->_description;
 

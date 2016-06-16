@@ -8,8 +8,8 @@ use Carp qw( confess );
 use Eval::Closure qw( eval_closure );
 use Exporter qw( import );
 use List::Util qw( all );
+use MRO::Compat;
 use Scalar::Util qw( blessed weaken );
-use mro ();
 
 our $VERSION = '0.18';
 
@@ -132,7 +132,7 @@ EOF
     my $attrs = $class->_attrs;
     for my $name ( sort keys %{$attrs} ) {
         my $attr = $attrs->{$name};
-        my $key_name = $attr->{init_arg} // $name;
+        my $key_name = defined $attr->{init_arg} ? $attr->{init_arg} : $name;
 
         if ( $attr->{required} ) {
             $constructor .= <<"EOF";

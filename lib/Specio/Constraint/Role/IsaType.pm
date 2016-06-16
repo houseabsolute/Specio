@@ -41,16 +41,18 @@ sub _wrap_message_generator {
 
     my $class = $self->class;
 
-    $generator //= sub {
-        my $description = shift;
-        my $value       = shift;
+    unless ( defined $generator ) {
+        $generator = sub {
+            my $description = shift;
+            my $value       = shift;
 
-        return
-              "Validation failed for $description with value "
-            . Devel::PartialDump->new->dump($value)
-            . '(not isa '
-            . $class . ')';
-    };
+            return
+                  "Validation failed for $description with value "
+                . Devel::PartialDump->new->dump($value)
+                . '(not isa '
+                . $class . ')';
+        };
+    }
 
     my $d = $self->_description;
 

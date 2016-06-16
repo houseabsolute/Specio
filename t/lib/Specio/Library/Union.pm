@@ -12,10 +12,13 @@ my $locale_object = declare(
     'LocaleObject',
     parent => t('Object'),
     inline => sub {
-        <<"EOF";
+
+        # Using $_[1] directly in the string causes some weirdness with 5.8
+        my $var = $_[1];
+        return <<"EOF";
 (
-    $_[1]->isa('DateTime::Locale::FromData')
-    || $_[1]->isa('DateTime::Locale::Base')
+    $var->isa('DateTime::Locale::FromData')
+    || $var->isa('DateTime::Locale::Base')
 )
 EOF
     },

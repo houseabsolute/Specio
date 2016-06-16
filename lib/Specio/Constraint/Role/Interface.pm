@@ -116,13 +116,15 @@ sub _wrap_message_generator {
     my $self      = shift;
     my $generator = shift;
 
-    $generator //= sub {
-        my $description = shift;
-        my $value       = shift;
+    unless ( defined $generator ) {
+        $generator = sub {
+            my $description = shift;
+            my $value       = shift;
 
-        return "Validation failed for $description with value "
-            . Devel::PartialDump->new->dump($value);
-    };
+            return "Validation failed for $description with value "
+                . Devel::PartialDump->new->dump($value);
+        };
+    }
 
     my $d = $self->_description;
 
@@ -485,7 +487,11 @@ sub _build_signature {
     # threads?
     return join "\n",
         ( $self->_has_parent ? $self->parent->_signature : () ),
-        ( $self->_constraint // $self->_inline_generator );
+        (
+        defined $self->_constraint
+        ? $self->_constraint
+        : $self->_inline_generator
+        );
 }
 
 # Moose compatibility methods - these exist as a temporary hack to make Specio

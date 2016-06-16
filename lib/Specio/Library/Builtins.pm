@@ -182,6 +182,16 @@ EOF
     }
 );
 
+# This is a 5.8 back-compat shim stolen from Type::Tiny's Devel::Perl58Compat
+# module.
+unless ( exists &re::is_regexp ) {
+    require B;
+    *re::is_regexp = sub {
+        ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
+        eval { B::svref_2object( $_[0] )->MAGIC->TYPE eq 'r' };
+    };
+}
+
 declare(
     'RegexpRef',
     parent => t('Ref'),
