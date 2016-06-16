@@ -92,7 +92,7 @@ around BUILD => sub {
     my $p    = shift;
 
     unless ( $self->_has_constraint || $self->_has_inline_generator ) {
-        $self->_set_constraint($NullConstraint);
+        $self->{_constraint} = $NullConstraint;
     }
 
     die
@@ -104,13 +104,6 @@ around BUILD => sub {
 
     return;
 };
-
-sub _set_constraint {
-    is_CodeRef( $_[1] )
-        or confess '_set_constraint must be given a coderef, not a '
-        . Devel::PartialDump->new->dump( $_[1] );
-    $_[0]->{_constraint} = $_[1];
-}
 
 sub _wrap_message_generator {
     my $self      = shift;
