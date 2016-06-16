@@ -12,7 +12,7 @@ use MRO::Compat;
 use Role::Tiny;
 use Scalar::Util qw( blessed weaken );
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 use Specio::TypeChecks qw(
     does_role

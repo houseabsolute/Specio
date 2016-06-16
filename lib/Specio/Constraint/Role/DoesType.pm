@@ -3,7 +3,7 @@ package Specio::Constraint::Role::DoesType;
 use strict;
 use warnings;
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 use Role::Tiny;
 use Storable qw( dclone );

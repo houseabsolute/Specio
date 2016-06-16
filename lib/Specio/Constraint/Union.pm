@@ -3,7 +3,7 @@ package Specio::Constraint::Union;
 use strict;
 use warnings;
 
-our $VERSION = '0.18';
+our $VERSION = '0.19';
 
 use List::Util qw( all any );
 use Role::Tiny::With;
