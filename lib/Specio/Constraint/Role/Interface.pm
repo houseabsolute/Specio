@@ -6,7 +6,6 @@ use warnings;
 our $VERSION = '0.18';
 
 use Carp qw( confess );
-use Class::Method::Modifiers ();
 use Devel::PartialDump;
 use Eval::Closure qw( eval_closure );
 use List::Util 1.33 qw( all any first );
@@ -84,10 +83,10 @@ use overload(
 
 my $NullConstraint = sub {1};
 
-sub BUILD { }
+# See Specio::OO to see how this is used.
 
-around BUILD => sub {
-    my $orig = shift;
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+sub _Specio_Constraint_Role_Interface_BUILD {
     my $self = shift;
     my $p    = shift;
 
@@ -103,7 +102,8 @@ around BUILD => sub {
         = $self->_wrap_message_generator( $p->{message_generator} );
 
     return;
-};
+}
+## use critic
 
 sub _wrap_message_generator {
     my $self      = shift;

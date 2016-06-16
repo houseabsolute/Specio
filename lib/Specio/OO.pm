@@ -9,6 +9,7 @@ use Eval::Closure qw( eval_closure );
 use Exporter qw( import );
 use List::Util qw( all );
 use MRO::Compat;
+use Role::Tiny;
 use Scalar::Util qw( blessed weaken );
 
 our $VERSION = '0.18';
@@ -90,6 +91,8 @@ sub _inline_predicate {
     }
 }
 
+my @RolesWithBUILD = qw( Specio::Constraint::Role::Interface );
+
 sub _inline_constructor {
     my $class = shift;
 
@@ -100,6 +103,20 @@ sub _inline_constructor {
             no strict 'refs';
             push @build_subs, $class . '::BUILD'
                 if defined &{ $class . '::BUILD' };
+        }
+    }
+
+    # This is all a hack to avoid needing Class::Method::Modifiers to add a
+    # BUILD from a role. We can't just call the method in the role "BUILD" or
+    # it will be shadowed by a class's BUILD. So we give it a wacky unique
+    # name. We need to explicitly know which roles have a _X_BUILD method
+    # because Role::Tiny doesn't provide a way to list all the roles applied
+    # to a class.
+    for my $role (@RolesWithBUILD) {
+        if ( Role::Tiny::does_role( $class, $role ) ) {
+            ( my $build_name = $role ) =~ s/::/_/g;
+            $build_name = q{_} . $build_name . '_BUILD';
+            push @build_subs, $role . '::' . $build_name;
         }
     }
 
