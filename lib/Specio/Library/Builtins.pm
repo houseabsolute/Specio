@@ -3,7 +3,7 @@ package Specio::Library::Builtins;
 use strict;
 use warnings;
 
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 
 use parent 'Specio::Exporter';
 
