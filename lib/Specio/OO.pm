@@ -11,6 +11,7 @@ use List::Util qw( all );
 use MRO::Compat;
 use Role::Tiny;
 use Scalar::Util qw( blessed weaken );
+use Specio::PartialDump qw( partial_dump );
 
 our $VERSION = '0.19';
 
@@ -244,14 +245,14 @@ sub _bad_args_message {
 
     return
         "$class->new requires either a hashref or hash as arguments. You passed "
-        . Devel::PartialDump->new->dump(@_);
+        . partial_dump(@_);
 }
 
 sub _bad_value_message {
     my $message = shift;
     my $value   = shift;
 
-    return $message . ' You passed ' . Devel::PartialDump->new->dump($value);
+    return $message . ' You passed ' . partial_dump($value);
 }
 ## use critic
 

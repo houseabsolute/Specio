@@ -4,10 +4,8 @@ use warnings;
 use Test::Fatal;
 use Test::More 0.96;
 
-use Devel::PartialDump;
 use Specio::Declare;
-
-my $dpd = Devel::PartialDump->new;
+use Specio::PartialDump qw( partial_dump );
 
 ## no critic (Modules::ProhibitMultiplePackages)
 {
@@ -226,7 +224,7 @@ my $dpd = Devel::PartialDump->new;
     for my $value ( 'd', 42, [] ) {
         ok(
             !$tc->value_is_valid($value),
-            'enum type rejects ' . $dpd->dump($value)
+            'enum type rejects ' . partial_dump($value)
         );
     }
 }

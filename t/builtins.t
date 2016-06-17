@@ -5,11 +5,9 @@ use open ':encoding(UTF-8)', ':std';
 
 use Test::More 0.96;
 
-use Devel::PartialDump;
 use Specio::Declare;
 use Specio::Library::Builtins;
-
-my $dpd = Devel::PartialDump->new;
+use Specio::PartialDump qw( partial_dump );
 
 {
     my $str = t('Str');
@@ -23,7 +21,7 @@ my $dpd = Devel::PartialDump->new;
     for my $value ( q{}, 'foo', 'bar::baz', "\x{3456}", 0, 42 ) {
         ok(
             $str->value_is_valid($value),
-            $dpd->dump($value) . ' is a valid Str value'
+            partial_dump($value) . ' is a valid Str value'
         );
     }
 
@@ -34,7 +32,7 @@ my $dpd = Devel::PartialDump->new;
     for my $value ( undef, \42, \$foo, [], {}, sub { }, *glob, \*globref ) {
         ok(
             !$str->value_is_valid($value),
-            $dpd->dump($value) . ' is not a valid Str value'
+            partial_dump($value) . ' is not a valid Str value'
         );
     }
 }

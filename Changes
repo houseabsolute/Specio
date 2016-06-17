@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Removed dependency on Devel::PartialDump by making a copy of just the bits
+  we need. Gross but effective.
+
+
 0.18     2016-06-15
 
 - Added union types.
