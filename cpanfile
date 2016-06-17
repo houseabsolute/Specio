@@ -1,6 +1,5 @@
 requires "B" => "0";
 requires "Carp" => "0";
-requires "Devel::PartialDump" => "0";
 requires "Devel::StackTrace" => "0";
 requires "Eval::Closure" => "0";
 requires "Exporter" => "0";
