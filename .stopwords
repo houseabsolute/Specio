@@ -9,6 +9,7 @@ globification
 inlinable
 inline
 isa
+Kogman
 LaxVersionStr
 ModuleName
 MUTC
@@ -43,3 +44,4 @@ StrictVersionStr
 subtype
 subtypes
 Throwable
+Yuval
