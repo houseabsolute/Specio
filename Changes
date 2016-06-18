@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.20     2016-06-18
+
 - Removed test dependency on namespace::autoclean.
 
 

@@ -25,9 +25,8 @@ on 'test' => sub {
   requires "IO::File" => "0";
   requires "Test::Fatal" => "0";
   requires "Test::More" => "0.96";
-  requires "Test::Requires" => "0";
+  requires "Test::Needs" => "0";
   requires "lib" => "0";
-  requires "namespace::autoclean" => "0";
   requires "open" => "0";
   requires "utf8" => "0";
 };
@@ -47,6 +46,7 @@ on 'develop' => sub {
   requires "IPC::Open3" => "0";
   requires "Moo" => "0";
   requires "Moose" => "2.1207";
+  requires "Mouse" => "0";
   requires "Perl::Critic" => "1.126";
   requires "Perl::Tidy" => "20160302";
   requires "Pod::Coverage::TrustPod" => "0";
@@ -66,4 +66,5 @@ on 'develop' => sub {
   requires "Test::Vars" => "0.009";
   requires "Test::Version" => "1";
   requires "blib" => "1.01";
+  requires "namespace::autoclean" => "0";
 };
