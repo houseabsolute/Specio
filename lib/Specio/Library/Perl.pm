@@ -8,7 +8,7 @@ our $VERSION = '0.22';
 use parent 'Specio::Exporter';
 
 use Specio::Library::String;
-use version ();
+use version 0.83 ();
 
 use Specio::Declare;
 

@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Require version 0.83. I know 0.77 doesn't work but I'm not sure exactly
+  which version fixed the problem, since I cannot install older
+  versions. Reported by Slaven Rezic. RT #115418.
+
+
 0.21     2016-06-18
 
 - Don't load Sub::Quote, but use it if it's already loaded. Since Moo uses it,
