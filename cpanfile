@@ -15,7 +15,7 @@ requires "parent" => "0";
 requires "perl" => "5.008";
 requires "re" => "0";
 requires "strict" => "0";
-requires "version" => "0";
+requires "version" => "0.83";
 requires "warnings" => "0";
 
 on 'test' => sub {

@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.22     2016-06-18
+
 - Require version 0.83. I know 0.77 doesn't work but I'm not sure exactly
   which version fixed the problem, since I cannot install older
   versions. Reported by Slaven Rezic. RT #115418.
