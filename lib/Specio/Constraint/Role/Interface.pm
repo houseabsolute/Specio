@@ -11,7 +11,6 @@ use List::Util 1.33 qw( all any first );
 use Specio::Exception;
 use Specio::PartialDump qw( partial_dump );
 use Specio::TypeChecks qw( is_CodeRef );
-use Sub::Quote qw( quote_sub );
 
 use Role::Tiny;
 
@@ -384,7 +383,7 @@ sub inline_check {
 sub _subify {
     my $self = shift;
 
-    if ( $self->can_be_inlined ) {
+    if ( defined &Sub::Quote::quote_sub && $self->can_be_inlined ) {
         my $inline = $self->inline_check('$_[0]');
         $inline .= ' or ';
 
@@ -399,7 +398,7 @@ sub _subify {
             '$type',
         );
 
-        return quote_sub( $inline, \%env );
+        return Sub::Quote::quote_sub( $inline, \%env );
     }
     else {
         return sub { $self->validate_or_die( $_[0] ) };
@@ -424,7 +423,10 @@ sub _inline_throw_exception {
 sub coercion_sub {
     my $self = shift;
 
-    if ( all { $_->can_be_inlined } $self->coercions ) {
+    if (
+        defined &Sub::Quote::quote_sub && all { $_->can_be_inlined }
+        $self->coercions
+        ) {
         my $inline = q{};
         my %env;
 
@@ -437,7 +439,7 @@ sub coercion_sub {
             %env = ( %env, %{ $coercion->_inline_environment } );
         }
 
-        return quote_sub( $inline, \%env );
+        return Sub::Quote::quote_sub( $inline, \%env );
     }
     else {
         return sub { $self->coerce_value(shift) };
