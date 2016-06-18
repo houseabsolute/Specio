@@ -3,7 +3,7 @@ package Specio::Constraint::Role::Interface;
 use strict;
 use warnings;
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 use Carp qw( confess );
 use Eval::Closure qw( eval_closure );
