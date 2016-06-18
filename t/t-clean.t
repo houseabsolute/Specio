@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 
+use Test::Needs 'namespace::autoclean';
+
 use Test::More 0.96;
 
 {

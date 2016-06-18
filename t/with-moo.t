@@ -1,9 +1,7 @@
 use strict;
 use warnings;
 
-use Test::Requires {
-    Moo => '0',
-};
+use Test::Needs 'Moo';
 
 use Test::Fatal;
 use Test::More 0.96;

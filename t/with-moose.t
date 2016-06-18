@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::Requires {
+use Test::Needs {
     Moose => '2.1207',
 };
 
