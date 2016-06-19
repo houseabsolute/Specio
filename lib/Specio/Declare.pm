@@ -23,6 +23,7 @@ our @EXPORT = qw(
     coerce
     declare
     enum
+    intersection
     object_can_type
     object_does_type
     object_isa_type
@@ -218,6 +219,25 @@ sub any_isa_type {
     return $tc;
 }
 
+sub intersection {
+    my $name;
+    $name = shift if @_ % 2;
+    my %p = @_;
+
+    require Specio::Constraint::Intersection;
+
+    my $tc = _make_tc(
+        ( defined $name ? ( name => $name ) : () ),
+        %p,
+        type_class => 'Specio::Constraint::Intersection',
+    );
+
+    register( scalar caller(), $name, $tc, 'exportable' )
+        if defined $name;
+
+    return $tc;
+}
+
 sub union {
     my $name;
     $name = shift if @_ % 2;
@@ -335,6 +355,11 @@ __END__
     enum(
         'Colors',
         [qw( blue green red )],
+    );
+
+    intersection(
+        'HashRefAndArrayRef',
+        of => [ t('HashRef'), t('ArrayRef') ],
     );
 
     union(
@@ -533,6 +558,17 @@ values.
 The first argument is the type name. The remaining arguments are key/value
 pairs. Currently this is just the C<values> key. This should an array
 reference of acceptable string values.
+
+The type name argument can be omitted to create an anonymous type.
+
+=head2 intersection
+
+This creates a type which is the intersection of two or more other types. A
+union only accepts values which match all of its underlying types.
+
+The first argument is the type name. The remaining arguments are key/value
+pairs. Currently this is just the C<of> key. This should an array
+reference of types.
 
 The type name argument can be omitted to create an anonymous type.
 
