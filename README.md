@@ -4,7 +4,7 @@ Specio - Type constraints and coercions for Perl
 
 # VERSION
 
-version 0.22
+version 0.23
 
 # SYNOPSIS
 
@@ -412,11 +412,11 @@ button at [http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~a
 
 # AUTHOR
 
-Dave Rolsky <autarch@urth.org>
+Dave Rolsky &lt;autarch@urth.org>
 
 # CONTRIBUTOR
 
-Karen Etheridge <ether@cpan.org>
+Karen Etheridge &lt;ether@cpan.org>
 
 # COPYRIGHT AND LICENCE
 
