@@ -146,10 +146,10 @@ The C<parent> parameter is ignored if it passed, as it is always C<undef>
 The C<inline_generator> and C<constraint> parameters are also ignored. This
 class provides its own default inline generator subroutine reference.
 
-Finally, this class requires an additional parameter, C<of>. This must be a
-an arrayref of type objects.
+Finally, this class requires an additional parameter, C<of>. This must be an
+arrayref of type objects.
 
-=head2 $enum->of
+=head2 $union->of
 
 Returns an array reference of the individual types which makes up this union.
 
