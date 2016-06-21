@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Fix a bizarre failure on Perl before 5.14. AFAICT this was a test problem,
+  not a library problem.
+
+
 0.23     2016-06-20
 
 - Added intersection types.

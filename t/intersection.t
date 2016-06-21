@@ -12,6 +12,17 @@ use Specio::Declare;
 use Specio::DeclaredAt;
 use Specio::Library::Builtins;
 
+# The test output looks something like this:
+#
+# "Attempt to free unreferenced scalar: SV 0xf64bf0 at /home/autarch/perl5/perlbrew/perls/perl-5.12.5/lib/site_perl/5.12.5/Test/Builder.pm line 302."
+#
+# But the problem isn't in Test::Builder. It's something to do with
+# overloading, because it happens when we try to test the non-inlined types
+# with a NumOverload object.
+plan skip_all =>
+    'This test triggers some odd overloading bug that causes a segfault on older perls'
+    if $] < 5.014;
+
 # The glob vars only work when they're use in the same package as where
 # they're declared. Globs are weird.
 my $GLOB = do {
