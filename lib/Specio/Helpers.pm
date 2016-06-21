@@ -7,7 +7,7 @@ use Carp qw( croak );
 use Exporter 'import';
 use overload ();
 
-our $VERSION = '0.24';
+our $VERSION = '0.25';
 
 use Scalar::Util qw( blessed );
 
