@@ -19,7 +19,7 @@ sub partial_dump {
     my (@args) = @_;
 
     my $dump
-        = _should__dump_as_pairs(@args)
+        = _should_dump_as_pairs(@args)
         ? _dump_as_pairs( 1, @args )
         : _dump_as_list( 1, @args );
 
@@ -32,7 +32,7 @@ sub partial_dump {
     return $dump;
 }
 
-sub _should__dump_as_pairs {
+sub _should_dump_as_pairs {
     my (@what) = @_;
 
     return if @what % 2 != 0;    # must be an even list
@@ -54,12 +54,12 @@ sub _dump_as_pairs {
     }
 
     return join(
-        ', ', __dump_as_pairs_recursive( $depth, @what ),
+        ', ', _dump_as_pairs_recursive( $depth, @what ),
         ( $truncated ? "..." : () )
     );
 }
 
-sub __dump_as_pairs_recursive {
+sub _dump_as_pairs_recursive {
     my ( $depth, @what ) = @_;
 
     return unless @what;
@@ -68,7 +68,7 @@ sub __dump_as_pairs_recursive {
 
     return (
         ( _format_key( $depth, $key ) . ': ' . _format( $depth, $value ) ),
-        __dump_as_pairs_recursive( $depth, @rest ),
+        _dump_as_pairs_recursive( $depth, @rest ),
     );
 }
 
