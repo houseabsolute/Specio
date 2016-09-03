@@ -228,11 +228,11 @@ sub test_constraint {
     subtest(
         ( $type->name || '<anon>' ),
         sub {
-            my $not_inlined = $type->_constraint_with_parents();
+            my $not_inlined = $type->_constraint_with_parents;
 
             my $inlined;
-            if ( $type->can_be_inlined() ) {
-                $inlined = $type->_generated_inline_sub();
+            if ( $type->can_be_inlined ) {
+                $inlined = $type->_generated_inline_sub;
             }
 
             for my $accept ( @{ $tests->{accept} || [] } ) {

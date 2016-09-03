@@ -24,9 +24,10 @@ __END__
         'PositiveInt',
         parent => t('Int'),
         inline => sub {
-            $_[0]->parent()->inline_check( $_[1] )
+            $_[0]->parent->inline_check( $_[1] )
                 . ' && ( '
-                . $_[1] . ' > 0 )';
+                . $_[1]
+                . ' > 0 )';
         },
     );
 
@@ -279,7 +280,7 @@ This should just work. Use a Specio type anywhere you'd specify a type.
 
 Using Specio with Moo is easy. You can pass Specio constraint objects as
 C<isa> parameters for attributes. For coercions, simply call C<<
-$type->coercion_sub() >>.
+$type->coercion_sub >>.
 
     package Foo;
 
@@ -308,7 +309,7 @@ $type->coercion_sub() >>.
     has ucstr => (
         is     => 'ro',
         isa    => $ucstr,
-        coerce => $ucstr->coercion_sub(),
+        coerce => $ucstr->coercion_sub,
     );
 
 The subs returned by Specio use L<Sub::Quote> internally and are suitable for
