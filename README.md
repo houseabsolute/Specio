@@ -4,7 +4,7 @@ Specio - Type constraints and coercions for Perl
 
 # VERSION
 
-version 0.24
+version 0.25
 
 # SYNOPSIS
 
@@ -17,9 +17,10 @@ version 0.24
         'PositiveInt',
         parent => t('Int'),
         inline => sub {
-            $_[0]->parent()->inline_check( $_[1] )
+            $_[0]->parent->inline_check( $_[1] )
                 . ' && ( '
-                . $_[1] . ' > 0 )';
+                . $_[1]
+                . ' > 0 )';
         },
     );
 
@@ -271,7 +272,7 @@ This should just work. Use a Specio type anywhere you'd specify a type.
 # USING SPECIO WITH [Moo](https://metacpan.org/pod/Moo)
 
 Using Specio with Moo is easy. You can pass Specio constraint objects as
-`isa` parameters for attributes. For coercions, simply call `$type->coercion_sub()`.
+`isa` parameters for attributes. For coercions, simply call `$type->coercion_sub`.
 
     package Foo;
 
@@ -300,7 +301,7 @@ Using Specio with Moo is easy. You can pass Specio constraint objects as
     has ucstr => (
         is     => 'ro',
         isa    => $ucstr,
-        coerce => $ucstr->coercion_sub(),
+        coerce => $ucstr->coercion_sub,
     );
 
 The subs returned by Specio use [Sub::Quote](https://metacpan.org/pod/Sub::Quote) internally and are suitable for
@@ -412,13 +413,13 @@ button at [http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~a
 
 # AUTHOR
 
-Dave Rolsky &lt;autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
 # CONTRIBUTOR
 
-Karen Etheridge &lt;ether@cpan.org>
+Karen Etheridge <ether@cpan.org>
 
-# COPYRIGHT AND LICENCE
+# COPYRIGHT AND LICENSE
 
 This software is Copyright (c) 2016 by Dave Rolsky.
 
