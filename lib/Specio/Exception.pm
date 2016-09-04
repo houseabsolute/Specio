@@ -7,7 +7,7 @@ use overload
     q{""}    => 'as_string',
     fallback => 1;
 
-our $VERSION = '0.25';
+our $VERSION = '0.26';
 
 use Devel::StackTrace;
 use Scalar::Util qw( blessed );

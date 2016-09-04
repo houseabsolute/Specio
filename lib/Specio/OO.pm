@@ -13,7 +13,7 @@ use Role::Tiny;
 use Scalar::Util qw( blessed weaken );
 use Specio::PartialDump qw( partial_dump );
 
-our $VERSION = '0.25';
+our $VERSION = '0.26';
 
 use Specio::TypeChecks qw(
     does_role
