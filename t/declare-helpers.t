@@ -137,6 +137,18 @@ use Specio::PartialDump qw( partial_dump );
         $tc->value_is_valid( Bar->new ),
         'Bar object is valid for object isa type (requires Foo)'
     );
+
+    is(
+        exception {
+            is(
+                $tc . q{},
+                object_isa_type('Foo') . q{},
+                'object_isa_type returns the same type for the same class each time'
+            );
+        },
+        undef,
+        'no exception calling object_isa_type repeatedly with the same class name'
+    );
 }
 
 {
@@ -160,6 +172,18 @@ use Specio::PartialDump qw( partial_dump );
             );
         }
     }
+
+    is(
+        exception {
+            is(
+                $tc . q{},
+                any_isa_type('FooAny') . q{},
+                'any_isa_type returns the same type for the same class each time'
+            );
+        },
+        undef,
+        'no exception calling any_isa_type repeatedly with the same class name'
+    );
 }
 
 {

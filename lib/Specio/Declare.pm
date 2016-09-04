@@ -134,6 +134,18 @@ sub object_does_type {
     my $name = shift;
     my %p    = @_;
 
+    my $caller = scalar caller();
+
+    # If we are being called repeatedly with a single argument, then we don't
+    # want to blow up because the type has already been declared. This would
+    # force the user to use t() for all calls but the first, making their code
+    # pointlessly more complicated.
+    unless ( keys %p ) {
+        if ( my $tc = internal_types_for_package($caller)->{$name} ) {
+            return $tc;
+        }
+    }
+
     require Specio::Constraint::ObjectDoes;
 
     my $tc = _make_tc(
@@ -151,6 +163,13 @@ sub object_isa_type {
     my $name = shift;
     my %p    = @_;
 
+    my $caller = scalar caller();
+    unless ( keys %p ) {
+        if ( my $tc = internal_types_for_package($caller)->{$name} ) {
+            return $tc;
+        }
+    }
+
     require Specio::Constraint::ObjectIsa;
 
     my $tc = _make_tc(
@@ -159,7 +178,7 @@ sub object_isa_type {
         type_class => 'Specio::Constraint::ObjectIsa',
     );
 
-    register( scalar caller(), $name, $tc, 'exportable' );
+    register( $caller, $name, $tc, 'exportable' );
 
     return $tc;
 }
@@ -189,6 +208,13 @@ sub any_does_type {
     my $name = shift;
     my %p    = @_;
 
+    my $caller = scalar caller();
+    unless ( keys %p ) {
+        if ( my $tc = internal_types_for_package($caller)->{$name} ) {
+            return $tc;
+        }
+    }
+
     require Specio::Constraint::AnyDoes;
 
     my $tc = _make_tc(
@@ -205,6 +231,13 @@ sub any_does_type {
 sub any_isa_type {
     my $name = shift;
     my %p    = @_;
+
+    my $caller = scalar caller();
+    unless ( keys %p ) {
+        if ( my $tc = internal_types_for_package($caller)->{$name} ) {
+            return $tc;
+        }
+    }
 
     require Specio::Constraint::AnyIsa;
 

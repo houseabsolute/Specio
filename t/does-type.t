@@ -55,6 +55,32 @@ use Specio::Declare;
     );
 }
 
+{
+    is(
+        exception {
+            is(
+                object_does_type('Role::MooseStyle') . q{},
+                object_does_type('Role::MooseStyle') . q{},
+                'object_does_type returns the same type for the same role each time'
+            );
+        },
+        undef,
+        'no exception calling object_does_type repeatedly with the same role name'
+    );
+
+    is(
+        exception {
+            is(
+                any_does_type('Role::MooseStyle') . q{},
+                any_does_type('Role::MooseStyle') . q{},
+                'any_does_type returns the same type for the same role each time'
+            );
+        },
+        undef,
+        'no exception calling any_does_type repeatedly with the same role name'
+    );
+}
+
 SKIP:
 {
     skip 'These tests require Mouse', 8

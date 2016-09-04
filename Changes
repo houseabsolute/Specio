@@ -1,5 +1,12 @@
 {{$NEXT}}
 
+- Calling {any,object}_{isa,does}_type repeatedly in a package with the same
+  class or role name would die. These subs are now special-cased to simply
+  return an existing type for the given name when they receive a single
+  argument (the name of the class or role). This could come up if you had two
+  attributes both of which required an object of the same type.
+
+
 0.24     2016-06-20
 
 - Fix a bizarre failure on Perl before 5.14. AFAICT this was a test problem,
