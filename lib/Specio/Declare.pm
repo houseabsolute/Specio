@@ -387,7 +387,7 @@ __END__
 
     enum(
         'Colors',
-        [qw( blue green red )],
+        values => [qw( blue green red )],
     );
 
     intersection(
