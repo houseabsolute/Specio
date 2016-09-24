@@ -12,7 +12,7 @@ use Specio::Exception;
 use Specio::PartialDump qw( partial_dump );
 use Specio::TypeChecks qw( is_CodeRef );
 
-use Role::Tiny;
+use Role::Tiny 1.003003;
 
 use Specio::Role::Inlinable;
 with 'Specio::Role::Inlinable';

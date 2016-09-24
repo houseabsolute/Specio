@@ -1,5 +1,12 @@
 {{$NEXT}}
 
+- Require Role::Tiny 1.003003. This should fix the test failures some
+  CPANTesters reported with this error:
+
+    Can't resolve method "???" overloading "&{}" in package
+    "Specio::Constraint::Simple" at Specio::Constraint::Simple->new line 35.
+
+
 0.25     2016-09-04
 
 - Calling {any,object}_{isa,does}_type repeatedly in a package with the same
