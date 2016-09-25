@@ -4,7 +4,7 @@ Specio - Type constraints and coercions for Perl
 
 # VERSION
 
-version 0.25
+version 0.26
 
 # SYNOPSIS
 
