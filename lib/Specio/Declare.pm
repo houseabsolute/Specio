@@ -5,7 +5,7 @@ use warnings;
 
 use parent 'Exporter';
 
-our $VERSION = '0.26';
+our $VERSION = '0.27';
 
 use Carp qw( croak );
 use Specio::Coercion;
