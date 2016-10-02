@@ -474,7 +474,7 @@ sub _build_description {
 
 sub _build_coercions { {} }
 
-# This is called on a new
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _clone_coercions {
     my $self = shift;
 
@@ -488,6 +488,7 @@ sub _clone_coercions {
 
     return \%clones;
 }
+## use critic
 
 sub _build_signature {
     my $self = shift;

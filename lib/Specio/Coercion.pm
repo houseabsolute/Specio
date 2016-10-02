@@ -131,7 +131,7 @@ __END__
 
 =pod
 
-=for Pod::Coverage BUILD
+=for Pod::Coverage BUILD clone_with_new_to
 
 =head1 SYNOPSIS
 
