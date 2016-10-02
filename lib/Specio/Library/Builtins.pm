@@ -16,11 +16,6 @@ use Specio::Declare;
 use Specio::Helpers ();
 
 declare(
-    'Any',
-    inline => sub {'1'}
-);
-
-declare(
     'Item',
     inline => sub {'1'}
 );
@@ -412,8 +407,110 @@ __END__
 
 =head1 DESCRIPTION
 
-See the documentation in L<Specio> for a list of types that this library
-implements.
+This library provides a set of types parallel to those provided by Moose.
 
-This library uses L<Specio::Exporter> to export its types.
+The types are in the following hierarchy
+
+  Item
+      Bool
+      Maybe (of `a)
+      Undef
+      Defined
+          Value
+              Str
+                  Num
+                      Int
+                  ClassName
+          Ref
+              ScalarRef (of `a)
+              ArrayRef (of `a)
+              HashRef (of `a)
+              CodeRef
+              RegexpRef
+              GlobRef
+              FileHandle
+              Object
+
+=head2 Item
+
+Accepts any value
+
+=head2 Bool
+
+Accepts a non-reference that is C<undef>, an empty string, C<0>, or C<1>. It
+also accepts any object which overloads boolification.
+
+=head2 Maybe (of `a)
+
+A parameterizable type which accepts C<undef> or the type C<`a>. If not
+parameterized this type will accept any value.
+
+=head2 Undef
+
+Only accepts C<undef>.
+
+=head2 Value
+
+Accepts any non-reference value.
+
+=head2 Str
+
+Accepts any non-reference value or an object which overloads stringification.
+
+=head2 Num
+
+Accepts nearly the same values as C<Scalar::Util::looks_like_number>, but does
+not accept numbers with leading or trailing spaces, infinities, or NaN. Also
+accepts an object which overloads numification.
+
+=head2 Int
+
+Accepts any integer value, or an object which overloads numification and
+numifies to an integer.
+
+=head2 ClassName
+
+Accepts any value which passes C<Str> where the string is a loaded package.
+
+=head2 Ref
+
+Accepts any reference.
+
+=head2 ScalarRef (of `a)
+
+Accepts a scalar reference or an object which overloads scalar
+dereferencing. If parameterized, the dereferenced value must be of type C<`a>.
+
+=head2 ArrayRef (of `a)
+
+Accepts a array reference or an object which overloads array dereferencing. If
+parameterized, the values in the arrayref must be of type C<`a>.
+
+=head2 HashRef (of `a)
+
+Accepts a hash reference or an object which overloads hash dereferencing. If
+parameterized, the values in the hashref must be of type C<`a>.
+
+=head2 CodeRef
+
+Accepts a code (sub) reference or an object which overloads code
+dereferencing.
+
+=head2 RegexpRef
+
+Accepts a regex object created by C<qr//>.
+
+=head2 GlobRef
+
+Accepts a glob reference or an object which overloads glob dereferencing.
+
+=head2 FileHandle
+
+Accepts a glob reference which is an open file handle, any C<IO::Handle>
+Object or subclass, or an object which overloads glob dereferencing and
+returns a glob reference which is an open file handle.
+
+=head2 Object
+
+Accepts any blessed object.
 
