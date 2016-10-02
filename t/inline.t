@@ -137,6 +137,19 @@ use Specio::Library::Builtins;
         $constraint->('Specio::Coercion'),
         'generated constraint accepts values as expected'
     );
+
+    my $code;
+    is(
+        exception { $code = $foo->inline_check('$x') },
+        undef,
+        'building inline code for an empty subtype of an any_isa_type does not die'
+    );
+
+    like(
+        $code,
+        qr/\$x->isa\((["'])Specio::Coercion\1\)/,
+        'generated code contains expected check'
+    );
 }
 
 done_testing();

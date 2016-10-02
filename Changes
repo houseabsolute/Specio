@@ -2,13 +2,15 @@
 
 - Added a Test::Specio module to provide helpers for testing Specio libraries.
 
+- Fixed another bug with a subtype of special types and inlining.
+
 
 0.27     2016-10-01
 
 - Cloning a type with coercions defined on it would cause an exception.
 
 - Creating a subtype of a special type created by *_isa_type, *_can_type, or
-  *_does_type, or enum would die when trying to inline type constraint.
+  *_does_type, or enum would die when trying to inline the type constraint.
 
 - Removed the never-documented Any type.
 

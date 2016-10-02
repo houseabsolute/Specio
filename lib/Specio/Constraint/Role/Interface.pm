@@ -378,7 +378,7 @@ sub inline_check {
     die 'Cannot inline' unless $self->can_be_inlined;
 
     my $type = $self->_self_or_first_inlinable_ancestor;
-    return $type->_inline_generator->( $self, @_ );
+    return $type->_inline_generator->( $type, @_ );
 }
 
 sub _subify {
