@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.28     2016-10-02
+
 - Added a Test::Specio module to provide helpers for testing Specio libraries.
 
 - Fixed another bug with a subtype of special types and inlining.
