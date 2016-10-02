@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.27     2016-10-01
+
 - Cloning a type with coercions defined on it would cause an exception.
 
 - Creating a subtype of a special type created by *_isa_type, *_can_type, or
