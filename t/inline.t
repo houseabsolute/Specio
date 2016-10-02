@@ -114,4 +114,29 @@ use Specio::Library::Builtins;
     );
 }
 
+{
+    # Note that the same bug would apply to role types and other special types
+    # that have a specialized _inline_generator.
+    my $foo = declare(
+        'Foo',
+        parent => any_isa_type('Specio::Coercion'),
+    );
+
+    my $constraint;
+    is(
+        exception { $constraint = $foo->_generated_inline_sub },
+        undef,
+        'building an inline sub for an empty subtype of an any_isa_type does not die'
+    );
+
+    ok(
+        !$constraint->('Specio::Constraint::Simple'),
+        'generated constraint rejects values as expected'
+    );
+    ok(
+        $constraint->('Specio::Coercion'),
+        'generated constraint accepts values as expected'
+    );
+}
+
 done_testing();

@@ -203,7 +203,7 @@ sub _build_generated_inline_sub {
     my $type = $self->_self_or_first_inlinable_ancestor;
 
     my $source
-        = 'sub { ' . $type->_inline_generator->( $self, '$_[0]' ) . '}';
+        = 'sub { ' . $type->_inline_generator->( $type, '$_[0]' ) . '}';
 
     return eval_closure(
         source      => $source,
