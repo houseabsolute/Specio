@@ -104,6 +104,23 @@ sub _build_description {
     return $desc;
 }
 
+sub clone_with_new_to {
+    my $self   = shift;
+    my $new_to = shift;
+
+    my $from = $self->from;
+
+    local $self->{from} = undef;
+    local $self->{to}   = undef;
+
+    my $clone = $self->clone;
+
+    $clone->{from} = $from;
+    $clone->{to}   = $new_to;
+
+    return $clone;
+}
+
 __PACKAGE__->_ooify;
 
 1;

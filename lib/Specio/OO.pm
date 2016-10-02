@@ -6,15 +6,11 @@ use warnings;
 use B qw( perlstring );
 use Carp qw( confess );
 use Eval::Closure qw( eval_closure );
-use Exporter qw( import );
 use List::Util qw( all );
 use MRO::Compat;
 use Role::Tiny;
 use Scalar::Util qw( blessed weaken );
 use Specio::PartialDump qw( partial_dump );
-
-our $VERSION = '0.27';
-
 use Specio::TypeChecks qw(
     does_role
     is_ArrayRef
@@ -26,6 +22,10 @@ use Specio::TypeChecks qw(
     isa_class
 );
 use Storable qw( dclone );
+
+our $VERSION = '0.27';
+
+use Exporter qw( import );
 
 ## no critic (Modules::ProhibitAutomaticExportation)
 our @EXPORT = qw(
@@ -259,27 +259,48 @@ sub _bad_value_message {
 sub clone {
     my $self = shift;
 
-    my %new;
+    # Attributes which provide a clone method are cloned by calling that
+    # method on the _clone_ (not the original). This is primarily to allow us
+    # to clone the coercions contained by a type in a way that doesn't lead to
+    # circular clone (type clones coercions which in turn need to clone their
+    # to/from types which in turn ...).
+    my $attrs = $self->_attrs;
+    my %special = map { $_ => $attrs->{$_}{clone} }
+        grep { $attrs->{$_}{clone} } keys %{$attrs};
+
+    my $new;
     for my $key ( keys %{$self} ) {
         my $value = $self->{$key};
 
-        # We need to special case arrays of Specio objects, as they may
-        # contain code refs which cannot be cloned with dclone.
-        if ( ( ref $value eq 'ARRAY' )
-            && all { ( blessed($_) || q{} ) =~ /Specio/ } @{$value} ) {
-
-            $new{$key} = [ map { $_->clone } @{$value} ];
+        if ( $special{$key} ) {
+            $new->{$key} = $value;
             next;
         }
 
-        $new{$key}
+        # We need to special case arrays and hashes of Specio objects, as they
+        # may contain code refs which cannot be cloned with dclone.
+        if ( ( ref $value eq 'ARRAY' )
+            && all { ( blessed($_) || q{} ) =~ /Specio/ } @{$value} ) {
+
+            $new->{$key} = [ map { $_->clone } @{$value} ];
+            next;
+        }
+
+        $new->{$key}
             = blessed $value           ? $value->clone
             : ( ref $value eq 'CODE' ) ? $value
             : ref $value               ? dclone($value)
             :                            $value;
     }
 
-    return bless \%new, ( ref $self );
+    bless $new, ( ref $self );
+
+    for my $key ( keys %special ) {
+        my $method = $special{$key};
+        $new->{$key} = $new->$method;
+    }
+
+    return $new;
 }
 
 1;

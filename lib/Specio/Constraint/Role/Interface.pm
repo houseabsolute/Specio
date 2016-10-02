@@ -61,6 +61,7 @@ use overload(
         },
         _coercions => {
             builder => '_build_coercions',
+            clone   => '_clone_coercions',
         },
 
         # Because types are cloned on import, we can't directly compare type
@@ -123,11 +124,11 @@ sub _wrap_message_generator {
     return sub { $generator->( $d, @_ ) };
 }
 
-sub coercions               { values %{ $_[0]->{coercions} } }
-sub coercion_from_type      { $_[0]->{coercions}{ $_[1] } }
-sub _has_coercion_from_type { exists $_[0]->{coercions}{ $_[1] } }
-sub _add_coercion           { $_[0]->{coercions}{ $_[1] } = $_[2] }
-sub has_coercions           { scalar keys %{ $_[0]->{coercions} } }
+sub coercions               { values %{ $_[0]->{_coercions} } }
+sub coercion_from_type      { $_[0]->{_coercions}{ $_[1] } }
+sub _has_coercion_from_type { exists $_[0]->{_coercions}{ $_[1] } }
+sub _add_coercion           { $_[0]->{_coercions}{ $_[1] } = $_[2] }
+sub has_coercions           { scalar keys %{ $_[0]->{_coercions} } }
 
 sub validate_or_die {
     my $self  = shift;
@@ -472,6 +473,21 @@ sub _build_description {
 }
 
 sub _build_coercions { {} }
+
+# This is called on a new
+sub _clone_coercions {
+    my $self = shift;
+
+    my $coercions = $self->_coercions;
+    my %clones;
+
+    for my $name ( keys %{$coercions} ) {
+        my $coercion = $coercions->{$name};
+        $clones{$name} = $coercion->clone_with_new_to($self);
+    }
+
+    return \%clones;
+}
 
 sub _build_signature {
     my $self = shift;

@@ -27,39 +27,61 @@ use Specio::Library::Builtins;
         using => sub { [ $_[0] ] },
     );
 
-    ok( $arrayref->has_coercions, 'ArrayRef type object has coercions' );
-
-    ok(
-        !Specio::Library::Builtins::t('ArrayRef')->has_coercions,
-        'ArrayRef type in Specio::Library::Builtins package does not have coercions (coercions only apply to local copy of type)'
-    );
-
-    ok(
-        $arrayref->has_coercion_from_type( t('Int') ),
-        'has a coercion for the Int type'
-    );
-
-    ok(
-        !$arrayref->has_coercion_from_type( t('Str') ),
-        'does not have a coercion for the Str type'
-    );
-
-    is_deeply(
-        $arrayref->coerce_value(42),
-        [42],
-        'coerced int to arrayref',
-    );
-
+    my $clone;
     is(
-        $arrayref->coerce_value(42.1),
-        42.1,
-        'cannot coerce num to arrayref - returns original value',
+        exception { $clone = $arrayref->clone },
+        undef,
+        'can clone constraint with coercions without an exception'
     );
 
-    ok(
-        !$arrayref->can_inline_coercion_and_check,
-        'cannot inline coercion and check for arrayref'
-    );
+    for my $pair (
+        [ 'ArrayRef',          $arrayref ],
+        [ 'clone of Arrayref', $clone ]
+        ) {
+        my ( $name, $type ) = @{$pair};
+
+        subtest(
+            $name,
+            sub {
+                ok(
+                    $type->has_coercions,
+                    'ArrayRef type object has coercions'
+                );
+
+                ok(
+                    !Specio::Library::Builtins::t('ArrayRef')->has_coercions,
+                    'ArrayRef type in Specio::Library::Builtins package does not have coercions (coercions only apply to local copy of type)'
+                );
+
+                ok(
+                    $type->has_coercion_from_type( t('Int') ),
+                    'has a coercion for the Int type'
+                );
+
+                ok(
+                    !$type->has_coercion_from_type( t('Str') ),
+                    'does not have a coercion for the Str type'
+                );
+
+                is_deeply(
+                    $type->coerce_value(42),
+                    [42],
+                    'coerced int to arrayref',
+                );
+
+                is(
+                    $type->coerce_value(42.1),
+                    42.1,
+                    'cannot coerce num to arrayref - returns original value',
+                );
+
+                ok(
+                    !$type->can_inline_coercion_and_check,
+                    'cannot inline coercion and check for arrayref'
+                );
+            }
+        );
+    }
 }
 
 {
