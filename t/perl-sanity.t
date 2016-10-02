@@ -4,7 +4,7 @@ use warnings;
 use lib 't/lib';
 
 use Test::More 0.96;
-use Test::Types;
+use Test::Specio qw( test_constraint :vars );
 
 use B ();
 use Specio::Library::String;
@@ -40,8 +40,7 @@ my %tests = (
     },
     DistName => {
         accept => [
-            $CLASS_NAME,
-            $STR_OVERLOAD_CLASS_NAME, qw(
+            qw(
                 Specio
                 Spec-Library-Builtins
                 strict
@@ -175,7 +174,7 @@ my %tests = (
 $tests{ModuleName} = $tests{PackageName};
 
 for my $name ( sort keys %tests ) {
-    test_constraint( $name, $tests{$name}, \&describe );
+    test_constraint( $name, $tests{$name} );
 }
 
 done_testing();

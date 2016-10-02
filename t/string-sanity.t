@@ -4,7 +4,7 @@ use warnings;
 use lib 't/lib';
 
 use Test::More 0.96;
-use Test::Types;
+use Test::Specio qw( test_constraint :vars );
 
 use Specio::Library::String;
 
@@ -18,14 +18,14 @@ my $GLOB = do {
 
 ## no critic (Variables::RequireInitializationForLocalVars)
 local *FOO;
-my $GLOB_OVERLOAD = GlobOverload->new( \*FOO );
+my $GLOB_OVERLOAD = _T::GlobOverload->new( \*FOO );
 
 local *BAR;
 {
     ## no critic (InputOutput::ProhibitBarewordFileHandles, InputOutput::RequireBriefOpen)
     open BAR, '<', $0 or die "Could not open $0 for the test";
 }
-my $GLOB_OVERLOAD_FH = GlobOverload->new( \*BAR );
+my $GLOB_OVERLOAD_FH = _T::GlobOverload->new( \*BAR );
 
 my $LONG_STR_255 = 'x' x 255;
 my $LONG_STR_256 = 'x' x 256;
@@ -222,7 +222,7 @@ my %tests = (
 );
 
 for my $name ( sort keys %tests ) {
-    test_constraint( $name, $tests{$name}, \&describe );
+    test_constraint( $name, $tests{$name} );
 }
 
 done_testing();

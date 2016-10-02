@@ -5,7 +5,7 @@ use lib 't/lib';
 
 use Test::Fatal;
 use Test::More 0.96;
-use Test::Types;
+use Test::Specio qw( test_constraint :vars );
 
 use Specio::Constraint::Intersection;
 use Specio::Declare;
@@ -33,14 +33,14 @@ my $GLOB = do {
 
 ## no critic (Variables::RequireInitializationForLocalVars)
 local *FOO;
-my $GLOB_OVERLOAD = GlobOverload->new( \*FOO );
+my $GLOB_OVERLOAD = _T::GlobOverload->new( \*FOO );
 
 local *BAR;
 {
     ## no critic (InputOutput::ProhibitBarewordFileHandles, InputOutput::RequireBriefOpen)
     open BAR, '<', $0 or die "Could not open $0 for the test";
 }
-my $GLOB_OVERLOAD_FH = GlobOverload->new( \*BAR );
+my $GLOB_OVERLOAD_FH = _T::GlobOverload->new( \*BAR );
 
 {
     package HashArray;
@@ -145,7 +145,7 @@ subtest(
             'intersection has no parent'
         );
 
-        test_constraint( $unnamed_intersection, \%tests, \&describe );
+        test_constraint( $unnamed_intersection, \%tests );
     }
 );
 
@@ -162,7 +162,7 @@ subtest(
             'name passed to intersection() is used'
         );
 
-        test_constraint( $named_intersection, \%tests, \&describe );
+        test_constraint( $named_intersection, \%tests );
     }
 );
 
@@ -205,7 +205,7 @@ subtest(
             'intersection is anonymous if any of its constituents are anonymous'
         );
 
-        test_constraint( $no_inline_intersection, \%tests, \&describe );
+        test_constraint( $no_inline_intersection, \%tests );
     }
 );
 
@@ -236,7 +236,7 @@ subtest(
             'intersection is anonymous if any of its constituents are anonymous'
         );
 
-        test_constraint( $mixed_inline_intersection, \%tests, \&describe );
+        test_constraint( $mixed_inline_intersection, \%tests );
     }
 );
 

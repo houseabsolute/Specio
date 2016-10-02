@@ -4,7 +4,7 @@ use warnings;
 use lib 't/lib';
 
 use Test::More 0.96;
-use Test::Types;
+use Test::Specio qw( test_constraint );
 
 use Specio::Library::Numeric;
 
@@ -54,7 +54,7 @@ my %tests = (
 );
 
 for my $name ( sort keys %tests ) {
-    test_constraint( $name, $tests{$name}, \&describe );
+    test_constraint( $name, $tests{$name} );
 }
 
 done_testing();

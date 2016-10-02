@@ -4,7 +4,7 @@ use warnings;
 use lib 't/lib';
 
 use Test::More 0.96;
-use Test::Types;
+use Test::Specio qw( describe test_constraint :vars );
 
 use Specio::Library::Builtins;
 
@@ -18,14 +18,14 @@ my $GLOB = do {
 
 ## no critic (Variables::RequireInitializationForLocalVars)
 local *FOO;
-my $GLOB_OVERLOAD = GlobOverload->new( \*FOO );
+my $GLOB_OVERLOAD = _T::GlobOverload->new( \*FOO );
 
 local *BAR;
 {
     ## no critic (InputOutput::ProhibitBarewordFileHandles, InputOutput::RequireBriefOpen)
     open BAR, '<', $0 or die "Could not open $0 for the test";
 }
-my $GLOB_OVERLOAD_FH = GlobOverload->new( \*BAR );
+my $GLOB_OVERLOAD_FH = _T::GlobOverload->new( \*BAR );
 
 my %tests = (
     Item => {
@@ -958,7 +958,7 @@ my %tests = (
 );
 
 for my $name ( sort keys %tests ) {
-    test_constraint( $name, $tests{$name}, \&describe );
+    test_constraint( $name, $tests{$name} );
 }
 
 my %ptype_tests = (
@@ -1194,7 +1194,7 @@ my %substr_test_str = (
 # accept the return val of substr() - which means passing that return val
 # directly to the checking code
 for my $type_name (qw( Str Num Int ClassName )) {
-    my $str = $substr_test_str{$type_name} || '123456789';
+    my $str = $substr_test_str{$type_name} || '123456789123456789';
 
     my $type = t($type_name);
 
@@ -1208,16 +1208,16 @@ for my $type_name (qw( Str Num Int ClassName )) {
     }
 
     ok(
-        $type->value_is_valid( substr( $str, 1, 5 ) ),
+        $type->value_is_valid( substr( $str, 1, 9 ) ),
         $type_name . ' accepts return val from substr using ->value_is_valid'
     );
     ok(
-        $not_inlined->( substr( $str, 1, 5 ) ),
+        $not_inlined->( substr( $str, 1, 9 ) ),
         $type_name
             . ' accepts return val from substr using unoptimized constraint'
     );
     ok(
-        $inlined->( substr( $str, 1, 5 ) ),
+        $inlined->( substr( $str, 1, 9 ) ),
         $type_name
             . ' accepts return val from substr using inlined constraint'
     );
