@@ -498,7 +498,8 @@ dereferencing.
 
 =head2 RegexpRef
 
-Accepts a regex object created by C<qr//>.
+Accepts a regex object created by C<qr//> or an object which overloads
+regex interpolation.
 
 =head2 GlobRef
 
