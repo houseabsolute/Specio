@@ -205,13 +205,27 @@ __END__
 
 =pod
 
-=for Pod::Coverage .*
+=for Pod::Coverage partial_dump
+
+=head1 SYNOPSIS
+
+  use Specio::PartialDump qw( partial_dump );
+
+  partial_dump( { foo => 42 } );
+  partial_dump(qw( a b c d e f g ));
+  partial_dump( foo => 42, bar => [ 1, 2, 3 ], );
 
 =head1 DESCRIPTION
 
-There's nothing public here.
+This is a copy of Devel::PartialDump with all the OO bits and prereqs
+removed. You may want to use this module in your own code to generate nicely
+formatted messages when a type constraint fails.
 
-This is a copy of Devel::PartialDump with all the OO bits and prereqs removed.
+This module optionally exports one sub, C<partial_dump>. This sub accepts any
+number of arguments. If given more than one, it will assume that it's either
+been given a list of key/value pairs (to build a hash) or a list of values (to
+build an array) and dump them appropriately. Objects and references are
+stringified in a sane way.
 
 =head1 COPYRIGHT AND LICENSE
 

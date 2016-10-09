@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Doc Specio::PartialDump because you may want to use it as part of the
+  failure message generation code for a type.
+
+
 0.28     2016-10-02
 
 - Added a Test::Specio module to provide helpers for testing Specio libraries.
