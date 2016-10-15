@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.30     2016-10-15
+
 - Fix a bug with the Sub::Quoted sub returned by $type->coercion_sub. If a
   type had more than one coercion, the generated sub could end up coercing the
   value to undef some of the time. Depending on hash key ordering, this could
