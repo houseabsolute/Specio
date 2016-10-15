@@ -40,7 +40,8 @@ use Specio::OO;
 sub BUILD {
     my $self = shift;
 
-    $self->{stack_trace} = Devel::StackTrace->new;
+    $self->{stack_trace}
+        = Devel::StackTrace->new( ignore_package => __PACKAGE__ );
 
     return;
 }

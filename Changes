@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- The stack trace contained by Specio::Exception objects no longer includes a
+  stack frames for the Specio::Exception package.
+
+
 0.30     2016-10-15
 
 - Fix a bug with the Sub::Quoted sub returned by $type->coercion_sub. If a
