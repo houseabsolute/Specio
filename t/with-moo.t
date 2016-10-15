@@ -206,4 +206,59 @@ is(
     );
 }
 
+# There was a bug in Specio for any attribute with a type with more than one
+# coercion. In order to guarantee that it occurs, you need a a class with just
+# one attribute.
+{
+    ## no critic (Modules::ProhibitMultiplePackages)
+    package Bar;
+
+    use Specio::Declare;
+    use Specio::Library::Builtins;
+
+    use Moo;
+
+    coerce(
+        t('Str'),
+        from             => t('ArrayRef'),
+        inline_generator => sub {
+            my $coercion  = shift;
+            my $value_var = shift;
+
+            return "join q{}, \@{$value_var}";
+        },
+    );
+
+    coerce(
+        t('Str'),
+        from             => t('HashRef'),
+        inline_generator => sub {
+            my $coercion  = shift;
+            my $value_var = shift;
+
+            return "join q{}, keys %{$value_var}";
+        },
+    );
+
+    has bar => (
+        is     => 'ro',
+        isa    => t('Str'),
+        coerce => t('Str')->coercion_sub,
+    );
+}
+
+{
+    is(
+        exception { Bar->new( bar => ['a'], ) },
+        undef,
+        q{no exception with Bar->new( bar => ['a'] )}
+    );
+
+    is(
+        exception { Bar->new( bar => { a => 1 } ) },
+        undef,
+        q{no exception with Bar->new( bar => { a => 1 } )}
+    );
+}
+
 done_testing();

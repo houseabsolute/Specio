@@ -431,13 +431,16 @@ sub coercion_sub {
         my %env;
 
         for my $coercion ( $self->coercions ) {
-            $inline
-                .= '$_[0] = '
-                . $coercion->inline_coercion('$_[0]') . ' if '
-                . $coercion->from->inline_check(' $_[0]') . ';';
+            $inline .= sprintf(
+                '$_[0] = %s if %s;' . "\n",
+                $coercion->inline_coercion('$_[0]'),
+                $coercion->from->inline_check('$_[0]')
+            );
 
             %env = ( %env, %{ $coercion->_inline_environment } );
         }
+
+        $inline .= sprintf( "%s;\n", '$_[0]' );
 
         return Sub::Quote::quote_sub( $inline, \%env );
     }

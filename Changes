@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- Fix a bug with the Sub::Quoted sub returned by $type->coercion_sub. If a
+  type had more than one coercion, the generated sub could end up coercing the
+  value to undef some of the time. Depending on hash key ordering, this could
+  end up being a heisenbug that only occured some of the time.
+
+
 0.29     2016-10-09
 
 - Doc Specio::PartialDump because you may want to use it as part of the
