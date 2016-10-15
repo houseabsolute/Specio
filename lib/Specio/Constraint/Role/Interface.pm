@@ -424,10 +424,9 @@ sub _inline_throw_exception {
 sub coercion_sub {
     my $self = shift;
 
-    if (
-        defined &Sub::Quote::quote_sub && all { $_->can_be_inlined }
-        $self->coercions
-        ) {
+    if ( defined &Sub::Quote::quote_sub
+        && all { $_->can_be_inlined } $self->coercions ) {
+
         my $inline = q{};
         my %env;
 
