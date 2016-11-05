@@ -19,7 +19,7 @@ requires '_build_description';
             predicate => '_has_inline_generator',
             init_arg  => 'inline_generator',
         },
-        _inline_environment => {
+        inline_environment => {
             is       => 'ro',
             isa      => 'HashRef',
             lazy     => 1,
@@ -38,7 +38,7 @@ requires '_build_description';
             isa      => 'Specio::DeclaredAt',
             required => 1,
         },
-        _description => {
+        description => {
             is       => 'ro',
             isa      => 'Str',
             init_arg => undef,
@@ -52,6 +52,14 @@ requires '_build_description';
         return $attrs;
     }
 }
+
+# These are here for backwards compatibility. Some other packages that I wrote
+# may call the private methods.
+
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+sub _description        { $_[0]->description }
+sub _inline_environment { $_[0]->inline_environment }
+## use critic
 
 sub can_be_inlined {
     my $self = shift;
@@ -67,8 +75,8 @@ sub _build_generated_inline_sub {
 
     return eval_closure(
         source      => $source,
-        environment => $self->_inline_environment,
-        description => 'inlined sub for ' . $self->_description,
+        environment => $self->inline_environment,
+        description => 'inlined sub for ' . $self->description,
     );
 }
 

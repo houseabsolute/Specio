@@ -95,8 +95,9 @@ sub _build_description {
     my $self = shift;
 
     my $from_name
-        = defined $self->from->name ? $self->from->name : 'anon type';
-    my $to_name = defined $self->to->name ? $self->to->name : 'anon type';
+        = defined $self->from->name ? $self->from->name : 'anonymous type';
+    my $to_name
+        = defined $self->to->name ? $self->to->name : 'anonymous type';
     my $desc = "coercion from $from_name to $to_name";
 
     $desc .= q{ } . $self->declared_at->description;
@@ -237,6 +238,13 @@ This parameter is required.
 These methods are all read-only attribute accessors for the corresponding
 attribute.
 
+=head2 $coercion->description
+
+This returns a string describing the coercion. This includes the names of the
+to and from type and where the coercion was declared, so you end up with
+something like C<'coercion from Foo to Bar declared in package My::Lib
+(lib/My/Lib.pm) at line 42'>.
+
 =head2 $coercion->coerce($value)
 
 Given a value of the right "from" type, returns a new value of the "to" type.
@@ -257,9 +265,22 @@ This returns true if the coercion has an inline generator I<and> the
 constraint it is from can be inlined. This exists primarily for the benefit of
 the C<inline_coercion_and_check()> method for type constraint object.
 
+=head2 $coercion->inline_environment()
+
+This returns a hash defining the variables that need to be closed over when
+inlining the coercion. The keys are full variable names like C<'$foo'> or
+C<'@bar'>. The values are I<references> to a variable of the matching type.
+
 =head2 $coercion->clone()
 
 Returns a clone of this object.
+
+=head2 $coercion->clone_with_new_to($new_to_type)
+
+This returns a clone of the coercion, replacing the "to" type with a new
+one. This is intended for use when the to type itself is being cloned as part
+of importing that type. We need to make sure the newly cloned coercion has the
+newly cloned type as well.
 
 =head1 ROLES
 

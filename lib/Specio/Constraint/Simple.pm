@@ -157,9 +157,14 @@ This parameter is required.
 
 It is possible to create a type without a constraint of its own.
 
-=head2 $type->name, $type->parent
+=head2 $type->name
 
-Returns the value of these parameters as they were passed to the constructor.
+Returns the name of the type as it was passed the constructor.
+
+=head2 $type->parent
+
+Returns the parent type passed to the constructor. If the type has no parent
+this returns C<undef>.
 
 =head2 $type->is_anon
 
@@ -200,10 +205,20 @@ This returns true if the type was created with a C<constraint> or
 C<inline_generator> parameter. This is used internally to skip type checks for
 types that don't actually implement a constraint.
 
+=head2 $type->description
+
+This returns a string describing the type. This includes the type's name and
+where it was declared, so you end up with something like C<'type named Foo
+declared in package My::Lib (lib/My/Lib.pm) at line 42'>. If the type is
+anonymous the name will be "anonymous type".
+
 =head2 $type->id
 
 This is a unique id for the type as a string. This is useful if you need to
-make a hash key based on a type, for example.
+make a hash key based on a type, for example. This should be treated as an
+essentially arbitrary and opaque string, and could change at any time in the
+future. If you want something human-readable, use the C<< $type->description
+>> method.
 
 =head2 $type->add_coercion($coercion)
 
@@ -256,6 +271,12 @@ C<eval_closure> subroutine.
 
 Given a variable name, this returns a string of code that implements the
 constraint. If the type is not inlinable, this method throws an error.
+
+=head2 $type->inline_environment()
+
+This returns a hash defining the variables that need to be closed over when
+inlining the type. The keys are full variable names like C<'$foo'> or
+C<'@bar'>. The values are I<references> to a variable of the matching type.
 
 =head2 $type->coercion_sub
 

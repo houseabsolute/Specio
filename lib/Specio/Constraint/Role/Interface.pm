@@ -119,7 +119,7 @@ sub _wrap_message_generator {
         };
     }
 
-    my $d = $self->_description;
+    my $d = $self->description;
 
     return sub { $generator->( $d, @_ ) };
 }
@@ -207,8 +207,8 @@ sub _build_generated_inline_sub {
 
     return eval_closure(
         source      => $source,
-        environment => $type->_inline_environment,
-        description => 'inlined sub for ' . $self->_description,
+        environment => $type->inline_environment,
+        description => 'inlined sub for ' . $self->description,
     );
 }
 
@@ -267,7 +267,7 @@ sub _constraint_with_parents {
 sub id {
     my $self = shift;
 
-    return $self->_description;
+    return $self->description;
 }
 
 sub add_coercion {
@@ -329,7 +329,7 @@ sub inline_coercion_and_check {
                 . $coercion->inline_coercion($arg_name) . ' if '
                 . $coercion->from->inline_check($arg_name) . ';';
 
-            %env = ( %env, %{ $coercion->_inline_environment } );
+            %env = ( %env, %{ $coercion->inline_environment } );
         }
     }
 
@@ -354,7 +354,7 @@ sub inline_coercion_and_check {
         my %env = (
             $type_var_name              => \$self,
             $message_generator_var_name => \( $self->_message_generator ),
-            %{ $self->_inline_environment },
+            %{ $self->inline_environment },
         );
 
         my $source = $self->inline_check( $_[0] );
@@ -437,7 +437,7 @@ sub coercion_sub {
                 $coercion->from->inline_check('$_[0]')
             );
 
-            %env = ( %env, %{ $coercion->_inline_environment } );
+            %env = ( %env, %{ $coercion->inline_environment } );
         }
 
         $inline .= sprintf( "%s;\n", '$_[0]' );
@@ -539,10 +539,6 @@ sub _compiled_type_coercion {
     };
 }
 ## use critic
-
-sub inline_environment {
-    shift->_inline_environment;
-}
 
 sub has_message {
     1;

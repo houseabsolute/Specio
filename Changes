@@ -3,6 +3,9 @@
 - The stack trace contained by Specio::Exception objects no longer includes a
   stack frames for the Specio::Exception package.
 
+- Made the inline_environment() and description() methods public on type and
+  coercion objects.
+
 
 0.30     2016-10-15
 

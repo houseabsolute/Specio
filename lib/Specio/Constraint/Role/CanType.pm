@@ -59,7 +59,7 @@ sub _wrap_message_generator {
         };
     }
 
-    my $d = $self->_description;
+    my $d = $self->description;
 
     return sub { $generator->( $d, @_ ) };
 }

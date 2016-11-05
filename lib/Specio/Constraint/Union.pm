@@ -108,7 +108,7 @@ sub _build_inline_environment {
     for my $type ( @{ $self->of } ) {
         %env = (
             %env,
-            %{ $type->_inline_environment },
+            %{ $type->inline_environment },
         );
     }
 
