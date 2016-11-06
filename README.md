@@ -4,7 +4,7 @@ Specio - Type constraints and coercions for Perl
 
 # VERSION
 
-version 0.30
+version 0.31
 
 # SYNOPSIS
 
@@ -389,8 +389,7 @@ which would also make MooseX::Types obsolete.
 
 # SUPPORT
 
-Bugs may be submitted through [the RT bug tracker](http://rt.cpan.org/Public/Dist/Display.html?Name=Specio)
-(or [bug-specio@rt.cpan.org](mailto:bug-specio@rt.cpan.org)).
+Bugs may be submitted through [https://github.com/houseabsolute/Specio/issues](https://github.com/houseabsolute/Specio/issues).
 
 I am also usually active on IRC as 'drolsky' on `irc://irc.perl.org`.
 
