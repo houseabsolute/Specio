@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.32     2017-01-12
+
 - Fixed a bug in the inlining for types create by any_can_type() and
   object_can_type(). This inlining mostly worked by accident because of some
   List::Util XS magic, but this broke under the debugger. Reported by

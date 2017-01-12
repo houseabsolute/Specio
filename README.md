@@ -4,7 +4,7 @@ Specio - Type constraints and coercions for Perl
 
 # VERSION
 
-version 0.31
+version 0.32
 
 # SYNOPSIS
 
@@ -389,9 +389,13 @@ which would also make MooseX::Types obsolete.
 
 # SUPPORT
 
-Bugs may be submitted through [https://github.com/houseabsolute/Specio/issues](https://github.com/houseabsolute/Specio/issues).
+Bugs may be submitted at [https://github.com/houseabsolute/Specio/issues](https://github.com/houseabsolute/Specio/issues).
 
-I am also usually active on IRC as 'drolsky' on `irc://irc.perl.org`.
+I am also usually active on IRC as 'autarch' on `irc://irc.perl.org`.
+
+# SOURCE
+
+The source code repository for Specio can be found at [https://github.com/houseabsolute/Specio](https://github.com/houseabsolute/Specio).
 
 # DONATIONS
 
@@ -420,8 +424,11 @@ Karen Etheridge <ether@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2016 by Dave Rolsky.
+This software is Copyright (c) 2012 - 2017 by Dave Rolsky.
 
 This is free software, licensed under:
 
     The Artistic License 2.0 (GPL Compatible)
+
+The full text of the license can be found in the
+`LICENSE` file included with this distribution.
