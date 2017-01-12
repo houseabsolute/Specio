@@ -3,7 +3,7 @@ package Specio::Exporter;
 use strict;
 use warnings;
 
-our $VERSION = '0.32';
+our $VERSION = '0.33';
 
 use Specio::Helpers qw( install_t_sub );
 use Specio::Registry

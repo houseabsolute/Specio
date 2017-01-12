@@ -3,7 +3,7 @@ package Test::Specio;
 use strict;
 use warnings;
 
-our $VERSION = '0.32';
+our $VERSION = '0.33';
 
 use B ();
 use IO::File;
