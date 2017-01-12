@@ -27,12 +27,14 @@ with 'Specio::Constraint::Role::CanType';
 
         my $methods = join ', ',
             map { B::perlstring($_) } @{ $self->methods };
-        return sprintf( <<'EOF', ($val) x 2, $methods );
+        return sprintf( <<'EOF', $val, $methods );
 (
-    Scalar::Util::blessed( %s )
-    &&
-    List::Util::all { %s->can($_) } %s
-)
+    do {
+        my $v = %s;
+        Scalar::Util::blessed($v)
+            && List::Util::all { $v->can($_) } %s;
+        }
+    )
 EOF
     };
 

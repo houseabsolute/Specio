@@ -27,18 +27,17 @@ with 'Specio::Constraint::Role::CanType';
 
         my $methods = join ', ',
             map { B::perlstring($_) } @{ $self->methods };
-        return sprintf( <<'EOF', ($val) x 3, $methods );
+        return sprintf( <<'EOF', $val, $methods );
 (
-    (
-        Scalar::Util::blessed( %s )
-        ||
-        (
-            !ref( %s )
-        )
+    do {
+        # We need to assign this since if it's something like $_[0] then
+        # inside the all block @_ gets redefined and we can no longer get at
+        # the value.
+        my $v = %s;
+        ( Scalar::Util::blessed($v) || ( !ref($v) ) )
+            && List::Util::all { $v->can($_) } %s;
+        }
     )
-    &&
-    List::Util::all { %s->can($_) } %s
-)
 EOF
     };
 
