@@ -515,7 +515,7 @@ named or anonymous type.
 =item * using => sub { ... }
 
 This is a subroutine which defines the type coercion. It will be passed a
-single argument, the value coerce. It should return a new value of the type
+single argument, the value to coerce. It should return a new value of the type
 this coercion is to.
 
 This parameter is mutually exclusive with the C<inline> parameter.
