@@ -373,7 +373,7 @@ __END__
     any_isa_type('DateTime');
 
     # Specio name is DateTimeObject
-    object_isa_type( 'DateTimeObject', 'DateTime' );
+    object_isa_type( 'DateTimeObject', class => 'DateTime' );
 
     any_can_type(
         'Duck',
