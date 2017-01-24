@@ -3,6 +3,10 @@
 - Fixed a mistake in the SYNOPSIS for Specio::Declare. The example for the
   *_isa_type helpers was not correct.
 
+- Removed the alpha warning from the docs. This is being used by enough of my
+  modules on CPAN that I don't plan on doing any big breaking changes without
+  a deprecation first.
+
 
 0.32     2017-01-12
 

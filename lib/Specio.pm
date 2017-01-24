@@ -62,8 +62,6 @@ __END__
 
 =head1 DESCRIPTION
 
-B<WARNING: This thing is very alpha.>
-
 The C<Specio> distribution provides classes for representing type constraints
 and coercion, along with syntax sugar for declaring them.
 
