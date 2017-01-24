@@ -4,7 +4,7 @@ Specio - Type constraints and coercions for Perl
 
 # VERSION
 
-version 0.32
+version 0.33
 
 # SYNOPSIS
 
@@ -54,8 +54,6 @@ version 0.32
     object_isa_type('MyApp::Person');
 
 # DESCRIPTION
-
-**WARNING: This thing is very alpha.**
 
 The `Specio` distribution provides classes for representing type constraints
 and coercion, along with syntax sugar for declaring them.

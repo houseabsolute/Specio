@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.33     2017-01-24
+
 - Fixed a mistake in the SYNOPSIS for Specio::Declare. The example for the
   *_isa_type helpers was not correct.
 
