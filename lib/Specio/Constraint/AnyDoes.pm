@@ -3,7 +3,7 @@ package Specio::Constraint::AnyDoes;
 use strict;
 use warnings;
 
-our $VERSION = '0.33';
+our $VERSION = '0.34';
 
 use B ();
 use Role::Tiny::With;
