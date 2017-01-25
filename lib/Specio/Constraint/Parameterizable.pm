@@ -62,7 +62,7 @@ sub parameterize {
     my $self = shift;
     my %args = @_;
 
-    my ( $parameter, $declared_at ) = @args{qw( of declared_at)};
+    my ( $parameter, $declared_at ) = @args{qw( of declared_at )};
     does_role( $parameter, 'Specio::Constraint::Role::Interface' )
         or confess
         'The "of" parameter passed to ->parameterize must be an object which does the Specio::Constraint::Role::Interface role';
