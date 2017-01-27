@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Packages with Specio::Exporter can now specify additional arbitrary subs to
+  exporter. See the Specio::Exporter docs for details.
+
+
 0.33     2017-01-24
 
 - Fixed a mistake in the SYNOPSIS for Specio::Declare. The example for the
