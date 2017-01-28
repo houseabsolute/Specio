@@ -103,8 +103,8 @@ our $STR_OVERLOAD_CLASS_NAME = _T::StrOverload->new('_T::StrOverload');
     package _T::NumOverload;
 
     use overload
-        q{0+} => sub { ${ $_[0] } },
-        '+'   => sub { ${ $_[0] } + $_[1] },
+        '0+' => sub { ${ $_[0] } },
+        '+'  => sub { ${ $_[0] } + $_[1] },
         fallback => 0;
 
     sub new {
@@ -123,7 +123,7 @@ our $NUM_OVERLOAD_NEG_DECIMAL = _T::NumOverload->new(42.42);
     package _T::CodeOverload;
 
     use overload
-        q{&{}} => sub { ${ $_[0] } },
+        '&{}' => sub { ${ $_[0] } },
         fallback => 0;
 
     sub new {
@@ -138,7 +138,7 @@ our $CODE_OVERLOAD = _T::CodeOverload->new( sub { } );
     package _T::RegexOverload;
 
     use overload
-        q{qr} => sub { ${ $_[0] } },
+        'qr' => sub { ${ $_[0] } },
         fallback => 0;
 
     sub new {
@@ -153,7 +153,7 @@ our $REGEX_OVERLOAD = _T::RegexOverload->new(qr/foo/);
     package _T::GlobOverload;
 
     use overload
-        q[*{}] => sub { ${ $_[0] } },
+        '*{}' => sub { ${ $_[0] } },
         fallback => 0;
 
     sub new {
@@ -166,7 +166,7 @@ our $REGEX_OVERLOAD = _T::RegexOverload->new(qr/foo/);
     package _T::ScalarOverload;
 
     use overload
-        q[${}] => sub { ${ $_[0] } },
+        '${}' => sub { ${ $_[0] } },
         fallback => 0;
 
     sub new {
@@ -181,7 +181,7 @@ our $SCALAR_OVERLOAD = _T::ScalarOverload->new('x');
     package _T::ArrayOverload;
 
     use overload
-        q[@{}] => sub { $_[0] },
+        '@{}' => sub { $_[0] },
         fallback => 0;
 
     sub new {
@@ -196,7 +196,7 @@ our $ARRAY_OVERLOAD = _T::ArrayOverload->new( [ 1, 2, 3 ] );
     package _T::HashOverload;
 
     use overload
-        q[%{}] => sub { $_[0] },
+        '%{}' => sub { $_[0] },
         fallback => 0;
 
     sub new {
