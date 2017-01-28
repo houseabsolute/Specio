@@ -506,7 +506,7 @@ You can create such a variable like this:
   local *FOO;
   my $GLOB_OVERLOAD = _T::GlobOverload->new( \*FOO );
 
-If you want to create a glob overloading object that returns filehandle, do
+If you want to create a glob overloading object that returns a filehandle, do
 this:
 
   local *BAR;
