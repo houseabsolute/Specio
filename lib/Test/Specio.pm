@@ -196,12 +196,15 @@ our $ARRAY_OVERLOAD = _T::ArrayOverload->new( [ 1, 2, 3 ] );
     package _T::HashOverload;
 
     use overload
-        '%{}' => sub { $_[0] },
+        '%{}' => sub { $_[0][0] },
         fallback => 0;
 
     sub new {
         my $hash = $_[1];
-        bless $hash, __PACKAGE__;
+
+        # We use an array-based object so we make sure we test hash
+        # overloading as opposed to just treating the object as a hash.
+        bless [$hash], __PACKAGE__;
     }
 }
 
