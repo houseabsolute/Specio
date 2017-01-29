@@ -148,10 +148,10 @@ C<parameterized_inline_generator> parameter.
 This is a subroutine that generates a new inline generator subroutine when the
 type is parameterized.
 
-It will be called as a method on the L<Specio::Constraint::Parameterized> object
-when that object needs to generate inline constraint. It will receive the type
-parameter as the first argument and the variable name as a string as the
-second.
+It will be called as a method on the L<Specio::Constraint::Parameterized>
+object when that object needs to generate an inline constraint. It will
+receive the type parameter as the first argument and the variable name as a
+string as the second.
 
 This probably seems fairly confusing, so looking at the examples in the
 L<Specio::Library::Builtins> code may be helpful.
