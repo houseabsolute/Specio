@@ -4,7 +4,7 @@ Specio - Type constraints and coercions for Perl
 
 # VERSION
 
-version 0.33
+version 0.34
 
 # SYNOPSIS
 
@@ -157,11 +157,12 @@ check unless it _also_ overloads boolification.
 Most types do not check that the overloaded method actually returns something
 that matches the constraint. This may change in the future.
 
-The `Bool` type accepts an object that provides `bool` overloading.
+The `Bool` type accepts an object that implements `bool` overloading.
 
-The `Str` type accepts an object that provides string (`q{""}`) overloading.
+The `Str` type accepts an object that implements string (`q{""}`)
+overloading.
 
-The `Num` type accepts an object that provides numeric `'0+'}`
+The `Num` type accepts an object that implements numeric (`'0+'}`)
 overloading. The `Int` type does as well, but it will check that the
 overloading returns an actual integer.
 

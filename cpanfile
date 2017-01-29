@@ -19,6 +19,7 @@ requires "re" => "0";
 requires "strict" => "0";
 requires "version" => "0.83";
 requires "warnings" => "0";
+recommends "Ref::Util" => "0.112";
 
 on 'test' => sub {
   requires "ExtUtils::MakeMaker" => "0";
@@ -51,6 +52,7 @@ on 'develop' => sub {
   requires "Perl::Tidy" => "20160302";
   requires "Pod::Coverage::TrustPod" => "0";
   requires "Pod::Wordlist" => "0";
+  requires "Ref::Util" => "0.112";
   requires "Sub::Quote" => "0";
   requires "Test::CPAN::Changes" => "0.19";
   requires "Test::CPAN::Meta::JSON" => "0.16";
@@ -65,6 +67,7 @@ on 'develop' => sub {
   requires "Test::Spelling" => "0.12";
   requires "Test::Vars" => "0.009";
   requires "Test::Version" => "2.05";
+  requires "Test::Without::Module" => "0";
   requires "blib" => "1.01";
   requires "namespace::autoclean" => "0";
 };

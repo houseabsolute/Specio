@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.34     2017-01-29
+
 - Packages with Specio::Exporter can now specify additional arbitrary subs to
   exporter. See the Specio::Exporter docs for details.
 
