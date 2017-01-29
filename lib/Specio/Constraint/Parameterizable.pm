@@ -157,7 +157,7 @@ This probably seems fairly confusing, so looking at the examples in the
 L<Specio::Library::Builtins> code may be helpful.
 
 This parameter is mutually exclusive with the
-C<parameterized_inline_generator> parameter.
+C<parameterized_constraint_generator> parameter.
 
 =back
 
