@@ -3,6 +3,9 @@
 - Packages with Specio::Exporter can now specify additional arbitrary subs to
   exporter. See the Specio::Exporter docs for details.
 
+- Importing the same library twice in a given package would throw an
+  exception. The second attempt to import is now ignored.
+
 
 0.33     2017-01-24
 

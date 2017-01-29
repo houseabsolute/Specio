@@ -11,11 +11,15 @@ use Specio::Helpers qw( install_t_sub );
 use Specio::Registry
     qw( exportable_types_for_package internal_types_for_package register );
 
+my %Exported;
+
 sub import {
     my $package  = shift;
     my $reexport = shift;
 
     my $caller = caller();
+
+    return if $Exported{$caller}{$package};
 
     my $exported = exportable_types_for_package($package);
 
@@ -35,6 +39,8 @@ sub import {
             *{ $caller . '::' . $sub } = \&{ $package . '::' . $sub };
         }
     }
+
+    $Exported{$caller}{$package} = 1;
 
     return;
 }
