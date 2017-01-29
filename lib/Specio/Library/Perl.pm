@@ -151,7 +151,7 @@ This type does allow Unicode characters.
 
 =head2 SafeIdentifier
 
-This is just like an C<Identifier> but it exclude the single-character
+This is just like an C<Identifier> but it excludes the single-character
 variables underscore (C<_>), C<a>< and C<b>, as these are special variables to
 the Perl interpreter.
 
