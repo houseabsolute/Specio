@@ -15,6 +15,13 @@ use Specio::Constraint::Parameterizable;
 use Specio::Declare;
 use Specio::Helpers ();
 
+BEGIN {
+    local $@ = undef;
+    my $has_ref_util
+        = eval { require Ref::Util; Ref::Util->VERSION('0.112'); 1 };
+    sub _HAS_REF_UTIL () {$has_ref_util}
+}
+
 declare(
     'Item',
     inline => sub {'1'}
@@ -159,13 +166,19 @@ EOF
     }
 );
 
-declare(
-    'CodeRef',
-    parent => t('Ref'),
-    inline => sub {
-        return sprintf( <<'EOF', ( $_[1] ) x 4 );
+{
+    my $ref_check
+        = _HAS_REF_UTIL
+        ? 'Ref::Util::is_plain_coderef(%s)'
+        : q{ref(%s) eq 'CODE'};
+
+    declare(
+        'CodeRef',
+        parent => t('Ref'),
+        inline => sub {
+            return sprintf( <<"EOF", ( $_[1] ) x 4 );
 (
-    ref( %s ) eq 'CODE'
+    $ref_check
     ||
     (
         Scalar::Util::blessed( %s )
@@ -174,26 +187,33 @@ declare(
     )
 )
 EOF
-    }
-);
-
-# This is a 5.8 back-compat shim stolen from Type::Tiny's Devel::Perl58Compat
-# module.
-unless ( exists &re::is_regexp ) {
-    require B;
-    *re::is_regexp = sub {
-        ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
-        eval { B::svref_2object( $_[0] )->MAGIC->TYPE eq 'r' };
-    };
+        }
+    );
 }
 
-declare(
-    'RegexpRef',
-    parent => t('Ref'),
-    inline => sub {
-        return sprintf( <<'EOF', ( $_[1] ) x 4 );
+{
+    # This is a 5.8 back-compat shim stolen from Type::Tiny's Devel::Perl58Compat
+    # module.
+    unless ( exists &re::is_regexp || _HAS_REF_UTIL ) {
+        require B;
+        *re::is_regexp = sub {
+            ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
+            eval { B::svref_2object( $_[0] )->MAGIC->TYPE eq 'r' };
+        };
+    }
+
+    my $ref_check
+        = _HAS_REF_UTIL
+        ? 'Ref::Util::is_regexpref(%s)'
+        : 're::is_regexp(%s)';
+
+    declare(
+        'RegexpRef',
+        parent => t('Ref'),
+        inline => sub {
+            return sprintf( <<"EOF", ( $_[1] ) x 4 );
 (
-    re::is_regexp( %s )
+    $ref_check
     ||
     (
         Scalar::Util::blessed( %s )
@@ -202,16 +222,23 @@ declare(
     )
 )
 EOF
-    },
-);
+        },
+    );
+}
 
-declare(
-    'GlobRef',
-    parent => t('Ref'),
-    inline => sub {
-        return sprintf( <<'EOF', ( $_[1] ) x 4 );
+{
+    my $ref_check
+        = _HAS_REF_UTIL
+        ? 'Ref::Util::is_plain_globref(%s)'
+        : q{ref( %s ) eq 'GLOB'};
+
+    declare(
+        'GlobRef',
+        parent => t('Ref'),
+        inline => sub {
+            return sprintf( <<"EOF", ( $_[1] ) x 4 );
 (
-    ref( %s ) eq 'GLOB'
+    $ref_check
     ||
     (
         Scalar::Util::blessed( %s )
@@ -220,19 +247,26 @@ declare(
     )
 )
 EOF
-    }
-);
+        }
+    );
+}
 
-# NOTE: scalar filehandles are GLOB refs, but a GLOB ref is not always a
-# filehandle
-declare(
-    'FileHandle',
-    parent => t('Ref'),
-    inline => sub {
-        return sprintf( <<'EOF', ( $_[1] ) x 7 );
+{
+    my $ref_check
+        = _HAS_REF_UTIL
+        ? 'Ref::Util::is_plain_globref(%s)'
+        : q{ref( %s ) eq 'GLOB'};
+
+    # NOTE: scalar filehandles are GLOB refs, but a GLOB ref is not always a
+    # filehandle
+    declare(
+        'FileHandle',
+        parent => t('Ref'),
+        inline => sub {
+            return sprintf( <<"EOF", ( $_[1] ) x 7 );
 (
     (
-        ref( %s ) eq 'GLOB'
+        $ref_check
         && Scalar::Util::openhandle( %s )
     )
     ||
@@ -251,14 +285,22 @@ declare(
     )
 )
 EOF
-    }
-);
+        }
+    );
+}
 
-declare(
-    'Object',
-    parent => t('Ref'),
-    inline => sub { 'Scalar::Util::blessed(' . $_[1] . ')' },
-);
+{
+    my $ref_check
+        = _HAS_REF_UTIL
+        ? 'Ref::Util::is_blessed_ref(%s)'
+        : 'Scalar::Util::blessed(%s)';
+
+    declare(
+        'Object',
+        parent => t('Ref'),
+        inline => sub { sprintf( $ref_check, $_[1] ) },
+    );
+}
 
 declare(
     'ClassName',
@@ -277,18 +319,22 @@ EOF
 );
 
 {
+    my $ref_check
+        = _HAS_REF_UTIL
+        ? 'Ref::Util::is_plain_scalarref(%s) || Ref::Util::is_plain_refref(%s)'
+        : q{ref( %s ) eq 'SCALAR' || ref( %s ) eq 'REF'};
+
     my $base_scalarref_check = sub {
-        return sprintf( <<'EOF', ( $_[0] ) x 5 );
+        return sprintf( <<"EOF", ( $_[0] ) x 5 );
 (
     (
-        ref( %s ) eq 'SCALAR'
-        || ref( %s ) eq 'REF'
+        $ref_check
     )
     ||
     (
         Scalar::Util::blessed( %s )
         && overload::Overloaded( %s )
-        && defined overload::Method( %s, '${}' )
+        && defined overload::Method( %s, '\${}' )
     )
 )
 EOF
@@ -314,15 +360,20 @@ EOF
 }
 
 {
+    my $ref_check
+        = _HAS_REF_UTIL
+        ? 'Ref::Util::is_plain_arrayref(%s)'
+        : q{ref( %s ) eq 'ARRAY'};
+
     my $base_arrayref_check = sub {
-        return sprintf( <<'EOF', ( $_[0] ) x 4 );
+        return sprintf( <<"EOF", ( $_[0] ) x 4 );
 (
-    ref( %s ) eq 'ARRAY'
+    $ref_check
     ||
     (
         Scalar::Util::blessed( %s )
         && overload::Overloaded( %s )
-        && defined overload::Method( %s, '@{}' )
+        && defined overload::Method( %s, '\@{}' )
     )
 )
 EOF
@@ -349,10 +400,15 @@ EOF
 }
 
 {
+    my $ref_check
+        = _HAS_REF_UTIL
+        ? 'Ref::Util::is_plain_hashref(%s)'
+        : q{ref( %s ) eq 'HASH'};
+
     my $base_hashref_check = sub {
-        return sprintf( <<'EOF', ( $_[0] ) x 4 );
+        return sprintf( <<"EOF", ( $_[0] ) x 4 );
 (
-    ref( %s ) eq 'HASH'
+    $ref_check
     ||
     (
         Scalar::Util::blessed( %s )
