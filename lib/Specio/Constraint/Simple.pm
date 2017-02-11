@@ -272,6 +272,22 @@ C<eval_closure> subroutine.
 Given a variable name, this returns a string of code that implements the
 constraint. If the type is not inlinable, this method throws an error.
 
+=head2 $type->inline_coercion($var)
+
+Given a variable name, this returns a string of code and an environment hash
+that implements all of the type's coercions. I<It does not check that the
+resulting value is valid.>
+
+This will throw an exception unless all of the type's coercions are inlinable.
+
+The return value is a two-element list. The first element is the code. The
+second is a hash reference containing variables which need to be in scope for
+the code to work. This is intended to be passed to L<Eval::Closure>'s
+C<eval_closure> subroutine.
+
+The returned code is a single C<do { }> block without a terminating
+semicolon.
+
 =head2 $type->inline_environment()
 
 This returns a hash defining the variables that need to be closed over when

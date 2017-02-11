@@ -304,10 +304,44 @@ sub coerce_value {
     return $value;
 }
 
+sub can_inline_coercion {
+    my $self = shift;
+
+    return all { $_->can_be_inlined } $self->coercions;
+}
+
 sub can_inline_coercion_and_check {
     my $self = shift;
 
     return all { $_->can_be_inlined } $self, $self->coercions;
+}
+
+sub inline_coercion {
+    my $self = shift;
+
+    die 'Cannot inline coercion'
+        unless $self->can_inline_coercion;
+
+    my %env;
+
+    my $arg_name = $_[0];
+    my $source   = 'do {';
+    if ( $self->has_coercions ) {
+        $source .= 'my $value = ' . $arg_name . ';';
+        $arg_name = '$value';
+        for my $coercion ( $self->coercions ) {
+            $source
+                .= '$value = '
+                . $coercion->inline_coercion($arg_name) . ' if '
+                . $coercion->from->inline_check($arg_name) . ';';
+
+            %env = ( %env, %{ $coercion->inline_environment } );
+        }
+    }
+
+    $source .= $arg_name . '};';
+
+    return ( $source, \%env );
 }
 
 sub inline_coercion_and_check {

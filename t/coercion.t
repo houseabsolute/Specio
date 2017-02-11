@@ -96,6 +96,11 @@ use Specio::Library::Builtins;
     );
 
     ok(
+        $hashref->can_inline_coercion,
+        'can inline coercion for hashref'
+    );
+
+    ok(
         $hashref->can_inline_coercion_and_check,
         'can inline coercion and check for hashref'
     );
@@ -113,48 +118,92 @@ use Specio::Library::Builtins;
         'can inline coercion and check for hashref with two coercions'
     );
 
-    my ( $source, $environment )
-        = $hashref->inline_coercion_and_check('$_[0]');
-
-    my $coerce_and_check;
-    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
-    eval {
-        $coerce_and_check = eval_closure(
-            source      => 'sub { ' . $source . ' }',
-            environment => $environment,
-            description => 'inlined coerce and check sub',
-        );
-    };
-    ## use critic
-
-    is(
-        $@,
-        q{},
-        'no error evaling closure for coercion and check'
+    ok(
+        $hashref->can_inline_coercion,
+        'can inline coercion for hashref'
     );
 
-    is_deeply(
-        $coerce_and_check->( { x => 1 } ),
-        { x => 1 },
-        'hashref is passed through coerce and check unchanged'
+    subtest(
+        'inline_coercion_and_check',
+        sub {
+            my ( $source, $environment )
+                = $hashref->inline_coercion_and_check('$_[0]');
+
+            my $coerce_and_check;
+            is(
+                exception {
+                    $coerce_and_check = eval_closure(
+                        source      => 'sub { ' . $source . ' }',
+                        environment => $environment,
+                        description => 'inlined coerce and check sub',
+                    );
+                },
+                undef,
+                'no error evaling closure for coercion and check'
+            );
+
+            is_deeply(
+                $coerce_and_check->( { x => 1 } ),
+                { x => 1 },
+                'hashref is passed through coerce and check unchanged'
+            );
+
+            is_deeply(
+                $coerce_and_check->( [ x => 1 ] ),
+                { x => 1 },
+                'arrayref is coerced to hashref'
+            );
+
+            is_deeply(
+                $coerce_and_check->(42),
+                { 42 => 1 },
+                'integer is coerced to hashref'
+            );
+
+            like(
+                exception { $coerce_and_check->('foo') },
+                qr/\QValidation failed for type named HashRef declared in package Specio::Library::Builtins\E.+\Qwith value "foo"/,
+                'string throws exception'
+            );
+        }
     );
 
-    is_deeply(
-        $coerce_and_check->( [ x => 1 ] ),
-        { x => 1 },
-        'arrayref is coerced to hashref'
-    );
+    subtest(
+        'inline_coercion',
+        sub {
+            my ( $source, $environment ) = $hashref->inline_coercion('$_[0]');
 
-    is_deeply(
-        $coerce_and_check->(42),
-        { 42 => 1 },
-        'integer is coerced to hashref'
-    );
+            my $coerce;
+            is(
+                exception {
+                    $coerce = eval_closure(
+                        source      => 'sub { ' . $source . ' }',
+                        environment => $environment,
+                        description => 'inlined coerce sub',
+                    );
+                },
+                undef,
+                'no error evaling closure for coercion and check'
+            );
 
-    like(
-        exception { $coerce_and_check->('foo') },
-        qr/\QValidation failed for type named HashRef declared in package Specio::Library::Builtins\E.+\Qwith value "foo"/,
-        'string throws exception'
+            is_deeply(
+                $coerce->( { x => 1 } ),
+                { x => 1 },
+                'hashref is passed through coerce and check unchanged'
+            );
+
+            is_deeply(
+                $coerce->( [ x => 1 ] ),
+                { x => 1 },
+                'arrayref is coerced to hashref'
+            );
+
+            is_deeply(
+                $coerce->(42),
+                { 42 => 1 },
+                'integer is coerced to hashref'
+            );
+        }
     );
 }
 
