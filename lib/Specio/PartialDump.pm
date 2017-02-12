@@ -3,7 +3,7 @@ package Specio::PartialDump;
 use strict;
 use warnings;
 
-our $VERSION = '0.35';
+our $VERSION = '0.36';
 
 use Scalar::Util qw( looks_like_number reftype blessed );
 

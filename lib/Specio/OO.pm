@@ -23,7 +23,7 @@ use Specio::TypeChecks qw(
 );
 use Storable qw( dclone );
 
-our $VERSION = '0.35';
+our $VERSION = '0.36';
 
 use Exporter qw( import );
 
