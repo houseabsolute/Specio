@@ -166,12 +166,12 @@ our $REGEX_OVERLOAD = _T::RegexOverload->new(qr/foo/);
     package _T::ScalarOverload;
 
     use overload
-        '${}' => sub { ${ $_[0] } },
+        '${}' => sub { $_[0][0] },
         fallback => 0;
 
     sub new {
         my $scalar = $_[1];
-        bless \$scalar, __PACKAGE__;
+        bless [$scalar], __PACKAGE__;
     }
 }
 
@@ -181,12 +181,12 @@ our $SCALAR_OVERLOAD = _T::ScalarOverload->new('x');
     package _T::ArrayOverload;
 
     use overload
-        '@{}' => sub { $_[0] },
+        '@{}' => sub { $_[0]{array} },
         fallback => 0;
 
     sub new {
         my $array = $_[1];
-        bless $array, __PACKAGE__;
+        bless { array => $array }, __PACKAGE__;
     }
 }
 
