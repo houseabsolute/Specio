@@ -6,6 +6,7 @@ requires "Exporter" => "0";
 requires "IO::File" => "0";
 requires "List::Util" => "1.33";
 requires "MRO::Compat" => "0";
+requires "Module::Runtime" => "0";
 requires "Role::Tiny" => "1.003003";
 requires "Role::Tiny::With" => "0";
 requires "Scalar::Util" => "0";
@@ -20,6 +21,7 @@ requires "strict" => "0";
 requires "version" => "0.83";
 requires "warnings" => "0";
 recommends "Ref::Util" => "0.112";
+recommends "Sub::Util" => "1.40";
 
 on 'test' => sub {
   requires "ExtUtils::MakeMaker" => "0";
@@ -40,6 +42,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "Code::TidyAll" => "0.56";
   requires "Code::TidyAll::Plugin::Test::Vars" => "0.02";
   requires "File::Spec" => "0";
   requires "IO::Handle" => "0";
