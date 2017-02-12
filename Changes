@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Added Specio::Subs, a module which allows you to turn one or more library's
+  types into subroutines like is_Int() and to_Int().
+
 - Added an inline_coercion method to Specio constraints.
 
 

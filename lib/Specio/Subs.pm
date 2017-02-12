@@ -3,10 +3,13 @@ package Specio::Subs;
 use strict;
 use warnings;
 
+our $VERSION = '0.35';
+
+use Carp qw( croak );
 use Eval::Closure qw( eval_closure );
+use Module::Runtime qw( use_package_optimistically );
 use Specio::Library::Perl;
 use Specio::Registry qw( exportable_types_for_package );
-use Try::Tiny;
 
 my $counter = 0;
 
@@ -18,9 +21,11 @@ sub import {
 
     my $ident = t('Identifier');
 
+    use_package_optimistically($_) for @libs;
+
     for my $types ( map { exportable_types_for_package($_) } @libs ) {
         for my $name ( keys %{$types} ) {
-            die
+            croak
                 qq{Cannot use '$name' type to create a check sub. It results in an invalid Perl subroutine name}
                 unless $ident->check( 'is_' . $name );
 
@@ -75,8 +80,9 @@ sub import {
                     _install_sub(
                         $caller, $force_name,
                         sub {
-                            $type->validate_or_die(
-                                $type->coerce_value( $_[0] ) );
+                            my $val = $type->coerce_value( $_[0] );
+                            $type->validate_or_die($val);
+                            return $val;
                         }
                     );
                 }
@@ -106,14 +112,13 @@ sub _make_sub {
 }
 
 my $sub_namer = do {
-    try {
+    eval {
         require Sub::Util;
         Sub::Util->VERSION(1.40);
         Sub::Util->can('set_subname');
-    }
-        or try {
+    } or eval {
         require Sub::Name;
-        Sub::Name->can('subname')
+        Sub::Name->can('subname');
     }
         or sub { return $_[1] };
 };
@@ -125,6 +130,7 @@ sub _install_sub {
 
     my $fq_name = $caller . '::' . $sub_name;
 
+    ## no critic (TestingAndDebugging::ProhibitNoStrict)
     no strict 'refs';
     *{$fq_name} = $sub_namer->( $fq_name, $sub );
 
@@ -132,3 +138,63 @@ sub _install_sub {
 }
 
 1;
+
+# ABSTRACT: Make validation and coercion subs from Specio types
+
+__END__
+
+=pod
+
+=head1 SYNOPSIS
+
+  use Specio::Subs qw( Specio::Library::Builtins Specio::Library::Perl My::Lib );
+
+  if ( is_PackageName($var) ) { ... }
+
+  assert_Str($var);
+
+  my $person1 = to_Person($var);
+  my $person2 = force_Person($var);
+
+=head1 DESCRIPTION
+
+This module generates a set of helpful validation and coercion subroutines for
+all of the types defined in one or more libraries.
+
+To use it, simply import C<Specio::Subs> passing a list of one or more library
+names. This module will load those libraries as needed.
+
+If any of the types in any libraries have names that do not work as part of a
+Perl subroutine name, this module will throw an exception.
+
+If you have L<Sub::Util> or L<Sub::Name> installed, one of those will be used
+to name the generated subroutines.
+
+=head1 "EXPORTS"
+
+The following subs are created in the importing package:
+
+=head2 is_$type($value)
+
+This subroutine returns a boolean indicating whether or not the C<$value> is
+valid for the type.
+
+=head2 assert_$type($value)
+
+This subroutine dies if the C<$value> is not valid for the type.
+
+=head2 to_$type($value)
+
+This subroutine attempts to coerce C<$value> into the given type. If it cannot
+be coerced it returns the original C<$value>.
+
+This is only created if the type has coercions.
+
+=head2 force_$type($value)
+
+This subroutine attempts to coerce C<$value> into the given type, and dies if
+it cannot do so.
+
+This is only created if the type has coercions.
+
+=cut
