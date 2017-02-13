@@ -16,7 +16,7 @@ sub parent {$hashref}
 
 ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _inline {
-    $hashref->_inline_check( $_[1] );
+    $hashref->inline_check( $_[1] );
 }
 
 sub _parameterization_args_builder {

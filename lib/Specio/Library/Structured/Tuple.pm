@@ -17,7 +17,7 @@ sub parent {$arrayref}
 
 ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _inline {
-    $arrayref->_inline_check( $_[1] );
+    $arrayref->inline_check( $_[1] );
 }
 
 sub _parameterization_args_builder {
