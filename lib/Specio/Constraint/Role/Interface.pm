@@ -415,6 +415,27 @@ sub inline_check {
     return $type->_inline_generator->( $type, @_ );
 }
 
+{
+    my $counter = 0;
+    sub inline_check_always {
+        my $self = shift;
+        my $value_var = shift;
+        my $source;
+        my %env;
+        if ($self->can_be_inlined) {
+            $source = $self->inline_check($value_var);
+            %env = %{ $self->inline_environment };
+        }
+        else {
+            $counter++;
+            my $type_var_name = '$_Specio_Constraint_Role_Interface_type'.$counter;
+            $env{$type_var_name} = \$self;
+            $source = $type_var_name . '->value_is_valid(' . $value_var . ')';
+        }
+        return ($source, \%env);
+    }
+}
+
 sub _subify {
     my $self = shift;
 

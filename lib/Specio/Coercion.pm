@@ -74,6 +74,27 @@ sub inline_coercion {
     return $self->_inline_generator->( $self, @_ );
 }
 
+{
+    my $counter = 0;
+    sub inline_coercion_always {
+        my $self = shift;
+        my $value_var = shift;
+        my $source;
+        my %env;
+        if ($self->can_be_inlined) {
+            $source = $self->inline_coercion($value_var);
+            %env = %{ $self->inline_environment };
+        }
+        else {
+            $counter++;
+            my $coercion_var_name = '$_Specio_Coercion_coercion'.$counter;
+            $env{$coercion_var_name} = \$self;
+            $source = $coercion_var_name . '->coerce(' . $value_var . ')';
+        }
+        return ($source, \%env);
+    }
+}
+
 sub _build_optimized_coercion {
     my $self = shift;
 
