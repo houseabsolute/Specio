@@ -31,6 +31,16 @@ use Specio::Library::Builtins;
         qr/Validation failed for type named Str .+ with value \[\s*\]/,
         'exception contains expected error'
     );
+
+    $e = exception {
+        $str->validate_or_die( [], { attribute => 'foo' } );
+    };
+
+    like(
+        $e->as_string,
+        qr/Validation failed for type named Str .+ with value \[\s*\] \(attribute: foo\)/,
+        'exception contains expected error'
+    );
 }
 
 done_testing();

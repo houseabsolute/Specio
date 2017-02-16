@@ -133,6 +133,7 @@ sub has_coercions           { scalar keys %{ $_[0]->{_coercions} } }
 sub validate_or_die {
     my $self  = shift;
     my $value = shift;
+    my $context = shift;
 
     return if $self->value_is_valid($value);
 
@@ -140,6 +141,7 @@ sub validate_or_die {
         message => $self->_message_generator->($value),
         type    => $self,
         value   => $value,
+        ($context ? (context => $context) : ()),
     );
 }
 
@@ -381,13 +383,17 @@ sub inline_coercion_and_check {
 
     sub inline_assert {
         my $self = shift;
+        my $context = shift;
 
         my $type_var_name = '$_Specio_Constraint_Interface_type' . $counter;
         my $message_generator_var_name
             = '$_Specio_Constraint_Interface_message_generator' . $counter;
+        my $context_var_name
+            = '$_Specio_Constraint_Interface_context' . $counter;
         my %env = (
             $type_var_name              => \$self,
             $message_generator_var_name => \( $self->_message_generator ),
+            ($context ? ($context_var_name => \$context) : ()),
             %{ $self->inline_environment },
         );
 
@@ -396,7 +402,8 @@ sub inline_coercion_and_check {
         $source .= $self->_inline_throw_exception(
             $_[0],
             $message_generator_var_name,
-            $type_var_name
+            $type_var_name,
+            ($context ? $context_var_name : ()),
         );
         $source .= ';';
 
@@ -445,12 +452,15 @@ sub _inline_throw_exception {
     my $value_var                  = shift;
     my $message_generator_var_name = shift;
     my $type_var_name              = shift;
+    my $context_var_name           = shift;
 
     #<<<
     return 'Specio::Exception->throw( '
         . ' message => ' . $message_generator_var_name . '->(' . $value_var . '),'
         . ' type    => ' . $type_var_name . ','
-        . ' value   => ' . $value_var . ' )';
+        . ' value   => ' . $value_var . ','
+        . ($context_var_name ? ' context => ' . $context_var_name . ',' : '')
+        . ')';
     #>>>
 }
 
