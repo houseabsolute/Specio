@@ -263,4 +263,37 @@ use Specio::Library::Builtins;
     );
 }
 
+{
+    my $str = declare(
+        'Str2',
+        parent => t('Str'),
+    );
+
+    coerce(
+        $str,
+        from   => t('Num'),
+        inline => sub {
+            return "$_[1] + 10";
+        },
+    );
+
+    coerce(
+        $str,
+        from   => t('Int'),
+        inline => sub {
+            return "$_[1] + 10";
+        },
+    );
+
+    my ( $source, $env ) = $str->inline_coercion('$_[0]');
+    my $code = eval_closure(
+        source      => "sub { $source }",
+        environment => $env,
+    );
+    is(
+        $code->(-10),
+        0,
+        'inlined coercion only fires one coercion',
+    );
+}
 done_testing();

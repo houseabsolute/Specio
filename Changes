@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Inlined coercions would attempt to coerce for every type which matched the
+  value given, instead of stopping after the first type. Fixed by Graham Knop
+  (GH #11).
+
+
 0.35     2017-02-12
 
 - Added Specio::Subs, a module which allows you to turn one or more library's

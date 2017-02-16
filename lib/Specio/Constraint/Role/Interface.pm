@@ -329,14 +329,16 @@ sub inline_coercion {
     if ( $self->has_coercions ) {
         $source .= 'my $value = ' . $arg_name . ';';
         $arg_name = '$value';
+        $source .= $arg_name . ' = ';
         for my $coercion ( $self->coercions ) {
             $source
-                .= '$value = '
-                . $coercion->inline_coercion($arg_name) . ' if '
-                . $coercion->from->inline_check($arg_name) . ';';
+                .= '('
+                . $coercion->from->inline_check($arg_name) . ') ? ('
+                . $coercion->inline_coercion($arg_name) . ') : ';
 
             %env = ( %env, %{ $coercion->inline_environment } );
         }
+        $source .= $arg_name . ';';
     }
 
     $source .= $arg_name . '};';
@@ -357,14 +359,16 @@ sub inline_coercion_and_check {
     if ( $self->has_coercions ) {
         $source .= 'my $value = ' . $arg_name . ';';
         $arg_name = '$value';
+        $source .= $arg_name . ' = ';
         for my $coercion ( $self->coercions ) {
             $source
-                .= '$value = '
-                . $coercion->inline_coercion($arg_name) . ' if '
-                . $coercion->from->inline_check($arg_name) . ';';
+                .= '('
+                . $coercion->from->inline_check($arg_name) . ') ? ('
+                . $coercion->inline_coercion($arg_name) . ') : ';
 
             %env = ( %env, %{ $coercion->inline_environment } );
         }
+        $source .= $arg_name . ';';
     }
 
     my ( $assert, $assert_env ) = $self->inline_assert($arg_name);
