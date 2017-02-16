@@ -339,7 +339,7 @@ sub inline_coercion {
         }
     }
 
-    $source .= $arg_name . '};';
+    $source .= $arg_name . '}';
 
     return ( $source, \%env );
 }
@@ -371,7 +371,7 @@ sub inline_coercion_and_check {
     $source .= $assert;
     %env = ( %env, %{$assert_env} );
 
-    $source .= $arg_name . '};';
+    $source .= $arg_name . '}';
 
     return ( $source, \%env );
 }
