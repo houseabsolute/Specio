@@ -335,7 +335,11 @@ sub inline_coercion {
                 . $coercion->inline_coercion($arg_name) . ' if '
                 . $coercion->from->inline_check($arg_name) . ';';
 
-            %env = ( %env, %{ $coercion->inline_environment } );
+            %env = (
+                %env,
+                %{ $coercion->inline_environment },
+                %{ $coercion->from->inline_environment },
+            );
         }
     }
 
@@ -363,7 +367,11 @@ sub inline_coercion_and_check {
                 . $coercion->inline_coercion($arg_name) . ' if '
                 . $coercion->from->inline_check($arg_name) . ';';
 
-            %env = ( %env, %{ $coercion->inline_environment } );
+            %env = (
+                %env,
+                %{ $coercion->inline_environment },
+                %{ $coercion->from->inline_environment },
+            );
         }
     }
 
@@ -471,7 +479,11 @@ sub coercion_sub {
                 $coercion->from->inline_check('$_[0]')
             );
 
-            %env = ( %env, %{ $coercion->inline_environment } );
+            %env = (
+                %env,
+                %{ $coercion->inline_environment },
+                %{ $coercion->from->inline_environment },
+            );
         }
 
         $inline .= sprintf( "%s;\n", '$_[0]' );
