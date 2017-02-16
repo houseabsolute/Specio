@@ -368,7 +368,11 @@ sub _inline_coercion {
             . $coercion->from->inline_check($arg_name) . ') ? ('
             . $coercion->inline_coercion($arg_name) . ') : ';
 
-        %env = ( %env, %{ $coercion->inline_environment } );
+        %env = (
+            %env,
+            %{ $coercion->inline_environment },
+            %{ $coercion->from->inline_environment },
+        );
     }
     $source .= $arg_name . ';';
 
@@ -470,7 +474,11 @@ sub coercion_sub {
                 $coercion->from->inline_check('$_[0]')
             );
 
-            %env = ( %env, %{ $coercion->inline_environment } );
+            %env = (
+                %env,
+                %{ $coercion->inline_environment },
+                %{ $coercion->from->inline_environment },
+            );
         }
 
         $inline .= sprintf( "%s;\n", '$_[0]' );

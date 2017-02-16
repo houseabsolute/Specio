@@ -4,6 +4,10 @@
   value given, instead of stopping after the first type. Fixed by Graham Knop
   (GH #11).
 
+- Inlined coercions did not include the inline environment variables needed by
+  the type from which the coercion was being performed. Fixed by Graham Knop
+  (GH #8).
+
 
 0.35     2017-02-12
 
