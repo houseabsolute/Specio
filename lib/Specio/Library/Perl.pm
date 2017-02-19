@@ -3,7 +3,7 @@ package Specio::Library::Perl;
 use strict;
 use warnings;
 
-our $VERSION = '0.36';
+our $VERSION = '0.37';
 
 use parent 'Specio::Exporter';
 
