@@ -29,65 +29,87 @@ sub import {
                 qq{Cannot use '$name' type to create a check sub. It results in an invalid Perl subroutine name}
                 unless $ident->check( 'is_' . $name );
 
-            my $type = $types->{$name};
-
-            my $is_name     = 'is_' . $name;
-            my $assert_name = 'assert_' . $name;
-            if ( $type->can_be_inlined ) {
-                _make_sub(
-                    $caller, $is_name,
-                    $type->inline_check('$_[0]')
-                );
-                _make_sub(
-                    $caller, $assert_name,
-                    $type->inline_assert('$_[0]')
-                );
-            }
-            else {
-                _install_sub(
-                    $caller, $is_name,
-                    sub { $type->value_is_valid( $_[0] ) }
-                );
-                _install_sub(
-                    $caller, $assert_name,
-                    sub { $type->validate_or_die( $_[0] ) }
-                );
-            }
-
-            if ( $type->has_coercions ) {
-                my $to_name = 'to_' . $name;
-                if ( $type->can_inline_coercion ) {
-                    _make_sub(
-                        $caller, $to_name,
-                        $type->inline_coercion('$_[0]')
-                    );
-                }
-                else {
-                    _install_sub(
-                        $caller, $to_name,
-                        sub { $type->coerce_value( $_[0] ) }
-                    );
-                }
-
-                my $force_name = 'force_' . $name;
-                if ( $type->can_inline_coercion_and_check ) {
-                    _make_sub(
-                        $caller, $force_name,
-                        $type->inline_coercion_and_check('$_[0]')
-                    );
-                }
-                else {
-                    _install_sub(
-                        $caller, $force_name,
-                        sub {
-                            my $val = $type->coerce_value( $_[0] );
-                            $type->validate_or_die($val);
-                            return $val;
-                        }
-                    );
-                }
-            }
+            _export_subs( $name, $types->{$name}, $caller );
         }
+    }
+}
+
+sub _export_subs {
+    my $name   = shift;
+    my $type   = shift;
+    my $caller = shift;
+
+    _export_validation_subs( $name, $type, $caller );
+
+    return unless $type->has_coercions;
+
+    _export_coercion_subs( $name, $type, $caller );
+}
+
+sub _export_validation_subs {
+    my $name   = shift;
+    my $type   = shift;
+    my $caller = shift;
+
+    my $is_name     = 'is_' . $name;
+    my $assert_name = 'assert_' . $name;
+    if ( $type->can_be_inlined ) {
+        _make_sub(
+            $caller, $is_name,
+            $type->inline_check('$_[0]')
+        );
+        _make_sub(
+            $caller, $assert_name,
+            $type->inline_assert('$_[0]')
+        );
+    }
+    else {
+        _install_sub(
+            $caller, $is_name,
+            sub { $type->value_is_valid( $_[0] ) }
+        );
+        _install_sub(
+            $caller, $assert_name,
+            sub { $type->validate_or_die( $_[0] ) }
+        );
+    }
+}
+
+sub _export_coercion_subs {
+    my $name   = shift;
+    my $type   = shift;
+    my $caller = shift;
+
+    my $to_name = 'to_' . $name;
+    if ( $type->can_inline_coercion ) {
+        _make_sub(
+            $caller, $to_name,
+            $type->inline_coercion('$_[0]')
+        );
+    }
+    else {
+        _install_sub(
+            $caller, $to_name,
+            sub { $type->coerce_value( $_[0] ) }
+        );
+    }
+
+    my $force_name = 'force_' . $name;
+    if ( $type->can_inline_coercion_and_check ) {
+        _make_sub(
+            $caller, $force_name,
+            $type->inline_coercion_and_check('$_[0]')
+        );
+    }
+    else {
+        _install_sub(
+            $caller, $force_name,
+            sub {
+                my $val = $type->coerce_value( $_[0] );
+                $type->validate_or_die($val);
+                return $val;
+            }
+        );
     }
 }
 
