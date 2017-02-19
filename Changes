@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.36     2017-02-19
+
 - Inlined coercions would attempt to coerce for every type which matched the
   value given, instead of stopping after the first type. Fixed by Graham Knop
   (GH #11).
