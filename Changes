@@ -12,6 +12,10 @@
   constraint with Moo), it will only generated its subified form once, rather
   than regenerating it each time it is de-referenced.
 
+- Added an API to Specio::Subs to allow you to combine type libraries and
+  helper subs in one package for exporting. See the Specio::Exporter docs for
+  more details.
+
 
 0.35     2017-02-12
 

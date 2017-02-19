@@ -109,3 +109,19 @@ C<Specio::Exporter> as its parent, define a sub named C<_also_export>. This
 sub should return a I<list> of subroutines defined in your package that should
 also be exported. These subs will be exported unconditionally to any package
 that uses your package.
+
+=head1 COMBINING LIBRARIES WITH L<Specio::Subs>
+
+You can combine loading libraries with subroutine generation using
+L<Specio::Subs> by using C<_also_export> and
+C<Specio::Subs::subs_installed_into>:
+
+    package My::Library;
+
+    use My::Library::Internal -reexport;
+    use Specio::Library::Builtins -reexport;
+    use Specio::Subs qw( My::Library::Internal Specio::Library::Builtins );
+
+    sub _also_export {
+        return Specio::Subs::subs_installed_into(__PACKAGE__);
+    }

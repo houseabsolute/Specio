@@ -145,6 +145,8 @@ my $sub_namer = do {
         or sub { return $_[1] };
 };
 
+my %Installed;
+
 sub _install_sub {
     my $caller   = shift;
     my $sub_name = shift;
@@ -152,11 +154,22 @@ sub _install_sub {
 
     my $fq_name = $caller . '::' . $sub_name;
 
-    ## no critic (TestingAndDebugging::ProhibitNoStrict)
-    no strict 'refs';
-    *{$fq_name} = $sub_namer->( $fq_name, $sub );
+    {
+        ## no critic (TestingAndDebugging::ProhibitNoStrict)
+        no strict 'refs';
+        *{$fq_name} = $sub_namer->( $fq_name, $sub );
+    }
+
+    $Installed{$caller} ||= [];
+    push @{ $Installed{$caller} }, $sub_name;
 
     return;
+}
+
+sub subs_installed_into {
+    my $package = shift;
+
+    return @{ $Installed{$package} || [] };
 }
 
 1;
@@ -218,5 +231,17 @@ This subroutine attempts to coerce C<$value> into the given type, and dies if
 it cannot do so.
 
 This is only created if the type has coercions.
+
+=head1 ADDITIONAL API
+
+=for Pod::Coverage subs_installed_into
+
+This module has a subroutine named C<subs_installed_into>. It is not exported
+but it can be called by its fully qualified name. It accepts a single
+argument, a package name. It returns a list of subs that it generated and
+installed in the given package, if any.
+
+This exists to make it easy to write a type library that combines other
+library and generates helper subs for export all at once.
 
 =cut
