@@ -57,10 +57,28 @@ sub _inline_reader {
 
     my $reader;
     if ( $attr->{lazy} && ( my $builder = $attr->{builder} ) ) {
-        $reader = "sub { \$_[0]->{$name} ||= \$_[0]->$builder; }";
+        my $source = <<'EOF';
+sub {
+     unless ( exists $_[0]->{%s} ) {
+         $_[0]->{%s} = $_[0]->%s;
+         Scalar::Util::weaken( $_[0]->{%s} ) if %s && ref $_[0]->{%s};
+     }
+     $_[0]->{%s};
+}
+EOF
+        $reader = sprintf(
+            $source,
+            $name,
+            $name,
+            $builder,
+            $name,
+            ( $attr->{weak_ref} ? 1 : 0 ),
+            $name,
+            $name,
+        );
     }
     else {
-        $reader = "sub { \$_[0]->{$name} }";
+        $reader = sprintf( 'sub { $_[0]->{%s} }', $name );
     }
 
     {

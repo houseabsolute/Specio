@@ -19,7 +19,7 @@ with 'Specio::Role::Inlinable';
 
 use overload(
     q{""}  => sub { $_[0] },
-    '&{}'  => '_subify',
+    '&{}'  => '_subification',
     'bool' => sub {1},
 );
 
@@ -62,6 +62,11 @@ use overload(
         _coercions => {
             builder => '_build_coercions',
             clone   => '_clone_coercions',
+        },
+        _subification => {
+            init_arg => undef,
+            lazy     => 1,
+            builder  => '_build_subification',
         },
 
         # Because types are cloned on import, we can't directly compare type
@@ -418,7 +423,14 @@ sub inline_check {
     return $type->_inline_generator->( $type, @_ );
 }
 
-sub _subify {
+# For some idiotic reason I called $type->_subify directly in Code::TidyAll so
+# I'll leave this in here for now.
+
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+sub _subify { $_[0]->_subification }
+## use critic
+
+sub _build_subification {
     my $self = shift;
 
     if ( defined &Sub::Quote::quote_sub && $self->can_be_inlined ) {

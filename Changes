@@ -8,6 +8,10 @@
   the type from which the coercion was being performed. Fixed by Graham Knop
   (GH #8).
 
+- When you use the same type repeatedly as coderef (for example, as a
+  constraint with Moo), it will only generated its subified form once, rather
+  than regenerating it each time it is de-referenced.
+
 
 0.35     2017-02-12
 
