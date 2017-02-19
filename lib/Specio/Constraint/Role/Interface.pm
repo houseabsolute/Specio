@@ -317,67 +317,62 @@ sub can_inline_coercion_and_check {
 }
 
 sub inline_coercion {
-    my $self = shift;
+    my $self     = shift;
+    my $arg_name = shift;
 
     die 'Cannot inline coercion'
         unless $self->can_inline_coercion;
 
-    my %env;
+    my $source = 'do { my $value = ' . $arg_name . ';';
 
-    my $arg_name = $_[0];
-    my $source   = 'do {';
-    if ( $self->has_coercions ) {
-        $source .= 'my $value = ' . $arg_name . ';';
-        $arg_name = '$value';
-        $source .= $arg_name . ' = ';
-        for my $coercion ( $self->coercions ) {
-            $source
-                .= '('
-                . $coercion->from->inline_check($arg_name) . ') ? ('
-                . $coercion->inline_coercion($arg_name) . ') : ';
+    my ( $coerce, $env );
+    ( $coerce, $arg_name, $env ) = $self->_inline_coercion($arg_name);
+    $source .= $coerce . $arg_name . '};';
 
-            %env = ( %env, %{ $coercion->inline_environment } );
-        }
-        $source .= $arg_name . ';';
-    }
-
-    $source .= $arg_name . '};';
-
-    return ( $source, \%env );
+    return ( $source, $env );
 }
 
 sub inline_coercion_and_check {
-    my $self = shift;
+    my $self     = shift;
+    my $arg_name = shift;
 
     die 'Cannot inline coercion and check'
         unless $self->can_inline_coercion_and_check;
 
-    my %env;
+    my $source = 'do { my $value = ' . $arg_name . ';';
 
-    my $arg_name = $_[0];
-    my $source   = 'do {';
-    if ( $self->has_coercions ) {
-        $source .= 'my $value = ' . $arg_name . ';';
-        $arg_name = '$value';
-        $source .= $arg_name . ' = ';
-        for my $coercion ( $self->coercions ) {
-            $source
-                .= '('
-                . $coercion->from->inline_check($arg_name) . ') ? ('
-                . $coercion->inline_coercion($arg_name) . ') : ';
-
-            %env = ( %env, %{ $coercion->inline_environment } );
-        }
-        $source .= $arg_name . ';';
-    }
-
+    my ( $coerce, $env );
+    ( $coerce, $arg_name, $env ) = $self->_inline_coercion($arg_name);
     my ( $assert, $assert_env ) = $self->inline_assert($arg_name);
-    $source .= $assert;
-    %env = ( %env, %{$assert_env} );
 
+    $source .= $coerce;
+    $source .= $assert;
     $source .= $arg_name . '};';
 
-    return ( $source, \%env );
+    return ( $source, { %{$env}, %{$assert_env} } );
+}
+
+sub _inline_coercion {
+    my $self     = shift;
+    my $arg_name = shift;
+
+    return ( q{}, $arg_name, {} ) unless $self->has_coercions;
+
+    my %env;
+
+    $arg_name = '$value';
+    my $source = $arg_name . ' = ';
+    for my $coercion ( $self->coercions ) {
+        $source
+            .= '('
+            . $coercion->from->inline_check($arg_name) . ') ? ('
+            . $coercion->inline_coercion($arg_name) . ') : ';
+
+        %env = ( %env, %{ $coercion->inline_environment } );
+    }
+    $source .= $arg_name . ';';
+
+    return ( $source, $arg_name, \%env );
 }
 
 {
