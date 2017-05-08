@@ -116,12 +116,12 @@ sub _inline_constructor {
     my $class = shift;
 
     my @build_subs;
-    for my $class ( @{ mro::get_linear_isa($class) } ) {
+    for my $parent ( @{ mro::get_linear_isa($class) } ) {
         {
             ## no critic (TestingAndDebugging::ProhibitNoStrict)
             no strict 'refs';
-            push @build_subs, $class . '::BUILD'
-                if defined &{ $class . '::BUILD' };
+            push @build_subs, $parent . '::BUILD'
+                if defined &{ $parent . '::BUILD' };
         }
     }
 
