@@ -84,7 +84,7 @@ use Specio::Declare;
 SKIP:
 {
     skip 'These tests require Mouse and Perl 5.10+', 8
-        unless $] >= 5.10 && eval { require Mouse; 1 };
+        unless $] >= 5.010000 && eval { require Mouse; 1 };
 
     ## no critic (BuiltinFunctions::ProhibitStringyEval, ErrorHandling::RequireCheckingReturnValueOfEval)
     eval <<'EOF';
