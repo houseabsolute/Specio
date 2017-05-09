@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.37     2017-05-09
+
 - Possible fix for very weird failures seen under threaded Perls with some
   modules that use Specio.
 
