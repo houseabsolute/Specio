@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.38     2017-07-01
+
 - Simplify checks for overloading to not call overload::Overloaded(). Just
   checking the return value of overload::Method() is sufficient.
 
