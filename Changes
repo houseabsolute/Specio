@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Simplify checks for overloading to not call overload::Overloaded(). Just
+  checking the return value of overload::Method() is sufficient.
+
+
 0.37     2017-05-09
 
 - Possible fix for very weird failures seen under threaded Perls with some
