@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.39     2017-08-02
+
 - Many bug fixes and improves to the types created by
   {any,object}_{can,does,isa}_type. In some cases, an invalid value could
   cause an exception in type check itself. In other cases, a value which
