@@ -34,7 +34,7 @@ with 'Specio::Constraint::Role::CanType';
         # inside the all block @_ gets redefined and we can no longer get at
         # the value.
         my $v = %s;
-        ( Scalar::Util::blessed($v) || ( !ref($v) ) )
+        ( Scalar::Util::blessed($v) || ( defined($v) && !ref($v) && length($v) ) )
             && List::Util::all { $v->can($_) } %s;
         }
     )
@@ -43,6 +43,10 @@ EOF
 
     sub _build_inline_generator {$_inline_generator}
 }
+
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+sub _allow_classes {1}
+## use critic
 
 __PACKAGE__->_ooify;
 

@@ -47,16 +47,6 @@ use Specio::PartialDump qw( partial_dump );
         $tc->value_is_valid( Bar->new ),
         'Bar object is valid for named ObjectCan type'
     );
-
-    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
-    eval { $tc->validate_or_die( Foo->new ) };
-    ## use critic
-    my $e = $@;
-    like(
-        $e->message,
-        qr/\QFoo is missing the 'bar' method/,
-        'got expected error message for failure with ObjectCan type'
-    );
 }
 
 {
@@ -73,18 +63,6 @@ use Specio::PartialDump qw( partial_dump );
         ok(
             $tc->value_is_valid('Bar'),
             "$desc is valid for named AnyCan type"
-        );
-    }
-
-    for my $thing ( 'Foo', Foo->new ) {
-        ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
-        eval { $tc->validate_or_die($thing) };
-        ## use critic
-        my $e = $@;
-        like(
-            $e->message,
-            qr/\QFoo is missing the 'bar' method/,
-            'got expected error message for failure with AnyCan type'
         );
     }
 }
@@ -193,16 +171,6 @@ use Specio::PartialDump qw( partial_dump );
         !$tc->value_is_valid( Foo->new ),
         'Foo object is not valid for object isa type (requires NonExistent)'
     );
-
-    ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
-    eval { $tc->validate_or_die( Foo->new ) };
-    ## use critic
-    my $e = $@;
-    like(
-        $e->message,
-        qr/\Q/,
-        'got expected error message for failure with ObjectCan type'
-    );
 }
 
 {
@@ -216,16 +184,6 @@ use Specio::PartialDump qw( partial_dump );
         ok(
             !$tc->value_is_valid($thing),
             "$desc is not valid for any isa type (requires Quux)"
-        );
-
-        ## no critic (ErrorHandling::RequireCheckingReturnValueOfEval)
-        eval { $tc->validate_or_die($thing) };
-        ## use critic
-        my $e = $@;
-        like(
-            $e->message,
-            qr/\Q/,
-            'got expected error message for failure with AnyCan type'
         );
     }
 }

@@ -24,25 +24,25 @@ with 'Specio::Constraint::Role::DoesType';
         my $self = shift;
         my $val  = shift;
 
-        return sprintf( <<'EOF', ($val) x 4, B::perlstring( $self->role ) );
+        return sprintf( <<'EOF', ($val) x 6, B::perlstring( $self->role ) );
 (
     (
-        Scalar::Util::blessed( %s )
-        ||
-        (
-            !ref( %s )
-        )
+        Scalar::Util::blessed(%s) || ( !ref(%s)
+            && defined(%s)
+            && length(%s) )
     )
-    &&
-    %s->can('does')
-    &&
-    %s->does(%s)
-)
+        && %s->can('does')
+        && %s->does(%s)
+    )
 EOF
     };
 
     sub _build_inline_generator {$_inline_generator}
 }
+
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+sub _allow_classes {1}
+## use critic
 
 __PACKAGE__->_ooify;
 

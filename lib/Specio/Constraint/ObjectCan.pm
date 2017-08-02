@@ -41,6 +41,10 @@ EOF
     sub _build_inline_generator {$_inline_generator}
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+sub _allow_classes {0}
+## use critic
+
 __PACKAGE__->_ooify;
 
 1;

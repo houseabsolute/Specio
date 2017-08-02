@@ -24,13 +24,15 @@ with 'Specio::Constraint::Role::IsaType';
         my $self = shift;
         my $val  = shift;
 
-        return sprintf( <<'EOF', ($val) x 3, B::perlstring( $self->class ) );
+        return sprintf( <<'EOF', ($val) x 5, B::perlstring( $self->class ) );
 (
     (
         Scalar::Util::blessed( %s )
         ||
         (
-            !ref( %s )
+            defined( %s )
+            && !ref( %s )
+            && length( %s )
         )
     )
     &&
@@ -41,6 +43,10 @@ EOF
 
     sub _build_inline_generator {$_inline_generator}
 }
+
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+sub _allow_classes {1}
+## use critic
 
 __PACKAGE__->_ooify;
 
