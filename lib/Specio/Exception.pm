@@ -75,7 +75,7 @@ __END__
 
 =for Pod::Coverage BUILD throw
 
-=head1 DESCRIPTION
+=head1 SYNOPSIS
 
   use Try::Tiny;
 
