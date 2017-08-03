@@ -39,6 +39,13 @@ with 'Specio::Constraint::Role::CanType';
                    defined($v)
                 && !ref($v)
                 && length($v)
+                && $v !~ /\A
+                          \s*
+                          -?[0-9]+(?:\.[0-9]+)?
+                          (?:[Ee][\-+]?[0-9]+)?
+                          \s*
+                          \z/xs
+
                 # Passing a GLOB from (my $glob = *GLOB) gives us a very weird
                 # scalar. It's not a ref and it has a length but trying to
                 # call ->can on it throws an exception

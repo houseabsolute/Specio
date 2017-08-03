@@ -35,7 +35,7 @@ subtest(
         );
         like(
             exception { $object_can->validate_or_die(42) },
-            qr/\QA plain scalar (42) will never pass an ObjectCan check (wants bar and foo)/,
+            qr/\QA number (42) will never pass an ObjectCan check (wants bar and foo)/,
             'exception for number'
         );
         like(
@@ -104,7 +104,7 @@ subtest(
         );
         like(
             exception { $object_isa->validate_or_die(42) },
-            qr/\QA plain scalar (42) will never pass an ObjectIsa check (wants Foo)/,
+            qr/\QA number (42) will never pass an ObjectIsa check (wants Foo)/,
             'exception for number'
         );
         like(
@@ -178,7 +178,7 @@ subtest(
         );
         like(
             exception { $object_does->validate_or_die(42) },
-            qr/\QA plain scalar (42) will never pass an ObjectDoes check (wants Role::Foo)/,
+            qr/\QA number (42) will never pass an ObjectDoes check (wants Role::Foo)/,
             'exception for number'
         );
         like(

@@ -79,6 +79,18 @@ sub _wrap_message_generator {
                         "A glob will never pass an $type check (wants $all_word_list)";
                 }
 
+                if (
+                    $value =~ /\A
+                        \s*
+                        -?[0-9]+(?:\.[0-9]+)?
+                        (?:[Ee][\-+]?[0-9]+)?
+                        \s*
+                        \z/xs
+                    ) {
+                    return
+                        "A number ($value) will never pass an $type check (wants $all_word_list)";
+                }
+
                 $class = $value if $allow_classes;
 
                 # At this point we either have undef or a non-empty string in

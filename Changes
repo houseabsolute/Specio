@@ -1,7 +1,8 @@
 {{$NEXT}}
 
-- Fixed more bugs with {any,does,object}_{can,isa}_type. When passed a glob
-  (not a globref) they would die in their type check.
+- Fixed more bugs with {any,object}_{can,does,isa}_type. When passed a glob
+  (not a globref) they would die in their type check. On Perl 5.16 or earlier,
+  passing a number to an any_* type would also die.
 
 - Fixed subification overloading. If Sub::Quote was loaded, this would be
   used, but any environment variables needed for the closure would not be

@@ -63,6 +63,18 @@ sub _wrap_message_generator {
                     "An empty string will never pass an $type check (wants $role)"
                     unless length $value;
 
+                if (
+                    $value =~ /\A
+                        \s*
+                        -?[0-9]+(?:\.[0-9]+)?
+                        (?:[Ee][\-+]?[0-9]+)?
+                        \s*
+                        \z/xs
+                    ) {
+                    return
+                        "A number ($value) will never pass an $type check (wants $role)";
+                }
+
                 if ( !$allow_classes ) {
                     my $dump = partial_dump($value);
                     return
