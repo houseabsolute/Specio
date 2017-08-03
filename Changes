@@ -1,5 +1,13 @@
 {{$NEXT}}
 
+- Fixed more bugs with {any,does,object}_{can,isa}_type. When passed a glob
+  (not a globref) they would die in their type check.
+
+- Fixed subification overloading. If Sub::Quote was loaded, this would be
+  used, but any environment variables needed for the closure would not be
+  included. This broke enums, among other things.
+
+
 0.39     2017-08-02
 
 - Many bug fixes and improves to the types created by
