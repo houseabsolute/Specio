@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.40     2017-08-03
+
 - Fixed more bugs with {any,object}_{can,does,isa}_type. When passed a glob
   (not a globref) they would die in their type check. On Perl 5.16 or earlier,
   passing a number to an any_* type would also die.
