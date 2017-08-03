@@ -47,8 +47,8 @@ with 'Specio::Constraint::Role::Interface';
         my $self = shift;
         my $val  = shift;
 
-        return sprintf( <<'EOF', $val, $self->_env_var_name, $val );
-( !ref( %s ) && $%s{ %s } )
+        return sprintf( <<'EOF', ($val) x 2, $self->_env_var_name, $val );
+( !ref( %s ) && defined( %s ) && $%s{ %s } )
 EOF
     };
 
