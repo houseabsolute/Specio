@@ -34,8 +34,17 @@ with 'Specio::Constraint::Role::CanType';
         # inside the all block @_ gets redefined and we can no longer get at
         # the value.
         my $v = %s;
-        ( Scalar::Util::blessed($v) || ( defined($v) && !ref($v) && length($v) ) )
-            && List::Util::all { $v->can($_) } %s;
+        (
+            Scalar::Util::blessed($v) || (
+                   defined($v)
+                && !ref($v)
+                && length($v)
+                # Passing a GLOB from (my $glob = *GLOB) gives us a very weird
+                # scalar. It's not a ref and it has a length but trying to
+                # call ->can on it throws an exception
+                && ref( \$v ) ne 'GLOB'
+            )
+        ) && List::Util::all { $v->can($_) } %s;
         }
     )
 EOF

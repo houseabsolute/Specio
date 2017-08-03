@@ -24,12 +24,13 @@ with 'Specio::Constraint::Role::DoesType';
         my $self = shift;
         my $val  = shift;
 
-        return sprintf( <<'EOF', ($val) x 6, B::perlstring( $self->role ) );
+        return sprintf( <<'EOF', ($val) x 7, B::perlstring( $self->role ) );
 (
     (
         Scalar::Util::blessed(%s) || ( !ref(%s)
             && defined(%s)
-            && length(%s) )
+            && length(%s)
+            && ref( \%s ) ne 'GLOB' )
     )
         && %s->can('does')
         && %s->does(%s)

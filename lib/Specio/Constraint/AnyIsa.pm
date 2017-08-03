@@ -24,20 +24,23 @@ with 'Specio::Constraint::Role::IsaType';
         my $self = shift;
         my $val  = shift;
 
-        return sprintf( <<'EOF', ($val) x 5, B::perlstring( $self->class ) );
+        return sprintf( <<'EOF', ($val) x 6, B::perlstring( $self->class ) );
 (
     (
-        Scalar::Util::blessed( %s )
-        ||
-        (
-            defined( %s )
-            && !ref( %s )
-            && length( %s )
-        )
+        Scalar::Util::blessed(%s)
+            || (
+               defined(%s)
+            && !ref(%s)
+            && length(%s)
+
+            # Passing a GLOB from (my $glob = *GLOB) gives us a very weird
+            # scalar. It's not a ref and it has a length but trying to
+            # call ->can on it throws an exception
+            && ref( \%s ) ne 'GLOB'
+            )
     )
-    &&
-    %s->isa(%s)
-)
+        && %s->isa(%s)
+    )
 EOF
     };
 

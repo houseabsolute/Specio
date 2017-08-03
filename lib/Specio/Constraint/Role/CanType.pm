@@ -74,6 +74,11 @@ sub _wrap_message_generator {
                     "An empty string will never pass an $type check (wants $all_word_list)"
                     unless length $value;
 
+                if ( ref \$value eq 'GLOB' ) {
+                    return
+                        "A glob will never pass an $type check (wants $all_word_list)";
+                }
+
                 $class = $value if $allow_classes;
 
                 # At this point we either have undef or a non-empty string in
