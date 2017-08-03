@@ -3,7 +3,7 @@ package Specio::Library::Structured;
 use strict;
 use warnings;
 
-our $VERSION = '0.40';
+our $VERSION = '0.41';
 
 use parent 'Specio::Exporter';
 
