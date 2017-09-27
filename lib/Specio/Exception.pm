@@ -67,7 +67,7 @@ __PACKAGE__->_ooify;
 
 1;
 
-# ABSTRACT: A Throwable::Error subclass for type constraint failures
+# ABSTRACT: An exception class for type constraint failures
 
 __END__
 
