@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Fixed checks for whether a class is loaded in light of upcoming optimization
+  in Perl 5.28. Fixed by Sprout (GH #12).
+
+
 0.40     2017-08-03
 
 - Fixed more bugs with {any,object}_{can,does,isa}_type. When passed a glob
