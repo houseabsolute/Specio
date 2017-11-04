@@ -3,7 +3,7 @@ package Specio::Constraint::Enum;
 use strict;
 use warnings;
 
-our $VERSION = '0.41';
+our $VERSION = '0.42';
 
 use B ();
 use Role::Tiny::With;

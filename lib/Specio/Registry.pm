@@ -5,7 +5,7 @@ use warnings;
 
 use parent 'Exporter';
 
-our $VERSION = '0.41';
+our $VERSION = '0.42';
 
 use Carp qw( confess croak );
 
