@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.41     2017-11-04
+
 - Fixed checks for whether a class is loaded in light of upcoming optimization
   in Perl 5.28. Fixed by Sprout (GH #12).
 
