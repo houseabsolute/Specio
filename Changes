@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- The Perl library claimed it provided types named LaxVersionStr and
+  StrictVersionStr but they were really named LaxVersion and
+  StrictVersion. The names have now been fixed to match the documentation, so
+  they are LaxVersionStr and StrictVersionStr.
+
+
 0.41     2017-11-04
 
 - Fixed checks for whether a class is loaded in light of upcoming optimization

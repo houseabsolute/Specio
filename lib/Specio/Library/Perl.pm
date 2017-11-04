@@ -80,7 +80,7 @@ EOF
 );
 
 declare(
-    'LaxVersion',
+    'LaxVersionStr',
     parent => t('NonEmptyStr'),
     inline => sub {
         return
@@ -95,7 +95,7 @@ EOF
 );
 
 declare(
-    'StrictVersion',
+    'StrictVersionStr',
     parent => t('NonEmptyStr'),
     inline => sub {
         return
