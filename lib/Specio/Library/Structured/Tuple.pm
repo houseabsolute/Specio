@@ -3,7 +3,7 @@ package Specio::Library::Structured::Tuple;
 use strict;
 use warnings;
 
-our $VERSION = '0.42';
+our $VERSION = '0.43';
 
 use Carp qw( confess );
 use List::Util ();
