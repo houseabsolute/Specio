@@ -104,7 +104,7 @@ sub parameterize {
                        blessed($_)
                     && does_role('Specio::Constraint::Role::Interface')
             } values %parameters
-            ) {
+        ) {
 
             confess
                 q{Any type objects passed to ->parameterize must be inlinable constraints if the structurable type has an inline_generator}

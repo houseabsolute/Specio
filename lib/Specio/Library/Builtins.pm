@@ -142,7 +142,7 @@ declare(
     'Int',
     parent => t('Num'),
     inline => sub {
-        return sprintf( <<'EOF', ( $_[1] ) x 6 )
+        return sprintf( <<'EOF', ( $_[1] ) x 6 );
 (
     (
         defined( %s )
@@ -300,7 +300,7 @@ declare(
     inline => sub {
         return
             sprintf(
-            <<'EOF', $_[0]->parent->inline_check( $_[1] ), ( $_[1] ) x 2 )
+            <<'EOF', $_[0]->parent->inline_check( $_[1] ), ( $_[1] ) x 2 );
 (
     ( %s )
     && length "%s"
@@ -438,7 +438,7 @@ declare(
         my $parameter = shift;
         my $val       = shift;
 
-        return sprintf( <<'EOF', $val, $parameter->inline_check($val) )
+        return sprintf( <<'EOF', $val, $parameter->inline_check($val) );
 ( !defined( %s ) || ( %s ) )
 EOF
     },

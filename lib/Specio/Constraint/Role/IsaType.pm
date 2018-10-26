@@ -71,7 +71,7 @@ sub _wrap_message_generator {
                         (?:[Ee][\-+]?[0-9]+)?
                         \s*
                         \z/xs
-                    ) {
+                ) {
                     return
                         "A number ($value) will never pass an $type check (wants $class)";
                 }
