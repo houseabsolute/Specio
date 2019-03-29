@@ -83,7 +83,7 @@ sub _structured_inline_generator {
     my @code = sprintf( '( %s )', $hashref->_inline_check($val) );
 
     for my $k ( sort keys %{ $args{kv} } ) {
-        my $p = $args{kv}{$k};
+        my $p      = $args{kv}{$k};
         my $access = sprintf( '%s->{%s}', $val, B::perlstring($k) );
 
         if ( !blessed($p) ) {

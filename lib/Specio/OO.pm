@@ -168,7 +168,7 @@ EOF
 
     my $attrs = $class->_attrs;
     for my $name ( sort keys %{$attrs} ) {
-        my $attr = $attrs->{$name};
+        my $attr     = $attrs->{$name};
         my $key_name = defined $attr->{init_arg} ? $attr->{init_arg} : $name;
 
         if ( $attr->{required} ) {
@@ -314,7 +314,7 @@ sub clone {
     # to clone the coercions contained by a type in a way that doesn't lead to
     # circular clone (type clones coercions which in turn need to clone their
     # to/from types which in turn ...).
-    my $attrs = $self->_attrs;
+    my $attrs   = $self->_attrs;
     my %special = map { $_ => $attrs->{$_}{clone} }
         grep { $attrs->{$_}{clone} } keys %{$attrs};
 

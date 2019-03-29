@@ -98,7 +98,7 @@ sub _build_inline_generator {
             map { sprintf( '( %s )', $_->_inline_generator->( $_, $_[1] ) ) }
                 @{ $self->of }
         ) . ')';
-        }
+    }
 }
 
 sub _build_inline_environment {
