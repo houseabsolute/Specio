@@ -470,11 +470,15 @@ subroutine something like this:
       my $self = shift;
       my $var  = shift;
 
-      return $_[0]->parent->inline_check( $_[1] )
+      return $self->parent->inline_check($var)
           . ' and more checking code goes here';
   }
 
-This parameter is mutually exclusive with the C<where> parameter.
+Or, more concisely:
+
+  sub { $_[0]->parent->inline_check( $_[1] ) . 'more code that checks $_[1]' }
+
+The C<inline> parameter is mutually exclusive with the C<where> parameter.
 
 =item * message_generator => sub { ... }
 
