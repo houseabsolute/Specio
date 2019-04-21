@@ -122,7 +122,7 @@ sub _word_list {
     return join ' and ', @items if @items == 2;
 
     my $final = pop @items;
-    my $list = join ', ', @items;
+    my $list  = join ', ', @items;
     $list .= ', and ' . $final;
 
     return $list;

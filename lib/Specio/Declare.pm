@@ -151,7 +151,7 @@ sub object_does_type {
 
     my $tc = _make_tc(
         ( defined $name ? ( name => $name ) : () ),
-        role => ( defined $p{role} ? $p{role} : $name ),
+        role       => ( defined $p{role} ? $p{role} : $name ),
         type_class => 'Specio::Constraint::ObjectDoes',
     );
 
@@ -177,7 +177,7 @@ sub object_isa_type {
 
     my $tc = _make_tc(
         ( defined $name ? ( name => $name ) : () ),
-        class => ( defined $p{class} ? $p{class} : $name ),
+        class      => ( defined $p{class} ? $p{class} : $name ),
         type_class => 'Specio::Constraint::ObjectIsa',
     );
 
@@ -224,7 +224,7 @@ sub any_does_type {
 
     my $tc = _make_tc(
         ( defined $name ? ( name => $name ) : () ),
-        role => ( defined $p{role} ? $p{role} : $name ),
+        role       => ( defined $p{role} ? $p{role} : $name ),
         type_class => 'Specio::Constraint::AnyDoes',
     );
 
@@ -250,7 +250,7 @@ sub any_isa_type {
 
     my $tc = _make_tc(
         ( defined $name ? ( name => $name ) : () ),
-        class => ( defined $p{class} ? $p{class} : $name ),
+        class      => ( defined $p{class} ? $p{class} : $name ),
         type_class => 'Specio::Constraint::AnyIsa',
     );
 

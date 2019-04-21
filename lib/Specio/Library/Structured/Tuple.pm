@@ -133,7 +133,7 @@ sub _structured_inline_generator {
     }
 
     for my $i ( 0 .. $#of ) {
-        my $p = $of[$i];
+        my $p      = $of[$i];
         my $access = sprintf( '%s->[%d]', $val, $i );
 
         if ( !blessed($p) ) {
