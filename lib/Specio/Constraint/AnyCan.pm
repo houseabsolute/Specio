@@ -26,7 +26,7 @@ with 'Specio::Constraint::Role::CanType';
         my $val  = shift;
 
         my $methods = join ', ',
-            map { B::perlstring($_) } @{ $self->methods };
+            map { XString::perlstring($_) } @{ $self->methods };
         return sprintf( <<'EOF', $val, $methods );
 (
     do {

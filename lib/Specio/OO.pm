@@ -3,7 +3,7 @@ package Specio::OO;
 use strict;
 use warnings;
 
-use B qw( perlstring );
+use XString ();
 use Carp qw( confess );
 use List::Util qw( all );
 use MRO::Compat;
@@ -195,7 +195,7 @@ EOF
                     . "( \$p{$key_name} )";
             }
             else {
-                my $quoted_class = perlstring( $attr->{isa} );
+                my $quoted_class = XString::perlstring( $attr->{isa} );
                 $validator
                     = "Specio::TypeChecks::isa_class( \$p{$key_name}, $quoted_class )";
             }
@@ -213,7 +213,7 @@ EOF
         }
 
         if ( $attr->{does} ) {
-            my $quoted_role = perlstring( $attr->{does} );
+            my $quoted_role = XString::perlstring( $attr->{does} );
             $constructor .= <<"EOF";
     if ( exists \$p{$key_name} && !Specio::TypeChecks::does_role( \$p{$key_name}, $quoted_role ) ) {
         Carp::confess(

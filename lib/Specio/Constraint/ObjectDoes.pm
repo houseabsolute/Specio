@@ -24,7 +24,7 @@ with 'Specio::Constraint::Role::DoesType';
         my $self = shift;
         my $val  = shift;
 
-        return sprintf( <<'EOF', ($val) x 3, B::perlstring( $self->role ) );
+        return sprintf( <<'EOF', ($val) x 3, XString::perlstring( $self->role ) );
 ( Scalar::Util::blessed(%s) && %s->can('does') && %s->does(%s) )
 EOF
     };

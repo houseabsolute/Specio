@@ -84,7 +84,7 @@ sub _structured_inline_generator {
 
     for my $k ( sort keys %{ $args{kv} } ) {
         my $p      = $args{kv}{$k};
-        my $access = sprintf( '%s->{%s}', $val, B::perlstring($k) );
+        my $access = sprintf( '%s->{%s}', $val, XString::perlstring($k) );
 
         if ( !blessed($p) ) {
             my $type = $p->{optional};
@@ -106,7 +106,7 @@ sub _structured_inline_generator {
         push @code,
             sprintf(
             $check,
-            ( join ', ', map { B::perlstring($_) } keys %{ $args{kv} } ),
+            ( join ', ', map { XString::perlstring($_) } keys %{ $args{kv} } ),
             $args{slurpy}->_inline_check( sprintf( '%s->{$_}', $val ) ),
             $val,
             );

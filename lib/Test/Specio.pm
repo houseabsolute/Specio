@@ -1258,7 +1258,7 @@ sub describe {
         return q{''} if $val eq q{};
 
         return looks_like_number($val)
-            && $val !~ /\n/ ? $val : B::perlstring($val);
+            && $val !~ /\n/ ? $val : XString::perlstring($val);
     }
 
     return 'open filehandle'

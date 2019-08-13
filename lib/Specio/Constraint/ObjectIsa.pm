@@ -24,7 +24,7 @@ with 'Specio::Constraint::Role::IsaType';
         my $self = shift;
         my $val  = shift;
 
-        return sprintf( <<'EOF', $val, $val, B::perlstring( $self->class ) );
+        return sprintf( <<'EOF', $val, $val, XString::perlstring( $self->class ) );
 ( Scalar::Util::blessed( %s ) && %s->isa(%s) )
 EOF
     };

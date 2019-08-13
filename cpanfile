@@ -15,6 +15,7 @@ requires "Sub::Quote" => "0";
 requires "Test::Fatal" => "0";
 requires "Test::More" => "0.96";
 requires "Try::Tiny" => "0";
+requires "XString" => "0";
 requires "overload" => "0";
 requires "parent" => "0";
 requires "perl" => "5.008";
@@ -74,5 +75,6 @@ on 'develop' => sub {
   requires "Test::Vars" => "0.009";
   requires "Test::Version" => "2.05";
   requires "Test::Without::Module" => "0";
+  requires "XString" => "0";
   requires "namespace::autoclean" => "0";
 };
