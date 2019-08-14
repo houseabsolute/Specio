@@ -224,7 +224,7 @@ BEGIN {
     }
 }
 
-our @EXPORT_OK = ( @vars, qw( builtins_tests describe test_constraint ) );
+our @EXPORT_OK   = ( @vars, qw( builtins_tests describe test_constraint ) );
 our %EXPORT_TAGS = ( vars => \@vars );
 
 sub builtins_tests {

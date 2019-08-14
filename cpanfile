@@ -15,6 +15,7 @@ requires "Sub::Quote" => "0";
 requires "Test::Fatal" => "0";
 requires "Test::More" => "0.96";
 requires "Try::Tiny" => "0";
+requires "XString" => "0";
 requires "overload" => "0";
 requires "parent" => "0";
 requires "perl" => "5.008";
