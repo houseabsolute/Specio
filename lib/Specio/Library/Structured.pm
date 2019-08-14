@@ -7,7 +7,6 @@ our $VERSION = '0.44';
 
 use parent 'Specio::Exporter';
 
-use B ();
 use Carp qw( confess );
 use List::Util ();
 use Scalar::Util qw( blessed );

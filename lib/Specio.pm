@@ -386,6 +386,30 @@ coercions and parameterizable types. This is a misfeature.
 
 =back
 
+=head1 OPTIONAL PREREQS
+
+There are several optional prereqs that if installed will make this
+distribution better in some way.
+
+=over 4
+
+=item * L<Ref::Util>
+
+Installing this will speed up a number of type checks for built-in types.
+
+=item * L<XString>
+
+If this is installed it will be loaded instead of the L<B> module if you have
+Perl 5.10 or greater. This module is much more memory efficient than loading
+all of L<B>.
+
+=item * L<Sub::Util> or L<Sub::Name>
+
+If one of these is installed then stack traces that end up in Specio code will
+have much better subroutine names for any frames.
+
+=back
+
 =head1 WHY THE NAME?
 
 This distro was originally called "Type", but that's an awfully generic top

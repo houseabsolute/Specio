@@ -8,6 +8,7 @@ our $VERSION = '0.44';
 use Carp qw( confess );
 use List::Util ();
 use Scalar::Util qw( blessed );
+use Specio::Helpers qw( perlstring );
 use Specio::Library::Builtins;
 use Specio::TypeChecks qw( does_role );
 
@@ -84,7 +85,7 @@ sub _structured_inline_generator {
 
     for my $k ( sort keys %{ $args{kv} } ) {
         my $p      = $args{kv}{$k};
-        my $access = sprintf( '%s->{%s}', $val, B::perlstring($k) );
+        my $access = sprintf( '%s->{%s}', $val, perlstring($k) );
 
         if ( !blessed($p) ) {
             my $type = $p->{optional};
@@ -106,7 +107,7 @@ sub _structured_inline_generator {
         push @code,
             sprintf(
             $check,
-            ( join ', ', map { B::perlstring($_) } keys %{ $args{kv} } ),
+            ( join ', ', map { perlstring($_) } keys %{ $args{kv} } ),
             $args{slurpy}->_inline_check( sprintf( '%s->{$_}', $val ) ),
             $val,
             );

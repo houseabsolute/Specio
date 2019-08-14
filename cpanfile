@@ -15,7 +15,6 @@ requires "Sub::Quote" => "0";
 requires "Test::Fatal" => "0";
 requires "Test::More" => "0.96";
 requires "Try::Tiny" => "0";
-requires "XString" => "0";
 requires "overload" => "0";
 requires "parent" => "0";
 requires "perl" => "5.008";
@@ -25,6 +24,7 @@ requires "version" => "0.83";
 requires "warnings" => "0";
 recommends "Ref::Util" => "0.112";
 recommends "Sub::Util" => "1.40";
+recommends "XString" => "0";
 
 on 'test' => sub {
   requires "ExtUtils::MakeMaker" => "0";

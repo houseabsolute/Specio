@@ -5,10 +5,10 @@ use warnings;
 
 our $VERSION = '0.44';
 
-use B ();
 use List::Util 1.33 ();
 use Role::Tiny::With;
 use Scalar::Util ();
+use Specio::Helpers qw( perlstring );
 use Specio::Library::Builtins;
 use Specio::OO;
 
@@ -25,8 +25,7 @@ with 'Specio::Constraint::Role::CanType';
         my $self = shift;
         my $val  = shift;
 
-        my $methods = join ', ',
-            map { B::perlstring($_) } @{ $self->methods };
+        my $methods = join ', ', map { perlstring($_) } @{ $self->methods };
         return sprintf( <<'EOF', $val, $methods );
 (
     do {

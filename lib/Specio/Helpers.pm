@@ -11,7 +11,7 @@ our $VERSION = '0.44';
 
 use Scalar::Util qw( blessed );
 
-our @EXPORT_OK = qw( install_t_sub is_class_loaded _STRINGLIKE );
+our @EXPORT_OK = qw( install_t_sub is_class_loaded perlstring _STRINGLIKE  );
 
 sub install_t_sub {
 
@@ -75,6 +75,16 @@ sub _STRINGLIKE ($) {
 # Borrowed from Params::Util
 sub _STRING ($) {
     return defined $_[0] && !ref $_[0] && length( $_[0] ) ? $_[0] : undef;
+}
+
+BEGIN {
+    if ( $] >= 5.010 && eval { require XString; 1 } ) {
+        *perlstring = \&XString::perlstring;
+    }
+    else {
+        require B;
+        *perlstring = \&B::perlstring;
+    }
 }
 
 # Borrowed from Types::Standard

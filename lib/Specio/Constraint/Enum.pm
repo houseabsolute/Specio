@@ -5,7 +5,6 @@ use warnings;
 
 our $VERSION = '0.44';
 
-use B ();
 use Role::Tiny::With;
 use Scalar::Util qw( refaddr );
 use Specio::Library::Builtins;

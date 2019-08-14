@@ -5,9 +5,9 @@ use warnings;
 
 our $VERSION = '0.44';
 
-use B ();
 use Role::Tiny::With;
 use Scalar::Util ();
+use Specio::Helpers qw( perlstring );
 use Specio::Library::Builtins;
 use Specio::OO;
 
@@ -24,7 +24,7 @@ with 'Specio::Constraint::Role::DoesType';
         my $self = shift;
         my $val  = shift;
 
-        return sprintf( <<'EOF', ($val) x 8, B::perlstring( $self->role ) );
+        return sprintf( <<'EOF', ($val) x 8, perlstring( $self->role ) );
 (
     (
         Scalar::Util::blessed(%s) || (

@@ -5,7 +5,6 @@ use warnings;
 
 our $VERSION = '0.44';
 
-use B ();
 use IO::File;
 use Scalar::Util qw( blessed looks_like_number openhandle );
 use Specio::Library::Builtins;
@@ -1258,7 +1257,7 @@ sub describe {
         return q{''} if $val eq q{};
 
         return looks_like_number($val)
-            && $val !~ /\n/ ? $val : B::perlstring($val);
+            && $val !~ /\n/ ? $val : Specio::Helpers::perlstring($val);
     }
 
     return 'open filehandle'
