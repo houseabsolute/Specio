@@ -1517,5 +1517,5 @@ If you want to create a glob overloading object that returns a filehandle, do
 this:
 
   local *BAR;
-  open BAR, '<', $0 or die "Could not open $0 for the test";
+  open BAR, '<', $^X or die "Could not open $^X for the test";
   my $GLOB_OVERLOAD_FH = _T::GlobOverload->new( \*BAR );
