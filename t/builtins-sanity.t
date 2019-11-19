@@ -1,8 +1,6 @@
 use strict;
 use warnings;
 
-use lib 't/lib';
-
 use Test::More 0.96;
 use Test::Specio qw( builtins_tests describe test_constraint :vars );
 
