@@ -11,6 +11,8 @@ stages:
       debug: 1
   - template: templates/test.yml@ci-perl-helpers
     parameters:
-      coverage: codecov
+      # Coverage tests cause a random segfault occasionally. See
+      # https://github.com/pjcj/Devel--Cover/issues/251 for my bug report.
+      # coverage: codecov
       debug: 1
       include_threaded_perls: 'true'
