@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.45     2019-11-24
+
 - Made XString a prereq if installing with Perl 5.10+.
 
 
