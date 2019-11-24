@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+0.44.0000001  2019-11-24 
+
+    Bogus change to test Azure pipeline
+
 - Made XString a prereq if installing with Perl 5.10+.
 
 
