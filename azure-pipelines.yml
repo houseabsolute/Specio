@@ -23,6 +23,7 @@ stages:
 
   - template: templates/helpers/macos.yml@ci-perl-helpers
     parameters:
+      cache_key: "1"
       debug: true
       include_threads: true
       use_default_perls: true
