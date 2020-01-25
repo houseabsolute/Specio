@@ -2,7 +2,7 @@ resources:
   repositories:
     - repository: ci-perl-helpers
       type: github
-      ref: refs/heads/no-ci-fix-test_xt
+      ref: refs/heads/no-ci-fix-windows-again
       name: houseabsolute/ci-perl-helpers
       endpoint: houseabsolute/ci-perl-helpers
 
