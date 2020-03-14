@@ -13,7 +13,7 @@ use Specio::PartialDump qw( partial_dump );
 use Specio::TypeChecks;
 use Storable qw( dclone );
 
-our $VERSION = '0.46';
+our $VERSION = '0.47';
 
 use Exporter qw( import );
 
