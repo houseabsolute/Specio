@@ -11,8 +11,6 @@ use Module::Runtime qw( use_package_optimistically );
 use Specio::Library::Perl;
 use Specio::Registry qw( exportable_types_for_package );
 
-my $counter = 0;
-
 sub import {
     shift;
     my @libs = @_;

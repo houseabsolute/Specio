@@ -20,7 +20,7 @@ sub _inline {
 }
 
 sub _parameterization_args_builder {
-    my $self = shift;
+    shift;
     my $args = shift;
 
     for my $k (qw( key value )) {
@@ -50,7 +50,7 @@ sub _name_builder {
 }
 
 sub _structured_inline_generator {
-    my $self = shift;
+    shift;
     my $val  = shift;
     my %args = @_;
 

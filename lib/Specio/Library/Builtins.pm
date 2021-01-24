@@ -108,7 +108,6 @@ EOF
     }
 );
 
-my $value_type = t('Value');
 declare(
     'Num',
     parent => t('Str'),
@@ -337,7 +336,7 @@ EOF
         parent     => t('Ref'),
         inline     => sub { $base_scalarref_check->( $_[1] ) },
         parameterized_inline_generator => sub {
-            my $self      = shift;
+            shift;
             my $parameter = shift;
             my $val       = shift;
 
@@ -375,7 +374,7 @@ EOF
         parent     => t('Ref'),
         inline     => sub { $base_arrayref_check->( $_[1] ) },
         parameterized_inline_generator => sub {
-            my $self      = shift;
+            shift;
             my $parameter = shift;
             my $val       = shift;
 
@@ -414,7 +413,7 @@ EOF
         parent     => t('Ref'),
         inline     => sub { $base_hashref_check->( $_[1] ) },
         parameterized_inline_generator => sub {
-            my $self      = shift;
+            shift;
             my $parameter = shift;
             my $val       = shift;
 
@@ -434,7 +433,7 @@ declare(
     parent                         => t('Item'),
     inline                         => sub {'1'},
     parameterized_inline_generator => sub {
-        my $self      = shift;
+        shift;
         my $parameter = shift;
         my $val       = shift;
 

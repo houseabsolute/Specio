@@ -107,8 +107,8 @@ our $STR_OVERLOAD_CLASS_NAME = _T::StrOverload->new('_T::StrOverload');
     package _T::NumOverload;
 
     use overload
-        '0+' => sub { ${ $_[0] } },
-        '+'  => sub { ${ $_[0] } + $_[1] },
+        '0+'     => sub { ${ $_[0] } },
+        '+'      => sub { ${ $_[0] } + $_[1] },
         fallback => 0;
 
     sub new {
@@ -589,7 +589,7 @@ sub builtins_tests {
                     -1.23456e-10
                     -1e+10
                     1E10
-                    ),
+                ),
             ],
             reject => [
                 $BOOL_OVERLOAD_TRUE,
@@ -639,7 +639,7 @@ sub builtins_tests {
                     -1e10
                     -1e+10
                     1E20
-                    ),
+                ),
             ],
             reject => [
                 $BOOL_OVERLOAD_TRUE,
@@ -684,7 +684,7 @@ sub builtins_tests {
                     -1.23456e10
                     -1.23456e-10
                     -1.23456e+10
-                    ),
+                ),
             ],
         },
         Str => {

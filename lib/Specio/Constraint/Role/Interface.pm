@@ -442,7 +442,7 @@ sub _build_subification {
 }
 
 sub _inline_throw_exception {
-    my $self                       = shift;
+    shift;
     my $value_var                  = shift;
     my $message_generator_var_name = shift;
     my $type_var_name              = shift;
