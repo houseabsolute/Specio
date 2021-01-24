@@ -100,8 +100,8 @@ This class's constructor accepts two additional parameters:
 
 =item * parent
 
-This should be the L<Specio::Constraint::Parameterizable> object from which this
-object was created.
+This should be the L<Specio::Constraint::Parameterizable> object from which
+this object was created.
 
 This parameter is required.
 

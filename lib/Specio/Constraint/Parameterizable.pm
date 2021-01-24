@@ -137,11 +137,11 @@ This class's constructor accepts two additional parameters:
 This is a subroutine that generates a new constraint subroutine when the type
 is parameterized.
 
-It will be called as a method on the type and will be passed a single
-argument, the type object for the type parameter.
+It will be called as a method on the type and will be passed a single argument,
+the type object for the type parameter.
 
-This parameter is mutually exclusive with the
-C<parameterized_inline_generator> parameter.
+This parameter is mutually exclusive with the C<parameterized_inline_generator>
+parameter.
 
 =item * parameterized_inline_generator
 
@@ -149,9 +149,9 @@ This is a subroutine that generates a new inline generator subroutine when the
 type is parameterized.
 
 It will be called as a method on the L<Specio::Constraint::Parameterized>
-object when that object needs to generate an inline constraint. It will
-receive the type parameter as the first argument and the variable name as a
-string as the second.
+object when that object needs to generate an inline constraint. It will receive
+the type parameter as the first argument and the variable name as a string as
+the second.
 
 This probably seems fairly confusing, so looking at the examples in the
 L<Specio::Library::Builtins> code may be helpful.
@@ -166,8 +166,8 @@ C<parameterized_constraint_generator> parameter.
 This method takes two arguments. The C<of> argument should be an object which
 does the L<Specio::Constraint::Role::Interface> role, and is required.
 
-The other argument, C<declared_at>, is optional. If it is not given, then a
-new L<Specio::DeclaredAt> object is creating using a call stack depth of 1.
+The other argument, C<declared_at>, is optional. If it is not given, then a new
+L<Specio::DeclaredAt> object is creating using a call stack depth of 1.
 
 This method returns a new L<Specio::Constraint::Parameterized> object.
 

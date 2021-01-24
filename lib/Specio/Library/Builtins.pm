@@ -522,8 +522,8 @@ Accepts any reference.
 
 =head2 ScalarRef (of `a)
 
-Accepts a scalar reference or an object which overloads scalar
-dereferencing. If parameterized, the dereferenced value must be of type C<`a>.
+Accepts a scalar reference or an object which overloads scalar dereferencing.
+If parameterized, the dereferenced value must be of type C<`a>.
 
 =head2 ArrayRef (of `a)
 
@@ -537,13 +537,12 @@ parameterized, the values in the hashref must be of type C<`a>.
 
 =head2 CodeRef
 
-Accepts a code (sub) reference or an object which overloads code
-dereferencing.
+Accepts a code (sub) reference or an object which overloads code dereferencing.
 
 =head2 RegexpRef
 
-Accepts a regex object created by C<qr//> or an object which overloads
-regex interpolation.
+Accepts a regex object created by C<qr//> or an object which overloads regex
+interpolation.
 
 =head2 GlobRef
 
@@ -551,9 +550,9 @@ Accepts a glob reference or an object which overloads glob dereferencing.
 
 =head2 FileHandle
 
-Accepts a glob reference which is an open file handle, any C<IO::Handle>
-Object or subclass, or an object which overloads glob dereferencing and
-returns a glob reference which is an open file handle.
+Accepts a glob reference which is an open file handle, any C<IO::Handle> Object
+or subclass, or an object which overloads glob dereferencing and returns a glob
+reference which is an open file handle.
 
 =head2 Object
 

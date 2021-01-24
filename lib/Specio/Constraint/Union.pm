@@ -157,3 +157,4 @@ Returns an array reference of the individual types which makes up this union.
 
 This class does the L<Specio::Constraint::Role::Interface> and
 L<Specio::Role::Inlinable> roles.
+

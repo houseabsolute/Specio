@@ -113,18 +113,17 @@ This library provides a set of structured types for Specio, C<Dict>, C<Map>,
 and C<Tuple>. This library also exports two helper subs used for some types,
 C<optional> and C<slurpy>.
 
-All structured types are parameterized by calling C<< t( 'Type Name', of =>
-... ) >>. The arguments passed after C<of> vary for each type.
+All structured types are parameterized by calling C<< t( 'Type Name', of => ...
+) >>. The arguments passed after C<of> vary for each type.
 
 =head2 Dict
 
-A C<Dict> is a hashref with a well-defined set of keys and types for those
-key.
+A C<Dict> is a hashref with a well-defined set of keys and types for those key.
 
 The argument passed to C<of> should be a single hashref. That hashref must
-contain a C<kv> key defining the expected keys and the types for their
-values. This C<kv> value is itself a hashref. If a key/value pair is optional,
-use C<optional> around the I<type> for that key:
+contain a C<kv> key defining the expected keys and the types for their values.
+This C<kv> value is itself a hashref. If a key/value pair is optional, use
+C<optional> around the I<type> for that key:
 
     my $person = t(
         'Dict',
@@ -169,9 +168,9 @@ conceivably be any sort of value.
 
 A C<Tuple> is an arrayref with a fixed set of members in a specific order.
 
-The argument passed to C<of> should be a single arrayref consisting of
-types. You can mark a slot in the C<Tuple> as optional by wrapping the type in
-a call to C<optional>:
+The argument passed to C<of> should be a single arrayref consisting of types.
+You can mark a slot in the C<Tuple> as optional by wrapping the type in a call
+to C<optional>:
 
     my $record = t(
         'Tuple',
@@ -208,5 +207,6 @@ You cannot mix C<optional> and C<slurpy> in a C<Tuple> definition.
 =head1 LIMITATIONS
 
 Currently all structured types require that the types they are structured with
-can be inlined. This may change in the future, but inlining all your types is
-a really good idea, so you should do that anyway.
+can be inlined. This may change in the future, but inlining all your types is a
+really good idea, so you should do that anyway.
+

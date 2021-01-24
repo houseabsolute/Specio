@@ -136,4 +136,6 @@ __END__
 
 =head1 DESCRIPTION
 
-See L<Specio::Constraint::AnyCan> and L<Specio::Constraint::ObjectCan> for details.
+See L<Specio::Constraint::AnyCan> and L<Specio::Constraint::ObjectCan> for
+details.
+

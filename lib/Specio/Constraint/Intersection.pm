@@ -131,8 +131,8 @@ __END__
 
 =head1 DESCRIPTION
 
-This is a specialized type constraint class for intersections, which will
-allow a value which matches each one of several distinct types.
+This is a specialized type constraint class for intersections, which will allow
+a value which matches each one of several distinct types.
 
 =head1 API
 
@@ -158,3 +158,4 @@ intersection.
 
 This class does the L<Specio::Constraint::Role::Interface> and
 L<Specio::Role::Inlinable> roles.
+

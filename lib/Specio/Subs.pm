@@ -235,11 +235,11 @@ This is only created if the type has coercions.
 =for Pod::Coverage subs_installed_into
 
 This module has a subroutine named C<subs_installed_into>. It is not exported
-but it can be called by its fully qualified name. It accepts a single
-argument, a package name. It returns a list of subs that it generated and
-installed in the given package, if any.
+but it can be called by its fully qualified name. It accepts a single argument,
+a package name. It returns a list of subs that it generated and installed in
+the given package, if any.
 
-This exists to make it easy to write a type library that combines other
-library and generates helper subs for export all at once.
+This exists to make it easy to write a type library that combines other library
+and generates helper subs for export all at once.
 
 =cut

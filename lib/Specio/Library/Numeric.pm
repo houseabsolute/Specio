@@ -177,3 +177,4 @@ This library provides some additional string numeric for common cases.
 =head2 SingleDigit
 
 A single digit from -9 to 9.
+

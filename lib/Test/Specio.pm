@@ -1312,12 +1312,12 @@ This module provides the following exports:
 
 This subroutine accepts two arguments. The first should be a Specio type
 object. The second is hashref which can contain the keys C<accept> and
-C<reject>. Each key should contain an arrayref of values which the type
-accepts or rejects.
+C<reject>. Each key should contain an arrayref of values which the type accepts
+or rejects.
 
-The third argument is optional. This is a sub reference which will be called
-to generate a description of the value being tested. This defaults to calling
-this package's C<describe> sub, but you can provide your own.
+The third argument is optional. This is a sub reference which will be called to
+generate a description of the value being tested. This defaults to calling this
+package's C<describe> sub, but you can provide your own.
 
 =head2 describe($value)
 
@@ -1503,10 +1503,9 @@ To create a glob you can pass around for tests, use this code:
       *SOME_GLOB;
   };
 
-The C<_T::GlobOverload> package is defined when you load C<Test::Specio> so
-you can create your own glob overloading objects. Such objects cannot be
-exported because the glob they return does not transfer across packages
-properly.
+The C<_T::GlobOverload> package is defined when you load C<Test::Specio> so you
+can create your own glob overloading objects. Such objects cannot be exported
+because the glob they return does not transfer across packages properly.
 
 You can create such a variable like this:
 

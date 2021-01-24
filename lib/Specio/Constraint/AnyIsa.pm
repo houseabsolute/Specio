@@ -101,3 +101,4 @@ Returns the class name passed to the constructor.
 
 This class does the L<Specio::Constraint::Role::IsaType>,
 L<Specio::Constraint::Role::Interface>, and L<Specio::Role::Inlinable> roles.
+

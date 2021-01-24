@@ -110,3 +110,4 @@ Returns an array reference of valid values for the type.
 
 This class does the L<Specio::Constraint::Role::Interface> and
 L<Specio::Role::Inlinable> roles.
+

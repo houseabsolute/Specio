@@ -116,9 +116,9 @@ This environment will be used when compiling the constraint as part of a
 subroutine. The named variables will be captured as closures in the generated
 subroutine, using L<Eval::Closure>.
 
-It should be very rare to need to set this in the constructor. It's more
-likely that a special type subclass would need to provide values that it
-generates internally.
+It should be very rare to need to set this in the constructor. It's more likely
+that a special type subclass would need to provide values that it generates
+internally.
 
 If you do set this, you are responsible for generating variable names that
 won't clash with anything else in the inlined code.
@@ -130,11 +130,11 @@ This parameter defaults to an empty hash reference.
 A subroutine to generate an error message when the type check fails. The
 default message says something like "Validation failed for type named Int
 declared in package Specio::Library::Builtins
-(.../Specio/blib/lib/Specio/Library/Builtins.pm) at line 147 in sub named (eval)
-with value 1.1".
+(.../Specio/blib/lib/Specio/Library/Builtins.pm) at line 147 in sub named
+(eval) with value 1.1".
 
-You can override this to provide something more specific about the way the
-type failed.
+You can override this to provide something more specific about the way the type
+failed.
 
 The subroutine you provide will be called as a subroutine, I<not as a method>,
 with two arguments. The first is the description of the type (the bit in the
@@ -217,8 +217,8 @@ anonymous the name will be "anonymous type".
 This is a unique id for the type as a string. This is useful if you need to
 make a hash key based on a type, for example. This should be treated as an
 essentially arbitrary and opaque string, and could change at any time in the
-future. If you want something human-readable, use the C<< $type->description
->> method.
+future. If you want something human-readable, use the C<< $type->description >>
+method.
 
 =head2 $type->add_coercion($coercion)
 
@@ -254,8 +254,7 @@ second is a hash reference containing variables which need to be in scope for
 the code to work. This is intended to be passed to L<Eval::Closure>'s
 C<eval_closure> subroutine.
 
-The returned code is a single C<do { }> block without a terminating
-semicolon.
+The returned code is a single C<do { }> block without a terminating semicolon.
 
 =head2 $type->inline_assert($var)
 
@@ -285,8 +284,7 @@ second is a hash reference containing variables which need to be in scope for
 the code to work. This is intended to be passed to L<Eval::Closure>'s
 C<eval_closure> subroutine.
 
-The returned code is a single C<do { }> block without a terminating
-semicolon.
+The returned code is a single C<do { }> block without a terminating semicolon.
 
 =head2 $type->inline_environment()
 
@@ -297,8 +295,8 @@ C<'@bar'>. The values are I<references> to a variable of the matching type.
 =head2 $type->coercion_sub
 
 This method returns a sub ref that takes a single argument and applied all
-relevant coercions to it. This sub ref will use L<Sub::Quote> if all the
-type's coercions are inlinable.
+relevant coercions to it. This sub ref will use L<Sub::Quote> if all the type's
+coercions are inlinable.
 
 This method exists primarily for the benefit of L<Moo>.
 

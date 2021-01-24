@@ -102,4 +102,6 @@ __END__
 
 =head1 DESCRIPTION
 
-See L<Specio::Constraint::AnyIsa> and L<Specio::Constraint::ObjectIsa> for details.
+See L<Specio::Constraint::AnyIsa> and L<Specio::Constraint::ObjectIsa> for
+details.
+

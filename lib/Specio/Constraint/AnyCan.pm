@@ -98,8 +98,7 @@ This class overrides the C<message_generator> default if none is provided.
 
 Finally, this class requires an additional parameter, C<methods>. This must be
 an array reference of method names which the constraint requires. You can also
-pass a single string and it will be converted to an array reference
-internally.
+pass a single string and it will be converted to an array reference internally.
 
 =head2 $any_can->methods
 
@@ -109,3 +108,4 @@ Returns an array reference containing the methods this constraint requires.
 
 This class does the L<Specio::Constraint::Role::IsaType>,
 L<Specio::Constraint::Role::Interface>, and L<Specio::Role::Inlinable> roles.
+

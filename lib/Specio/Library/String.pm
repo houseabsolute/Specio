@@ -79,10 +79,10 @@ A string which has at least one character.
 
 =head2 SimpleStr
 
-A string that is 255 characters or less with no vertical whitespace
-characters.
+A string that is 255 characters or less with no vertical whitespace characters.
 
 =head2 NonEmptySimpleStr
 
 A non-empty string that is 255 characters or less with no vertical whitespace
 characters.
+

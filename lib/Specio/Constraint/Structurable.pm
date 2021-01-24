@@ -165,11 +165,11 @@ This is a subroutine that takes the values passed to C<of> and returns a hash
 of named arguments. These arguments will then be passed into the
 C<structured_constraint_generator> or C<structured_inline_generator>.
 
-This should also do argument checking to make sure that the argument passed
-are valid. For example, the C<Tuple> type turns the arrayref passed to C<of>
-into a hash, along the way checking that the caller did not do things like
-interleave optional and required elements or mix optional and slurpy together
-in the definition.
+This should also do argument checking to make sure that the argument passed are
+valid. For example, the C<Tuple> type turns the arrayref passed to C<of> into a
+hash, along the way checking that the caller did not do things like interleave
+optional and required elements or mix optional and slurpy together in the
+definition.
 
 This parameter is required.
 
@@ -214,8 +214,7 @@ L<Specio::Library::Structured::*> code may be helpful.
 This parameter is mutually exclusive with the
 C<structured_constraint_generator> parameter.
 
-This parameter or the C<structured_constraint_generator> parameter is
-required.
+This parameter or the C<structured_constraint_generator> parameter is required.
 
 =back
 
@@ -224,8 +223,8 @@ required.
 This method takes two arguments. The C<of> argument should be an object which
 does the L<Specio::Constraint::Role::Interface> role, and is required.
 
-The other argument, C<declared_at>, is optional. If it is not given, then a
-new L<Specio::DeclaredAt> object is creating using a call stack depth of 1.
+The other argument, C<declared_at>, is optional. If it is not given, then a new
+L<Specio::DeclaredAt> object is creating using a call stack depth of 1.
 
 This method returns a new L<Specio::Constraint::Structured> object.
 

@@ -77,9 +77,9 @@ __END__
 
 =head1 DESCRIPTION
 
-This class provides a thin wrapper around some of the return values from
-Perl's C<caller> built-in. It's used internally to identify where types and
-coercions are being declared, which is useful when generating error messages.
+This class provides a thin wrapper around some of the return values from Perl's
+C<caller> built-in. It's used internally to identify where types and coercions
+are being declared, which is useful when generating error messages.
 
 =head1 API
 
@@ -107,3 +107,4 @@ Returns true if there is a subroutine name associated with this object.
 
 Puts all the information together into a single string like "declared in
 package Foo::Bar (.../Foo/Bar.pm) at line 42 in sub named blah".
+
