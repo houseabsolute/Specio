@@ -14,7 +14,7 @@
 0.46     2020-03-14
 
 - No code changes, just fixing a mistake in the POD. Reported by Petr
-  Pisar. Fixes #17.
+  Pisar. GH #17.
 
 
 0.45     2019-11-24
