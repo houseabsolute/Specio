@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.47     2021-01-29
+
 - Change Specio constraint object's stringification overloading to return the
   type name rather than the default Perl object stringification, which gives
   you something like
