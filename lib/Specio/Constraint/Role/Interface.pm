@@ -18,7 +18,7 @@ use Specio::Role::Inlinable;
 with 'Specio::Role::Inlinable';
 
 use overload(
-    q{""}  => sub { $_[0] },
+    q{""}  => '_stringify',
     '&{}'  => '_subification',
     'bool' => sub {1},
 );
@@ -530,6 +530,14 @@ sub _clone_coercions {
     return \%clones;
 }
 ## use critic
+
+sub _stringify {
+    my $self = shift;
+
+    return $self->name unless $self->is_anon;
+
+    return sprintf( '__ANON__(%s)', $self->parent . q{} );
+}
 
 sub _build_signature {
     my $self = shift;
