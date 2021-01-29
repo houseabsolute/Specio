@@ -21,6 +21,7 @@ use overload(
     q{""}  => '_stringify',
     '&{}'  => '_subification',
     'bool' => sub {1},
+    'eq'   => 'is_same_type_as',
 );
 
 {

@@ -302,9 +302,27 @@ This method exists primarily for the benefit of L<Moo>.
 
 =head1 OVERLOADING
 
-All constraints overloading subroutine de-referencing for the benefit of
-L<Moo>. The returned subroutine uses L<Sub::Quote> if the type constraint is
-inlinable.
+All constraints implement the following overloads:
+
+=head2 Subroutine De-referencing
+
+This is done for the benefit of L<Moo>. The returned subroutine uses
+L<Sub::Quote> if the type constraint is inlinable.
+
+=head2 Stringification
+
+For non-anonymous types, this will be the type's name. For anonymous types, a
+string like "__ANON__(Str)" is generated. However, this string should not be
+expected to be stable across releases, so don't use it for things like equality
+checks!
+
+=head2 Boolification
+
+This always returns true.
+
+=head2 String Equality (eq)
+
+This calls C<< $type->is_same_type_as($other) >> to compare the two types.
 
 =head1 ROLES
 
