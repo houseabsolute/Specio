@@ -239,7 +239,9 @@ but it can be called by its fully qualified name. It accepts a single argument,
 a package name. It returns a list of subs that it generated and installed in
 the given package, if any.
 
-This exists to make it easy to write a type library that combines other library
-and generates helper subs for export all at once.
+This exists to make it easy to write a type library that combines other
+libraries and generates helper subs for export all at once.
+
+See the L<Specio::Exporter> docs for more details.
 
 =cut
