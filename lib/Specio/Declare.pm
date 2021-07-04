@@ -411,7 +411,7 @@ __END__
 =head1 DESCRIPTION
 
 This package exports a set of type declaration helpers. Importing this package
-also causes it to create a C<t> subroutine the caller.
+also causes it to create a C<t> subroutine in the calling package.
 
 =head1 SUBROUTINES
 
