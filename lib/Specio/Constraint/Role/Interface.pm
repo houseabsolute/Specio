@@ -166,8 +166,9 @@ sub is_a_type_of {
     my $self = shift;
     my $type = shift;
 
-    return any { $_->_signature eq $type->_signature }
-    $self->_ancestors_and_self;
+    return
+        any { $_->_signature eq $type->_signature }
+        $self->_ancestors_and_self;
 }
 
 sub is_same_type_as {
@@ -222,7 +223,7 @@ sub _self_or_first_inlinable_ancestor {
     my $self = shift;
 
     my $type = first { $_->_has_inline_generator }
-    reverse $self->_ancestors_and_self;
+        reverse $self->_ancestors_and_self;
 
     # This should never happen because ->can_be_inlined should always be
     # checked before this builder is called.
