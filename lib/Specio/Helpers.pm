@@ -24,7 +24,14 @@ sub install_t_sub {
     my $types  = shift;
 
     # XXX - check to see if their t() is something else entirely?
-    return if $caller->can('t');
+    {
+        ## no critic (TestingAndDebugging::ProhibitNoStrict)
+        no strict 'refs';
+
+        # We used to check ->can('t') but that was wrong, since it would
+        # return if a parent class had a t() sub.
+        return if *{ $caller . '::t' }{CODE};
+    }
 
     my $t = sub {
         my $name = shift;

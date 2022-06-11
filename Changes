@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Importing types into a class which inherited from another class that had
+  imported types wouldn't work, leaving the child class with no `t()`
+  sub. Patch by Kerin Millar.
+
+
 0.47     2021-01-29
 
 - Change Specio constraint object's stringification overloading to return the
