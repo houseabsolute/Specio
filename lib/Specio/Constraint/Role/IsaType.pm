@@ -3,7 +3,7 @@ package Specio::Constraint::Role::IsaType;
 use strict;
 use warnings;
 
-our $VERSION = '0.48';
+our $VERSION = '0.49';
 
 use Scalar::Util qw( blessed );
 use Specio::PartialDump qw( partial_dump );

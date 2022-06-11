@@ -3,7 +3,7 @@ package Specio::Constraint::Parameterizable;
 use strict;
 use warnings;
 
-our $VERSION = '0.48';
+our $VERSION = '0.49';
 
 use Carp qw( confess );
 use Role::Tiny::With;

@@ -3,7 +3,7 @@ package Specio::Subs;
 use strict;
 use warnings;
 
-our $VERSION = '0.48';
+our $VERSION = '0.49';
 
 use Carp qw( croak );
 use Eval::Closure qw( eval_closure );
