@@ -5,9 +5,9 @@ use warnings;
 
 our $VERSION = '0.49';
 
-use Exporter qw( import );
+use Exporter        qw( import );
 use Specio::Helpers qw( is_class_loaded );
-use Scalar::Util qw( blessed );
+use Scalar::Util    qw( blessed );
 
 our @EXPORT_OK = qw(
     does_role

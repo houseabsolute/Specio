@@ -8,9 +8,9 @@ our $VERSION = '0.49';
 use parent 'Specio::Exporter';
 
 use List::Util 1.33 ();
-use overload     ();
-use re           ();
-use Scalar::Util ();
+use overload        ();
+use re              ();
+use Scalar::Util    ();
 use Specio::Constraint::Parameterizable;
 use Specio::Declare;
 use Specio::Helpers ();

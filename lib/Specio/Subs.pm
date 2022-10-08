@@ -5,8 +5,8 @@ use warnings;
 
 our $VERSION = '0.49';
 
-use Carp qw( croak );
-use Eval::Closure qw( eval_closure );
+use Carp            qw( croak );
+use Eval::Closure   qw( eval_closure );
 use Module::Runtime qw( use_package_optimistically );
 use Specio::Library::Perl;
 use Specio::Registry qw( exportable_types_for_package );

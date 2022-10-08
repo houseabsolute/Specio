@@ -3,12 +3,12 @@ package Specio::OO;
 use strict;
 use warnings;
 
-use Carp qw( confess );
+use Carp       qw( confess );
 use List::Util qw( all );
 use MRO::Compat;
 use Role::Tiny;
-use Scalar::Util qw( weaken );
-use Specio::Helpers qw( perlstring );
+use Scalar::Util        qw( weaken );
+use Specio::Helpers     qw( perlstring );
 use Specio::PartialDump qw( partial_dump );
 use Specio::TypeChecks;
 use Storable qw( dclone );

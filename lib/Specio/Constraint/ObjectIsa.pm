@@ -6,7 +6,7 @@ use warnings;
 our $VERSION = '0.49';
 
 use Role::Tiny::With;
-use Scalar::Util ();
+use Scalar::Util    ();
 use Specio::Helpers qw( perlstring );
 use Specio::Library::Builtins;
 use Specio::OO;

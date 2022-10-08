@@ -7,7 +7,7 @@ our $VERSION = '0.49';
 
 use List::Util 1.33 ();
 use Role::Tiny::With;
-use Scalar::Util ();
+use Scalar::Util    ();
 use Specio::Helpers qw( perlstring );
 use Specio::Library::Builtins;
 use Specio::OO;

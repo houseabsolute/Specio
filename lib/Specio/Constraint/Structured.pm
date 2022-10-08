@@ -9,7 +9,7 @@ use List::Util qw( all );
 use Role::Tiny::With;
 use Specio::OO;
 use Specio::TypeChecks qw( does_role );
-use Storable qw( dclone );
+use Storable           qw( dclone );
 
 use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';

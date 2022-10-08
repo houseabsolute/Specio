@@ -11,7 +11,7 @@ use Carp qw( croak );
 use Specio::Coercion;
 use Specio::Constraint::Simple;
 use Specio::DeclaredAt;
-use Specio::Helpers qw( install_t_sub _STRINGLIKE );
+use Specio::Helpers  qw( install_t_sub _STRINGLIKE );
 use Specio::Registry qw( internal_types_for_package register );
 
 ## no critic (Modules::ProhibitAutomaticExportation)

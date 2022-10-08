@@ -5,12 +5,12 @@ use warnings;
 
 our $VERSION = '0.49';
 
-use Carp qw( confess );
-use Eval::Closure qw( eval_closure );
+use Carp            qw( confess );
+use Eval::Closure   qw( eval_closure );
 use List::Util 1.33 qw( all any first );
 use Specio::Exception;
 use Specio::PartialDump qw( partial_dump );
-use Specio::TypeChecks qw( is_CodeRef );
+use Specio::TypeChecks  qw( is_CodeRef );
 
 use Role::Tiny 1.003003;
 

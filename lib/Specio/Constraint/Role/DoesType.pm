@@ -6,9 +6,9 @@ use warnings;
 our $VERSION = '0.49';
 
 use Role::Tiny;
-use Scalar::Util qw( blessed );
+use Scalar::Util        qw( blessed );
 use Specio::PartialDump qw( partial_dump );
-use Storable qw( dclone );
+use Storable            qw( dclone );
 
 use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
