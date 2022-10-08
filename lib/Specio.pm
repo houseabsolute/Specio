@@ -73,9 +73,6 @@ type to a variable at all.
 Instead, you can explicitly check a value against a type, and optionally coerce
 values to that type.
 
-My long-term goal is to replace Moose's built-in types and L<MooseX::Types>
-with this module.
-
 =head1 WHAT IS A TYPE?
 
 At it's core, a type is simply a constraint. A constraint is code that checks a
@@ -415,11 +412,6 @@ This distro was originally called "Type", but that's an awfully generic top
 level namespace. Specio is Latin for for "look at" and "spec" is the root for
 the word "species". It's short, relatively easy to type, and not used by any
 other distro.
-
-=head1 LONG-TERM PLANS
-
-Eventually I'd like to see this distro replace Moose's internal type system,
-which would also make MooseX::Types obsolete.
 
 =cut
 
