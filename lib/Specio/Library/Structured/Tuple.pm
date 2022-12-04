@@ -5,9 +5,9 @@ use warnings;
 
 our $VERSION = '0.49';
 
-use Carp         qw( confess );
-use List::Util   ();
-use Scalar::Util qw( blessed );
+use Carp            qw( confess );
+use List::Util 1.33 ();
+use Scalar::Util    qw( blessed );
 use Specio::Library::Builtins;
 use Specio::TypeChecks qw( does_role );
 

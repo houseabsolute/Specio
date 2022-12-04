@@ -6,7 +6,7 @@ use warnings;
 our $VERSION = '0.49';
 
 use Carp            qw( confess );
-use List::Util      ();
+use List::Util 1.33 ();
 use Scalar::Util    qw( blessed );
 use Specio::Helpers qw( perlstring );
 use Specio::Library::Builtins;

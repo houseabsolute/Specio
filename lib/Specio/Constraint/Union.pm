@@ -5,7 +5,7 @@ use warnings;
 
 our $VERSION = '0.49';
 
-use List::Util qw( all any );
+use List::Util 1.33 qw( all any );
 use Role::Tiny::With;
 use Specio::OO;
 use Storable qw( dclone );

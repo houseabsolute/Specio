@@ -3,8 +3,8 @@ package Specio::OO;
 use strict;
 use warnings;
 
-use Carp       qw( confess );
-use List::Util qw( all );
+use Carp qw( confess );
+use List::Util 1.33 qw( all );
 use MRO::Compat;
 use Role::Tiny;
 use Scalar::Util        qw( weaken );

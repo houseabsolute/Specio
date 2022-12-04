@@ -8,7 +8,6 @@ our $VERSION = '0.49';
 use parent 'Specio::Exporter';
 
 use Carp         qw( confess );
-use List::Util   ();
 use Scalar::Util qw( blessed );
 use Specio::Constraint::Structurable;
 use Specio::Declare;

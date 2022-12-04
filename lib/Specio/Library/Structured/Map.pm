@@ -5,8 +5,8 @@ use warnings;
 
 our $VERSION = '0.49';
 
-use Carp       qw( confess );
-use List::Util ();
+use Carp qw( confess );
+use List::Util 1.33 ();
 use Specio::Library::Builtins;
 use Specio::TypeChecks qw( does_role );
 
