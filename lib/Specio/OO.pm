@@ -3,7 +3,8 @@ package Specio::OO;
 use strict;
 use warnings;
 
-use Carp qw( confess );
+use Carp            qw( confess );
+use Clone           ();
 use List::Util 1.33 qw( all );
 use MRO::Compat;
 use Role::Tiny;
@@ -11,7 +12,6 @@ use Scalar::Util        qw( weaken );
 use Specio::Helpers     qw( perlstring );
 use Specio::PartialDump qw( partial_dump );
 use Specio::TypeChecks;
-use Storable qw( dclone );
 
 our $VERSION = '0.49';
 
@@ -327,16 +327,6 @@ sub clone {
             next;
         }
 
-        # We need to special case arrays of Specio objects, as they may
-        # contain code refs which cannot be cloned with dclone. Not using
-        # blessed is a small optimization.
-        if ( ( ref $value eq 'ARRAY' )
-            && all { ( ref($_) || q{} ) =~ /Specio/ } @{$value} ) {
-
-            $new->{$key} = [ map { $_->clone } @{$value} ];
-            next;
-        }
-
         # This is a weird hacky way of trying to avoid calling
         # Scalar::Util::blessed, which showed up as a hotspot in profiling of
         # loading DateTime. That's because we call ->clone a _lot_ (it's
@@ -345,7 +335,7 @@ sub clone {
         $new->{$key}
             = !$ref               ? $value
             : $ref eq 'CODE'      ? $value
-            : $BuiltinTypes{$ref} ? dclone($value)
+            : $BuiltinTypes{$ref} ? Clone::clone($value)
             :                       $value->clone;
     }
 

@@ -5,17 +5,18 @@ use warnings;
 
 our $VERSION = '0.49';
 
-use Role::Tiny;
+use Clone               ();
 use Scalar::Util        qw( blessed );
 use Specio::PartialDump qw( partial_dump );
-use Storable            qw( dclone );
+
+use Role::Tiny;
 
 use Specio::Constraint::Role::Interface;
 with 'Specio::Constraint::Role::Interface';
 
 {
     ## no critic (Subroutines::ProtectPrivateSubs)
-    my $attrs = dclone( Specio::Constraint::Role::Interface::_attrs() );
+    my $attrs = Clone::clone( Specio::Constraint::Role::Interface::_attrs() );
     ## use critic
 
     for my $name (qw( parent _inline_generator )) {
@@ -40,7 +41,7 @@ sub _wrap_message_generator {
     my $self      = shift;
     my $generator = shift;
 
-    my $type          = ( split /::/, blessed $self)[-1];
+    my $type          = ( split /::/, blessed $self )[-1];
     my $role          = $self->role;
     my $allow_classes = $self->_allow_classes;
 
@@ -58,7 +59,7 @@ sub _wrap_message_generator {
                     "An unblessed reference ($dump) will never pass an $type check (wants $role)";
             }
 
-            if ( !blessed $value) {
+            if ( !blessed $value ) {
                 return
                     "An empty string will never pass an $type check (wants $role)"
                     unless length $value;

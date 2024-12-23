@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Attempting to import any structured type caused a confusing "Can't store CODE items"
+  error. Reported by Kerin Millar.
+
+
 0.48     2022-06-11
 
 - Importing types into a class which inherited from another class that had
