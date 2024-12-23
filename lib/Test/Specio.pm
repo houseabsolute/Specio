@@ -117,8 +117,8 @@ our $STR_OVERLOAD_CLASS_NAME = _T::StrOverload->new('_T::StrOverload');
     }
 }
 
-our $NUM_OVERLOAD_ZERO        = _T::NumOverload->new(0);
-our $NUM_OVERLOAD_ONE         = _T::NumOverload->new(1);
+our $NUM_OVERLOAD_ZERO        = _T::NumOverload->new( 0);
+our $NUM_OVERLOAD_ONE         = _T::NumOverload->new( 1);
 our $NUM_OVERLOAD_NEG         = _T::NumOverload->new(-42);
 our $NUM_OVERLOAD_DECIMAL     = _T::NumOverload->new(42.42);
 our $NUM_OVERLOAD_NEG_DECIMAL = _T::NumOverload->new(42.42);

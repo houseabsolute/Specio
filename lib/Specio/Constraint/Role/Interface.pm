@@ -549,6 +549,7 @@ sub _build_signature {
     # address and stringifies to the same value. XXX - will this break under
     # threads?
     return join "\n",
+        ## no critic (Subroutines::ProtectPrivateSubs)
         ( $self->_has_parent ? $self->parent->_signature : () ),
         (
         defined $self->_constraint
