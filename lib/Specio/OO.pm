@@ -13,7 +13,7 @@ use Specio::Helpers     qw( perlstring );
 use Specio::PartialDump qw( partial_dump );
 use Specio::TypeChecks;
 
-our $VERSION = '0.49';
+our $VERSION = '0.50';
 
 use Exporter qw( import );
 

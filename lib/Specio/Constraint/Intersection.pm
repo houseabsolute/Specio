@@ -3,7 +3,7 @@ package Specio::Constraint::Intersection;
 use strict;
 use warnings;
 
-our $VERSION = '0.49';
+our $VERSION = '0.50';
 
 use Clone ();
 use List::Util 1.33 qw( all );
