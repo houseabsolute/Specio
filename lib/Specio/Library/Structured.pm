@@ -104,10 +104,6 @@ __END__
 
 =head1 DESCRIPTION
 
-B<This particular library should be considered in an alpha state. The syntax
-for defining structured types may change, as well as some of the internals of
-its implementation.>
-
 This library provides a set of structured types for Specio, C<Dict>, C<Map>,
 and C<Tuple>. This library also exports two helper subs used for some types,
 C<optional> and C<slurpy>.
