@@ -147,14 +147,24 @@ declare(
         defined( %s )
         && !ref( %s )
         && (
-               do { ( my $val1 = %s ) =~ /\A-?[0-9]+(?:[Ee]\+?[0-9]+)?\z/ }
+               do {
+                   my $val1 = %s;
+                   $val1 =~ /\A-?[0-9]+(?:[Ee]\+?[0-9]+)?\z/
+                   && $val1 == int($val1)
+               }
            )
     )
     ||
     (
         Scalar::Util::blessed( %s )
         && defined overload::Method( %s, '0+' )
-        && do { ( my $val2 = %s + 0 ) =~ /\A-?[0-9]+(?:[Ee]\+?[0-9]+)?\z/ }
+        && (
+               do {
+                   my $val2 = %s + 0;
+                   $val2 =~ /\A-?[0-9]+(?:[Ee]\+?[0-9]+)?\z/
+                   && $val2 == int($val2)
+               }
+           )
     )
 )
 EOF
