@@ -3,7 +3,7 @@ package Specio::Constraint::ObjectIsa;
 use strict;
 use warnings;
 
-our $VERSION = '0.50';
+our $VERSION = '0.51';
 
 use Role::Tiny::With;
 use Scalar::Util    ();

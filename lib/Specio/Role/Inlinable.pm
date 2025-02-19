@@ -3,7 +3,7 @@ package Specio::Role::Inlinable;
 use strict;
 use warnings;
 
-our $VERSION = '0.50';
+our $VERSION = '0.51';
 
 use Eval::Closure qw( eval_closure );
 

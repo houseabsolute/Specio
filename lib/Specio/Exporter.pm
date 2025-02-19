@@ -3,7 +3,7 @@ package Specio::Exporter;
 use strict;
 use warnings;
 
-our $VERSION = '0.50';
+our $VERSION = '0.51';
 
 use parent 'Exporter';
 
