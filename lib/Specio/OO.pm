@@ -4,11 +4,12 @@ use strict;
 use warnings;
 
 use Carp            qw( confess );
-use Clone           ();
+use Clone::Choose   ();
 use List::Util 1.33 qw( all );
 use MRO::Compat;
 use Role::Tiny;
 use Scalar::Util        qw( weaken );
+use Specio              qw( _clone );
 use Specio::Helpers     qw( perlstring );
 use Specio::PartialDump qw( partial_dump );
 use Specio::TypeChecks;
@@ -335,7 +336,7 @@ sub clone {
         $new->{$key}
             = !$ref               ? $value
             : $ref eq 'CODE'      ? $value
-            : $BuiltinTypes{$ref} ? Clone::clone($value)
+            : $BuiltinTypes{$ref} ? _clone($value)
             :                       $value->clone;
     }
 

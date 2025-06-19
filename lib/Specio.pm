@@ -7,6 +7,33 @@ use 5.008;
 
 our $VERSION = '0.51';
 
+use Module::Implementation;
+
+use Exporter qw( import );
+
+BEGIN {
+    # This env var exists for the benefit of the PurePerlTests dzil plugin, which only knows how to
+    # set an env var to a true value.
+    if ( $ENV{SPECIO_TEST_PP} ) {
+        ## no critic (Variables::RequireLocalizedPunctuationVars)
+        $ENV{SPECIO_IMPLEMENTATION} = 'PP';
+    }
+
+    my $loader = Module::Implementation::build_loader_sub(
+        implementations => [ 'XS', 'PP' ],
+        symbols         => ['_clone'],
+    );
+    $loader->();
+}
+
+# It's a bit weird to put this in the root module, but this way the env var that
+# Module::Implementation::build_loader_sub uses will be named "SPECIO_IMPLEMENTATION". That way, if
+# in the future there are other optional XS components besides the Clone implementation, we don't
+# end up with a bunch of different env vars.
+#
+## no critic (Modules::ProhibitAutomaticExportation)
+our @EXPORT = qw( _clone );
+
 1;
 
 # ABSTRACT: Type constraints and coercions for Perl
@@ -406,6 +433,12 @@ have much better subroutine names for any frames.
 
 =back
 
+=head1 FORCING PURE PERL MODE
+
+For some use cases (notably fatpacking a program), you may want to force Specio
+to use pure Perl code instead of XS code. This can be done by setting the
+environment variable C<SPECIO_IMPLEMENTATION> to C<PP>.
+
 =head1 WHY THE NAME?
 
 This distro was originally called "Type", but that's an awfully generic top
@@ -414,4 +447,3 @@ the word "species". It's short, relatively easy to type, and not used by any
 other distro.
 
 =cut
-
