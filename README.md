@@ -392,9 +392,9 @@ distribution better in some way.
 
 # FORCING PURE PERL MODE
 
-For some use cases (notably fat-packing a program), you may want to force
-Specio to use pure Perl code instead of XS code. This can be done by setting
-the environment variable `SPECIO_IMPLEMENTATION` to `PP`.
+For some use cases (notably fatpacking a program), you may want to force Specio
+to use pure Perl code instead of XS code. This can be done by setting the
+environment variable `SPECIO_IMPLEMENTATION` to `PP`.
 
 # WHY THE NAME?
 

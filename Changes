@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.51     2025-06-19
+
 - Made it possible to force Specio to only use pure Perl dependencies by setting the
   SPECIO_IMPLEMENTATION environment variable to "PP". Requested by @arodland (Andrew Rodland). GH
   #23.
