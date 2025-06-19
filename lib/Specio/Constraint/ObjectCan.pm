@@ -3,7 +3,7 @@ package Specio::Constraint::ObjectCan;
 use strict;
 use warnings;
 
-our $VERSION = '0.51';
+our $VERSION = '0.52';
 
 use List::Util 1.33 ();
 use Role::Tiny::With;

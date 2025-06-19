@@ -3,7 +3,7 @@ package Specio::Constraint::Structurable;
 use strict;
 use warnings;
 
-our $VERSION = '0.51';
+our $VERSION = '0.52';
 
 use Carp qw( confess );
 use Role::Tiny::With;
