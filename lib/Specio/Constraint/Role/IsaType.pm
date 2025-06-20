@@ -5,8 +5,8 @@ use warnings;
 
 our $VERSION = '0.52';
 
-use Clone               ();
 use Scalar::Util        qw( blessed );
+use Specio              qw( _clone );
 use Specio::PartialDump qw( partial_dump );
 
 use Role::Tiny;
@@ -16,7 +16,7 @@ with 'Specio::Constraint::Role::Interface';
 
 {
     ## no critic (Subroutines::ProtectPrivateSubs)
-    my $attrs = Clone::clone( Specio::Constraint::Role::Interface::_attrs() );
+    my $attrs = _clone( Specio::Constraint::Role::Interface::_attrs() );
     ## use critic
 
     for my $name (qw( parent _inline_generator )) {
