@@ -3,7 +3,7 @@ package Specio::Constraint::Enum;
 use strict;
 use warnings;
 
-our $VERSION = '0.52';
+our $VERSION = '0.53';
 
 use Role::Tiny::With;
 use Scalar::Util qw( refaddr );

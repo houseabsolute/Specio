@@ -5,7 +5,7 @@ use warnings;
 
 use 5.008;
 
-our $VERSION = '0.52';
+our $VERSION = '0.53';
 
 use Module::Implementation;
 
