@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.53     2025-10-04
+
 - Fixed a test failure when trying to open $^X on some platforms.
 
 
