@@ -3,7 +3,7 @@ package Specio::Constraint::Role::DoesType;
 use strict;
 use warnings;
 
-our $VERSION = '0.53';
+our $VERSION = '0.54';
 
 use Scalar::Util        qw( blessed );
 use Specio              qw( _clone );

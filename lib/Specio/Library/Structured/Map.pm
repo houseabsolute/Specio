@@ -3,7 +3,7 @@ package Specio::Library::Structured::Map;
 use strict;
 use warnings;
 
-our $VERSION = '0.53';
+our $VERSION = '0.54';
 
 use Carp qw( confess );
 use List::Util 1.33 ();

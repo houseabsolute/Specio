@@ -3,7 +3,7 @@ package Specio::Constraint::Structured;
 use strict;
 use warnings;
 
-our $VERSION = '0.53';
+our $VERSION = '0.54';
 
 use List::Util 1.33 qw( all );
 use Role::Tiny::With;
