@@ -1373,8 +1373,8 @@ for more details on how to create these things.
 
 =head2 create_BAR_handle_code()
 
-Returns a string you can C<eval> to create a bar filehandle named C<BAR>. This should be used like
-this:
+Returns a string you can C<eval> to create a bar filehandle named C<BAR>. This
+should be used like this:
 
   local *BAR;
   {
@@ -1539,7 +1539,8 @@ You can create such a variable like this:
   local *FOO;
   my $GLOB_OVERLOAD = _T::GlobOverload->new( \*FOO );
 
-If you want to create a glob overloading object that returns a filehandle, do this:
+If you want to create a glob overloading object that returns a filehandle, do
+this:
 
   local *BAR;
   open BAR, '<', $some_file or die $!;
