@@ -29,6 +29,9 @@ use Specio::OO;
         stack_trace => {
             init_arg => undef,
         },
+        context => {
+            isa      => 'HashRef',
+        },
     };
 
     ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
@@ -50,6 +53,12 @@ sub as_string {
     my $self = shift;
 
     my $str = $self->message;
+    if ($self->context and my %context = %{$self->context}) {
+        $str
+          .= ' ('
+          . join(', ', map { "$_: $context{$_}" } sort keys %context)
+          . ')';
+    }
     $str .= "\n\n" . $self->stack_trace->as_string;
 
     return $str;
