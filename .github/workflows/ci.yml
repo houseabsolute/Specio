@@ -10,4 +10,5 @@ jobs:
     with:
       dist: Specio
       with-threads: true
+      min-perl: 5.12
       ref: v0
