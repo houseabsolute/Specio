@@ -5,16 +5,18 @@ use FindBin qw( $Bin );
 
 my $lib_path;
 
+# These tests get copied to the `xt` dir for the pure-Perl tests, so we need to find `t/lib` from
+# multiple directories.
 BEGIN {
-    if ( $Bin =~ /xt/ ) {
-        $lib_path = "$Bin/../../t";
-    }
-    else {
-        $lib_path = "$Bin";
+    for my $dir ( map {"$Bin/$_"} qw( lib ../../t/lib ) ) {
+        if ( -f "$dir/Specio/Library/CannotSub.pm" ) {
+            $lib_path = "$dir";
+            last;
+        }
     }
 }
 
-use lib "$lib_path/lib";
+use lib "$lib_path";
 
 use Test::Fatal;
 use Test::More 0.96;
