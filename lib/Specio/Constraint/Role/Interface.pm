@@ -283,7 +283,7 @@ sub add_coercion {
 
     my $from_id = $coercion->from->id;
 
-    confess "Cannot add two coercions fom the same type: $from_id"
+    confess "Cannot add two coercions from the same type: $from_id"
         if $self->_has_coercion_from_type($from_id);
 
     $self->_add_coercion( $from_id => $coercion );

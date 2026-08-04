@@ -28,7 +28,7 @@ probably better for inlining anyway. Anything you wanted from the object
 should be something you can inline anyway (I hope).
 
 Note that parameterizable types I<still> need to provide a
-parameterized_inline_generator sub (not a Sub::Quote). This sub shoudl
+parameterized_inline_generator sub (not a Sub::Quote). This sub should
 I<return> a quoted sub based on the type parameter. Sub::Quote makes this
 harder than it should be because it doesn't have a very nice API. Oh well.
 

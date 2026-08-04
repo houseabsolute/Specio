@@ -16,7 +16,7 @@ our @EXPORT_OK = qw( install_t_sub is_class_loaded perlstring _STRINGLIKE  );
 sub install_t_sub {
 
     # Specio::DeclaredAt use Specio::OO, which in turn uses
-    # Specio::Helpers. If we load this with "use" we get a cirular require and
+    # Specio::Helpers. If we load this with "use" we get a circular require and
     # a big mess.
     require Specio::DeclaredAt;
 
